@@ -17,7 +17,7 @@
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
                BuildableName = "FakeHunter-tvOS.app"
                BlueprintName = "FakeHunter-tvOS"
-               ReferencedContainer = "container:i.xcodeproj">
+               ReferencedContainer = "container:FakeHunter.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
                BuildableName = "FakeHunter-tvOSTests.xctest"
                BlueprintName = "FakeHunter-tvOSTests"
-               ReferencedContainer = "container:i.xcodeproj">
+               ReferencedContainer = "container:FakeHunter.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -57,7 +57,7 @@
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
             BuildableName = "FakeHunter-tvOS.app"
             BlueprintName = "FakeHunter-tvOS"
-            ReferencedContainer = "container:i.xcodeproj">
+            ReferencedContainer = "container:FakeHunter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -74,7 +74,7 @@
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
             BuildableName = "FakeHunter-tvOS.app"
             BlueprintName = "FakeHunter-tvOS"
-            ReferencedContainer = "container:i.xcodeproj">
+            ReferencedContainer = "container:FakeHunter.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
