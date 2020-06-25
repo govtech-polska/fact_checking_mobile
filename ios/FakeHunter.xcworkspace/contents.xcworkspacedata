@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/kamilc/DOOK/FakeHunter/ios/FakeHunter.xcodeproj">
+      location = "group:FakeHunter.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:FakeHunter.xcodeproj">
    </FileRef>
 </Workspace>
