@@ -58,10 +58,14 @@
 		3FF0AFE05A91D1011CDFB4CE /* libPods-FakeHunter-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FakeHunter-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		424D51DE6552AE224D7D55B4 /* libPods-FakeHunter-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FakeHunter-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53157C64279979BCBAE24AD8 /* libPods-FakeHunter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FakeHunter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E63051615BED79086E89269 /* Pods-FakeHunter.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter/Pods-FakeHunter.adhoc.xcconfig"; sourceTree = "<group>"; };
+		640D099CE3482CBEF8675353 /* Pods-FakeHunter-tvOSTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOSTests.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOSTests/Pods-FakeHunter-tvOSTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		79ED013DDA0BBB58DDCDEE24 /* Pods-FakeHunter-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOSTests/Pods-FakeHunter-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		7DF8E0F26A276AFA3ACEA944 /* Pods-FakeHunter-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOSTests/Pods-FakeHunter-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		8584ACD8A609325D4BFE697B /* Pods-FakeHunter-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A6A5DF8B483AA37D5E5B3CB5 /* Pods-FakeHunter-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		BE798C2F3D9093F4739AEA6E /* Pods-FakeHunter-tvOS.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.adhoc.xcconfig"; sourceTree = "<group>"; };
+		BF0E1F95167E8CC5E7F34AAA /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-FakeHunterTests/Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		DE83D5FA05B2F700C02E4C25 /* Pods-FakeHunter-FakeHunterTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-FakeHunterTests.debug.xcconfig"; path = "Target Support Files/Pods-FakeHunter-FakeHunterTests/Pods-FakeHunter-FakeHunterTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E48B5C56541772D213A738B5 /* Pods-FakeHunter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter/Pods-FakeHunter.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -160,6 +164,10 @@
 				A6A5DF8B483AA37D5E5B3CB5 /* Pods-FakeHunter-tvOS.release.xcconfig */,
 				7DF8E0F26A276AFA3ACEA944 /* Pods-FakeHunter-tvOSTests.debug.xcconfig */,
 				79ED013DDA0BBB58DDCDEE24 /* Pods-FakeHunter-tvOSTests.release.xcconfig */,
+				5E63051615BED79086E89269 /* Pods-FakeHunter.adhoc.xcconfig */,
+				BF0E1F95167E8CC5E7F34AAA /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */,
+				BE798C2F3D9093F4739AEA6E /* Pods-FakeHunter-tvOS.adhoc.xcconfig */,
+				640D099CE3482CBEF8675353 /* Pods-FakeHunter-tvOSTests.adhoc.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -957,7 +965,7 @@
 		};
 		8A6CBB8924A223C90072CC60 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E48B5C56541772D213A738B5 /* Pods-FakeHunter.release.xcconfig */;
+			baseConfigurationReference = 5E63051615BED79086E89269 /* Pods-FakeHunter.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -982,7 +990,7 @@
 		};
 		8A6CBB8A24A223C90072CC60 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 360F7351BEBB5062CA58EFB7 /* Pods-FakeHunter-FakeHunterTests.release.xcconfig */;
+			baseConfigurationReference = BF0E1F95167E8CC5E7F34AAA /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
@@ -1002,7 +1010,7 @@
 		};
 		8A6CBB8B24A223C90072CC60 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A6A5DF8B483AA37D5E5B3CB5 /* Pods-FakeHunter-tvOS.release.xcconfig */;
+			baseConfigurationReference = BE798C2F3D9093F4739AEA6E /* Pods-FakeHunter-tvOS.adhoc.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1030,7 +1038,7 @@
 		};
 		8A6CBB8C24A223C90072CC60 /* AdHoc */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 79ED013DDA0BBB58DDCDEE24 /* Pods-FakeHunter-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 640D099CE3482CBEF8675353 /* Pods-FakeHunter-tvOSTests.adhoc.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
