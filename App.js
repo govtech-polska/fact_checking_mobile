@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   View,
   Text,
+  Image,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -30,8 +31,36 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <Image
+                  resizeMode='contain'
+                  style={{ width: size, height: size, backgroundColor: color }}
+                />
+              );
+            },
+          }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            tabBarLabel: 'Settings',
+            tabBarIcon: ({ color, size }) => {
+              return (
+                <Image
+                  resizeMode='contain'
+                  style={{ width: size, height: size, backgroundColor: color }}
+                />
+              );
+            },
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
