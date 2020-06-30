@@ -1,4 +1,5 @@
 import { all } from 'redux-saga/effects';
+import { verifiedSaga } from './VerifiedSaga';
 // import { authFlow } from './AuthSaga';
 // import { onboardingSaga } from './OnboardingSaga';
 // import { settingsSaga } from './SettingsSaga';
@@ -8,6 +9,7 @@ import { all } from 'redux-saga/effects';
 
 function* rootSaga() {
   yield all([
+    verifiedSaga(),
     // authFlow(),
     // landingSaga(),
     // exploreSaga(),

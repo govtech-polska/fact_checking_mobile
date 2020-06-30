@@ -1,40 +1,48 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   Image,
 } from 'react-native';
+import Moment from 'moment';
 
-import { WHITE_SMOKE } from '../constants/colors'
+import {
+  WHITE_SMOKE,
+  DARK_GRAY,
+} from '../constants/colors'
 
-const VerifiedCell = ({ text, verificationStatus }) => {
-
+const VerifiedCell = ({ item }) => {
   const verificationStatusImageUrl = () => {
-    switch (verificationStatus) {
-      case 'ok': return require('../resources/img/verifiedCell/verifiedOk.png')
-      case 'bad': return require('../resources/img/verifiedCell/verifiedBad.png')
-      case 'not': return require('../resources/img/verifiedCell/verifiedNot.png')
-      default: return require('../resources/img/verifiedCell/verifiedOk.png')
+    switch (item.verdict) {
+      case 'true': return require('../resources/img/verifiedCell/verifiedOk.png')
+      case 'false': return require('../resources/img/verifiedCell/verifiedBad.png')
+      case 'unidentified': return require('../resources/img/verifiedCell/verifiedNot.png')
+      default: return require('../resources/img/verifiedCell/verifiedNot.png')
     }
   }
+  const date = Moment(item.reported_at).format('DD.MM.YYYY')
 
   return (
     <>
-    <View style={styles.container}>
-      <Image
-        resizeMode='contain'
-        style={styles.image}
-        defaultSource={require('../resources/img/verifiedCell/logoPlaceholder.png')}
-      />
-      <Text style={{ flex: 2 }}>{text}</Text>
-      <Image
-        resizeMode='contain'
-        style={styles.verificationResult}
-        source={verificationStatusImageUrl()}
-      />
-    </View>
-    <View style={styles.separator} />
+      <View style={styles.container}>
+        <Image
+          resizeMode='contain'
+          style={styles.image}
+          defaultSource={require('../resources/img/verifiedCell/logoPlaceholder.png')}
+          source={{ uri: item.screenshot_url || '' }}
+        />
+        <View style={{ flex: 2 }}>
+          <Text style={styles.title}>{item.title}</Text>
+          <Text style={styles.date}>{date}</Text>
+        </View>
+        <Image
+          resizeMode='contain'
+          style={styles.verificationResult}
+          source={verificationStatusImageUrl()}
+        />
+      </View>
+      <View style={styles.separator} />
     </>
   );
 };
@@ -43,7 +51,6 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 8,
     paddingHorizontal: 16,
-    // backgroundColor: 'yellow',
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
@@ -63,7 +70,17 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: WHITE_SMOKE,
     marginHorizontal: 16,
+  },
+  title: {
+    color: 'black',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  date: {
+    color: DARK_GRAY,
+    fontSize: 12,
+    marginTop: 4,
   }
 });
 
-export { VerifiedCell };
+export default memo(VerifiedCell);

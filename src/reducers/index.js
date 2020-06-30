@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import VerifiedReducer from './VerifiedReducer';
 // import AuthReducer from './AuthReducer';
 // import AppStateReducer from './AppStateReducer';
 // import FeedReducer from './FeedReducer';
@@ -15,6 +16,7 @@ import { combineReducers } from 'redux';
 // import StatsReducer from './StatsReducer';
 
 export default combineReducers({
+  verified: VerifiedReducer,
   // auth: AuthReducer,
   // appState: AppStateReducer,
   // feed: FeedReducer,

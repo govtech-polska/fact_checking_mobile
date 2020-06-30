@@ -2,49 +2,148 @@ import React, { Component } from 'react';
 import {
   View,
   FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
+import { connect } from 'react-redux';
 
-import { VerifiedCell } from '../components';
-
-const data = [
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 
-  2, 
-  3, 
-  4, 
-  5, 
-  6, 
-  7, 
-  8,
-];
+import {
+  VerifiedCell,
+  LoadingOverlay,
+} from '../components';
+import {
+  promiseDispatch,
+  fetchVerifiedRequest,
+  fetchNextPageVerifiedRequest,
+} from '../actions';
+import { CINNABAR } from '../constants/colors'
 
 class VerifiedScreen extends Component {
-
-  drawCell = ({ index, item }) => {
-    console.log('DrawCell text: ', item);
-    console.log('DrawCell index: ', index);
-    const verificationStatus = () => {
-      if (index % 3 == 0) {
-        return 'ok';
-      } else if (index % 3 == 1) {
-        return 'bad';
-      } else {
-        return 'not';
-      }
-    }
-
-    return <VerifiedCell text={item} verificationStatus={verificationStatus()} />
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFetchingInitial: false,
+      isFetchingNextPage: false,
+      refreshing: false,
+    };
   }
 
+  async componentDidMount() {
+    this.setState({ isFetchingInitial: true });
+    await this.fetchData();
+    this.setState({ isFetchingInitial: false });
+    this._focusListener = this.props.navigation.addListener('focus', () => {
+      this.onRefreshTriggered();
+    });
+  }
+
+  componentWillUnmount() {
+    this._focusListener();
+  }
+
+  drawCell = ({ item }) => {
+    return <VerifiedCell item={item} />
+  }
+
+  keyExtractor = (_item, index) => index.toString();
+
+  fetchData = async () => {
+    try {
+      await this.props.fetchVerifiedRequest();
+      return
+    } catch (error) {
+      //TODO: dropdown alert
+      console.log('Error: ', error)
+      return
+    }
+  }
+
+  loadNextPage = async () => {
+    const {
+      shouldLoadNextPage,
+    } = this.props;
+    const {
+      isFetchingNextPage,
+    } = this.state;
+
+    if (shouldLoadNextPage && !isFetchingNextPage) {
+      this.setState({ isFetchingNextPage: true });
+      try {
+        await this.props.fetchNextPageVerifiedRequest();
+        this.setState({ isFetchingNextPage: false });
+      } catch (error) {
+        showAlert('error', '', error);
+        this.setState({ isFetchingNextPage: false });
+      }
+    }
+  }
+
+  onRefreshTriggered = async () => {
+    this.setState({ refreshing: true });
+    await this.fetchData();
+    this.setState({ refreshing: false });
+  }
+
+  renderListFooterComponent = () => (
+    <View style={styles.loader}>
+      <ActivityIndicator size='large' color={CINNABAR} />
+    </View>
+  );
+
   render() {
+    const {
+      isFetchingNextPage,
+      refreshing,
+    } = this.state;
     return (
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
+      <View style={styles.container}>
         <FlatList
-          data={data}
+          data={this.props.articles}
           renderItem={this.drawCell}
+          keyExtractor={this.keyExtractor}
+          onEndReached={this.loadNextPage}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={isFetchingNextPage ? this.renderListFooterComponent : null}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this.onRefreshTriggered}
+              tintColor={CINNABAR}
+            />
+          }
         />
+        <LoadingOverlay visible={this.state.isFetchingInitial} />
       </View>
     );
   }
 }
 
-export default VerifiedScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white'
+  },
+  loader: {
+    alignItems: 'center',
+    flex: 1,
+    padding: 24,
+  },
+});
+
+const mapStateToProps = (state) => {
+  return {
+    articles: state.verified.articles,
+    shouldLoadNextPage: state.verified.shouldLoadNextPage,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchVerifiedRequest: () => promiseDispatch(dispatch, fetchVerifiedRequest),
+    fetchNextPageVerifiedRequest: () => promiseDispatch(dispatch, fetchNextPageVerifiedRequest),
+  };
+};
+
+// export default VerifiedScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(VerifiedScreen);
