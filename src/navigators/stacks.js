@@ -10,16 +10,13 @@ import {
 } from '../screens';
 import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
+import LogoHeader from '../resources/img/logo_fh.svg'
 
 const VerifiedStack = createStackNavigator();
 
 function LogoTitle() {
   return (
-    <Image
-      resizeMode='contain'
-      style={{ width: 220 }}
-      source={require('../resources/img/logoHeader.png')}
-    />
+    <LogoHeader width={240} height={40} />
   );
 }
 
