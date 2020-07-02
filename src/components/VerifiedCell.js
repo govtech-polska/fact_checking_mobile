@@ -10,15 +10,18 @@ import Moment from 'moment';
 import {
   WHITE_SMOKE,
   DARK_GRAY,
-} from '../constants/colors'
+} from '../constants/colors';
+import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
+import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
+import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 
 const VerifiedCell = ({ item }) => {
-  const verificationStatusImageUrl = () => {
+
+  const verificationStatusImage = () => {
     switch (item.verdict) {
-      case 'true': return require('../resources/img/verifiedCell/verifiedOk.png')
-      case 'false': return require('../resources/img/verifiedCell/verifiedBad.png')
-      case 'unidentified': return require('../resources/img/verifiedCell/verifiedNot.png')
-      default: return require('../resources/img/verifiedCell/verifiedNot.png')
+      case 'true': return <VerifiedOk width={25} height={25} style={{ marginLeft: 8 }} />;
+      case 'false': return <VerifiedBad width={25} height={25} style={{ marginLeft: 8 }} />;
+      default: return <VerifiedNot width={25} height={25} style={{ marginLeft: 8 }} />;
     }
   }
   const date = Moment(item.reported_at).format('DD.MM.YYYY')
@@ -36,11 +39,7 @@ const VerifiedCell = ({ item }) => {
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.date}>{date}</Text>
         </View>
-        <Image
-          resizeMode='contain'
-          style={styles.verificationResult}
-          source={verificationStatusImageUrl()}
-        />
+        {verificationStatusImage()}
       </View>
       <View style={styles.separator} />
     </>
