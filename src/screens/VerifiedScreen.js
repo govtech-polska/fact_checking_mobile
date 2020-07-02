@@ -143,5 +143,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-// export default VerifiedScreen;
 export default connect(mapStateToProps, mapDispatchToProps)(VerifiedScreen);

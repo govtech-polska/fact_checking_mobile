@@ -8,7 +8,6 @@ import rootSaga from '../sagas';
 const sagaMiddleware = createSagaMiddleware();
 
 const middleware = [thunk, sagaMiddleware];
-// const middleware = [sagaMiddleware];
 
 if (process.env.NODE_ENV === 'development') {
   const logger = createLogger({ collapsed: true });
