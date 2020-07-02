@@ -11,13 +11,14 @@ import { connect } from 'react-redux';
 import {
   VerifiedCell,
   LoadingOverlay,
+  DropDownAlert,
 } from '../components';
 import {
   promiseDispatch,
   fetchVerifiedRequest,
   fetchNextPageVerifiedRequest,
 } from '../actions';
-import { CINNABAR } from '../constants/colors'
+import { CINNABAR } from '../constants/colors';
 
 class VerifiedScreen extends Component {
   constructor(props) {
@@ -51,11 +52,8 @@ class VerifiedScreen extends Component {
   fetchData = async () => {
     try {
       await this.props.fetchVerifiedRequest();
-      return
     } catch (error) {
-      //TODO: dropdown alert
-      console.log('Error: ', error)
-      return
+      DropDownAlert.showError();
     }
   }
 
@@ -73,7 +71,7 @@ class VerifiedScreen extends Component {
         await this.props.fetchNextPageVerifiedRequest();
         this.setState({ isFetchingNextPage: false });
       } catch (error) {
-        showAlert('error', '', error);
+        DropDownAlert.showError();
         this.setState({ isFetchingNextPage: false });
       }
     }
