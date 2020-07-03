@@ -1,3 +1,4 @@
+import { combineReducers } from 'redux';
 import {
   FETCH_INITIAL_VERIFIED_SUCCESS,
   FETCH_NEXT_PAGE_VERIFIED_SUCCESS,
@@ -9,7 +10,14 @@ const VERIFIED_INITIAL_STATE = {
   shouldLoadNextPage: false,
 }
 
-export default (state = VERIFIED_INITIAL_STATE, action) => {
+const verifiedList = (
+  state = {
+    articles: [],
+    nextUrl: null,
+    shouldLoadNextPage: false,
+  },
+  action,
+) => {
   switch (action.type) {
     case FETCH_INITIAL_VERIFIED_SUCCESS: 
       return {
@@ -27,4 +35,29 @@ export default (state = VERIFIED_INITIAL_STATE, action) => {
       }
     default: return state
   }
-}
+};
+
+
+export default combineReducers({
+  verifiedList,
+});
+
+// export default (state = VERIFIED_INITIAL_STATE, action) => {
+//   switch (action.type) {
+//     case FETCH_INITIAL_VERIFIED_SUCCESS: 
+//       return {
+//         ...state,
+//         articles: action.payload.results,
+//         nextUrl: action.payload.nextUrl,
+//         shouldLoadNextPage: action.payload.nextUrl !== null,
+//       }
+//     case FETCH_NEXT_PAGE_VERIFIED_SUCCESS:
+//       return {
+//         ...state,
+//         articles: [...state.articles, ...action.payload.results],
+//         nextUrl: action.payload.nextUrl,
+//         shouldLoadNextPage: action.payload.nextUrl !== null,
+//       }
+//     default: return state
+//   }
+// }

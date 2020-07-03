@@ -21,6 +21,10 @@ import {
 } from '../actions';
 import { CINNABAR } from '../constants/colors';
 import { strings } from '../constants/strings';
+import {
+  getVerifiedList,
+  getShouldLoadVerifiedNextPage,
+} from '../selectors';
 
 class VerifiedScreen extends Component {
   constructor(props) {
@@ -46,7 +50,12 @@ class VerifiedScreen extends Component {
   }
 
   drawCell = ({ item }) => {
-    return <VerifiedCell item={item} />
+    return (
+      <VerifiedCell
+        item={item}
+        onCellTapped={() => this.props.navigation.navigate('VerifiedDetailsScreen', { item })}
+      />
+    );
   }
 
   keyExtractor = (_item, index) => index.toString();
@@ -140,9 +149,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
+  console.log('VerifiedScreen state: ', state);
   return {
-    articles: state.verified.articles,
-    shouldLoadNextPage: state.verified.shouldLoadNextPage,
+    articles: getVerifiedList(state.verified),
+    shouldLoadNextPage: getShouldLoadVerifiedNextPage(state.verified),
   };
 };
 
