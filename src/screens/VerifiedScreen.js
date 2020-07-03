@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
+  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -19,6 +20,7 @@ import {
   fetchNextPageVerifiedRequest,
 } from '../actions';
 import { CINNABAR } from '../constants/colors';
+import { strings } from '../constants/strings';
 
 class VerifiedScreen extends Component {
   constructor(props) {
@@ -96,6 +98,7 @@ class VerifiedScreen extends Component {
     } = this.state;
     return (
       <View style={styles.container}>
+        <Text style={styles.title}>{strings.verifiedTitle}</Text>
         <FlatList
           data={this.props.articles}
           renderItem={this.drawCell}
@@ -126,6 +129,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     padding: 24,
+  },
+  title: {
+    color: 'black',
+    fontSize: 24,
+    marginTop: 16,
+    marginBottom: 8,
+    paddingHorizontal: 16,
   },
 });
 

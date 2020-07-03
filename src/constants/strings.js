@@ -3,5 +3,5 @@ export const strings = {
 
   //MARK: Tab names
   verifiedTab: 'Zewryfikowane',
-  
+  verifiedTitle: 'Zweryfikowane informacje',
 };
