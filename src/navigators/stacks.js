@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import {
-  Image,
+  View,
 } from 'react-native';
 
 import {
@@ -16,7 +16,9 @@ const VerifiedStack = createStackNavigator();
 
 function LogoTitle() {
   return (
-    <LogoHeader width={240} height={40} />
+    <View style={{ alignItems: 'center' }}>
+      <LogoHeader width={240} height={40} />
+    </View>
   );
 }
 
