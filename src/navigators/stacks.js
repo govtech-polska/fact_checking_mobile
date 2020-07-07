@@ -35,7 +35,7 @@ export const VerifiedStackScreen = () => {
         name={strings.verifiedTab}
         component={VerifiedScreen}
         options={{
-          title: '',
+          title: ' ',
           headerStyle: {
             backgroundColor: CINNABAR,
           },

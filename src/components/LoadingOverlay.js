@@ -6,7 +6,6 @@ import {
 } from '../constants/colors';
 
 const LoadingOverlay = ({ visible }) => {
-  console.log('LoadingOverlay visible: ', visible);
   if (visible) {
     return (
       <View style={styles.container}>

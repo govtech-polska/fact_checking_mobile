@@ -4,4 +4,10 @@ export const strings = {
   //MARK: Tab names
   verifiedTab: 'Zewryfikowane',
   verifiedTitle: 'Zweryfikowane informacje',
+  reportDateLabel: 'Data zgłoszenia: ',
+  informationSourceLabel: 'Źródło informacji:',
+  argumentLabel: 'Teza:',
+  fhLinkLabel: 'Link do materiału:',
+  expertReportLabel: 'Raport eksperta:',
+  verifiedDateLabel: 'Data werdyktu:',
 };

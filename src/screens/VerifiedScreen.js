@@ -53,7 +53,7 @@ class VerifiedScreen extends Component {
     return (
       <VerifiedCell
         item={item}
-        onCellTapped={() => this.props.navigation.navigate('VerifiedDetailsScreen', { item })}
+        onCellTapped={() => this.props.navigation.navigate('VerifiedDetailsScreen', { id: item.id })}
       />
     );
   }
@@ -75,7 +75,6 @@ class VerifiedScreen extends Component {
     const {
       isFetchingNextPage,
     } = this.state;
-
     if (shouldLoadNextPage && !isFetchingNextPage) {
       this.setState({ isFetchingNextPage: true });
       try {
@@ -149,7 +148,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  console.log('VerifiedScreen state: ', state);
   return {
     articles: getVerifiedList(state.verified),
     shouldLoadNextPage: getShouldLoadVerifiedNextPage(state.verified),

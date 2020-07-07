@@ -2,13 +2,8 @@ import { combineReducers } from 'redux';
 import {
   FETCH_INITIAL_VERIFIED_SUCCESS,
   FETCH_NEXT_PAGE_VERIFIED_SUCCESS,
+  FETCH_VERIFIED_DETAILS_SUCCESS,
 } from '../actions'
-
-const VERIFIED_INITIAL_STATE = {
-  articles: [],
-  nextUrl: null,
-  shouldLoadNextPage: false,
-}
 
 const verifiedList = (
   state = {
@@ -19,7 +14,7 @@ const verifiedList = (
   action,
 ) => {
   switch (action.type) {
-    case FETCH_INITIAL_VERIFIED_SUCCESS: 
+    case FETCH_INITIAL_VERIFIED_SUCCESS:
       return {
         ...state,
         articles: action.payload.results,
@@ -37,27 +32,29 @@ const verifiedList = (
   }
 };
 
+const articlesDetails = (
+  state = {
+    items: [],
+  },
+  action,
+) => {
+  switch (action.type) {
+    case FETCH_VERIFIED_DETAILS_SUCCESS:
+      return {
+        ...state,
+        items: [
+          ...state.items,
+          {
+            id: action.payload.id,
+            data: action.payload.item
+          },
+        ],
+      }
+    default: return state;
+  }
+}
 
 export default combineReducers({
   verifiedList,
+  articlesDetails,
 });
-
-// export default (state = VERIFIED_INITIAL_STATE, action) => {
-//   switch (action.type) {
-//     case FETCH_INITIAL_VERIFIED_SUCCESS: 
-//       return {
-//         ...state,
-//         articles: action.payload.results,
-//         nextUrl: action.payload.nextUrl,
-//         shouldLoadNextPage: action.payload.nextUrl !== null,
-//       }
-//     case FETCH_NEXT_PAGE_VERIFIED_SUCCESS:
-//       return {
-//         ...state,
-//         articles: [...state.articles, ...action.payload.results],
-//         nextUrl: action.payload.nextUrl,
-//         shouldLoadNextPage: action.payload.nextUrl !== null,
-//       }
-//     default: return state
-//   }
-// }
