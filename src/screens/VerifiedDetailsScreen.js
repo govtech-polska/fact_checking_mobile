@@ -6,9 +6,11 @@ import {
   Image,
   Linking,
   ScrollView,
+  Modal,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Moment from 'moment';
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 import {
   promiseDispatch,
@@ -18,6 +20,7 @@ import {
 import {
   LoadingOverlay,
   DropDownAlert,
+  TouchableOpacityDebounce,
 } from '../components';
 import { strings } from '../constants/strings';
 import { DARK_GRAY } from '../constants/colors';
@@ -28,6 +31,7 @@ class VerifiedDetailsScreen extends Component {
     this.state = {
       loading: true,
       verifiedDetails: null,
+      imageViewerVisible: false,
     };
   }
 
@@ -66,6 +70,31 @@ class VerifiedDetailsScreen extends Component {
     });
   }
 
+  toggleImageViewerVisibility = () => {
+    this.setState((prevState) => ({ imageViewerVisible: !prevState.imageViewerVisible }));
+  }
+
+  renderImageModalIfNeeded = () => {
+    const { imageViewerVisible } = this.state;
+    return (
+      <Modal
+        visible={imageViewerVisible}
+        transparent={true}
+        animationType="slide"
+      >
+        <ImageViewer
+          enableSwipeDown
+          renderIndicator={() => { }}
+          imageUrls={[
+            { url: this.state.verifiedDetails.screenshot_url },
+          ]}
+          onRequestClose={this.toggleImageViewerVisibility}
+          onCancel={this.toggleImageViewerVisibility}
+        />
+      </Modal>
+    )
+  }
+
   render() {
     const {
       loading,
@@ -74,6 +103,7 @@ class VerifiedDetailsScreen extends Component {
     return (
       loading ? (<LoadingOverlay loading />) : (
         <ScrollView style={{ backgroundColor: 'white' }}>
+          {this.renderImageModalIfNeeded()}
           <View style={styles.container}>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>
@@ -81,11 +111,17 @@ class VerifiedDetailsScreen extends Component {
               </Text>
               <Text style={styles.dateLabel}>{`${strings.reportDateLabel} ${this.dateFormatted(verifiedDetails?.reported_at, 'DD.MM.YYYY')}`}</Text>
             </View>
-            <Image
-              resizeMode='contain'
-              style={styles.image}
-              source={{ uri: verifiedDetails.screenshot_url || '' }}
-            />
+
+            <TouchableOpacityDebounce
+              onPress={this.toggleImageViewerVisibility}
+            >
+              <Image
+                resizeMode='contain'
+                style={styles.image}
+                source={{ uri: verifiedDetails.screenshot_url || '' }}
+              />
+            </TouchableOpacityDebounce>
+
             <View style={styles.detailsContainer}>
 
               <Text style={styles.detailsTitle}>{strings.informationSourceLabel}</Text>
