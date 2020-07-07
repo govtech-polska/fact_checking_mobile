@@ -17,13 +17,8 @@ const VerifiedStack = createStackNavigator();
 
 function LogoTitle() {
   return (
-    <View
-      style={{
-        alignItems: 'center',
-        flex: 1
-      }}
-    >
-      <LogoHeader width={240} height={40} style={{ flex: 1 }} />
+    <View style={{ alignItems: 'center' }}>
+      <LogoHeader width={240} height={40} />
     </View>
   );
 }
