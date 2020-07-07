@@ -7,6 +7,9 @@ import {
   Linking,
   ScrollView,
   Modal,
+  Button,
+  Share,
+  Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Moment from 'moment';
@@ -33,6 +36,21 @@ class VerifiedDetailsScreen extends Component {
       verifiedDetails: null,
       imageViewerVisible: false,
     };
+
+    props.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacityDebounce
+          style={{ width: 30, height: 30 }}
+          onPress={this.onShare}
+        >
+          <Image
+            style={{ flex: 1 }}
+            resizeMode='contain'
+            source={require('../resources/img/share.png')}
+          />
+        </TouchableOpacityDebounce>
+      ),
+    });
   }
 
   async componentDidMount() {
@@ -44,7 +62,6 @@ class VerifiedDetailsScreen extends Component {
     } catch (error) {
       this.setState({ loading: false });
       DropDownAlert.showError();
-
     }
   }
 
@@ -94,6 +111,22 @@ class VerifiedDetailsScreen extends Component {
       </Modal>
     )
   }
+
+  onShare = async () => {
+    try {
+      const { verifiedDetails: { id } } = this.state;
+      const result = await Share.share({
+        ...Platform.select({
+          android: {
+            message: `https://app.fakehunter.pap.pl/${id}`,
+          }
+        }),
+        url: `https://app.fakehunter.pap.pl/${id}`,
+      });
+    } catch (error) {
+      DropDownAlert.showError();
+    }
+  };
 
   render() {
     const {
