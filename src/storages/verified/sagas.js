@@ -2,11 +2,13 @@ import { all, } from 'redux-saga/effects';
 
 import { apiSaga } from '../../base/api/redux';
 import {
-  VERIFIED,
+  NEWS,
+  DETAILS,
 } from './actions'
 
 export function* articlesSaga() {
   yield all([
-    apiSaga(VERIFIED)(),
+    apiSaga(NEWS)(),
+    apiSaga(DETAILS)(),
   ]);
 }

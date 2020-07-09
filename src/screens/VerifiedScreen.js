@@ -25,7 +25,7 @@ import {
   getIsFetchingNextPage,
   getIsFetchingInitial,
 } from '../selectors';
-import { verifiedActions } from '../storages/verified/actions'
+import { feedActions } from '../storages/verified/actions'
 
 class VerifiedScreen extends Component {
 
@@ -37,7 +37,6 @@ class VerifiedScreen extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('componentDidUpdate props', this.props)
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError()
     }
@@ -186,7 +185,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchVerifiedRequest: (...args) => dispatch(verifiedActions.verified(...args)),
+    fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
   };
 };
 

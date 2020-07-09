@@ -13,43 +13,32 @@ import Moment from 'moment';
 import ImageViewer from 'react-native-image-zoom-viewer';
 
 import {
-  promiseDispatch,
-  fetchVerifiedDetailsRequest,
-  verifiedDetailsScreenUnmounted,
-} from '../actions'
-import {
   LoadingOverlay,
   DropDownAlert,
   TouchableOpacityDebounce,
 } from '../components';
 import { strings } from '../constants/strings';
 import { DARK_GRAY } from '../constants/colors';
+import { feedActions } from '../storages/verified/actions'
+import { APP_URL } from '../constants/api';
 
 class VerifiedDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
-      verifiedDetails: null,
       imageViewerVisible: false,
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const { id } = this.props.route.params;
-    try {
-      const verifiedDetails = await this.props.fetchVerifiedDetailsRequest(id);
-      console.log('VerifiedDetailsScreen verifiedDetails:', verifiedDetails);
-      this.setState({ loading: false, verifiedDetails });
-    } catch (error) {
-      this.setState({ loading: false });
-      DropDownAlert.showError();
-
-    }
+    this.props.fetchVerifiedDetailsRequest(id);
   }
 
-  componentWillUnmount() {
-    this.props.verifiedDetailsScreenUnmounted();
+  componentDidUpdate(prevProps) {
+    if (this.props.error && prevProps.error !== this.props.error) {
+      DropDownAlert.showError()
+    }
   }
 
   dateFormatted(date, format) {
@@ -57,7 +46,7 @@ class VerifiedDetailsScreen extends Component {
   }
 
   fhLink(id) {
-    return `https://app.fakehunter.pap.pl/${id}`
+    return `${APP_URL}/${id}`
   }
 
   openUrl(url) {
@@ -76,6 +65,7 @@ class VerifiedDetailsScreen extends Component {
 
   renderImageModalIfNeeded = () => {
     const { imageViewerVisible } = this.state;
+    const { details } = this.props;
     return (
       <Modal
         visible={imageViewerVisible}
@@ -86,7 +76,7 @@ class VerifiedDetailsScreen extends Component {
           enableSwipeDown
           renderIndicator={() => { }}
           imageUrls={[
-            { url: this.state.verifiedDetails.screenshot_url },
+            { url: details?.screenshot_url || '' },
           ]}
           onRequestClose={this.toggleImageViewerVisibility}
           onCancel={this.toggleImageViewerVisibility}
@@ -97,19 +87,20 @@ class VerifiedDetailsScreen extends Component {
 
   render() {
     const {
-      loading,
-      verifiedDetails,
-    } = this.state;
+      details,
+      isFetching,
+    } = this.props;
+
     return (
-      loading ? (<LoadingOverlay loading />) : (
+      (isFetching || !details) ? (<LoadingOverlay loading />) : (
         <ScrollView style={{ backgroundColor: 'white' }}>
           {this.renderImageModalIfNeeded()}
           <View style={styles.container}>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>
-                {verifiedDetails?.expert?.title}
+                {details?.expert?.title}
               </Text>
-              <Text style={styles.dateLabel}>{`${strings.reportDateLabel} ${this.dateFormatted(verifiedDetails?.reported_at, 'DD.MM.YYYY')}`}</Text>
+              <Text style={styles.dateLabel}>{`${strings.reportDateLabel} ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
             </View>
 
             <TouchableOpacityDebounce
@@ -118,7 +109,7 @@ class VerifiedDetailsScreen extends Component {
               <Image
                 resizeMode='contain'
                 style={styles.image}
-                source={{ uri: verifiedDetails.screenshot_url || '' }}
+                source={{ uri: details.screenshot_url || '' }}
               />
             </TouchableOpacityDebounce>
 
@@ -127,26 +118,26 @@ class VerifiedDetailsScreen extends Component {
               <Text style={styles.detailsTitle}>{strings.informationSourceLabel}</Text>
               <Text
                 style={styles.url}
-                onPress={() => this.openUrl(verifiedDetails.url)}
+                onPress={() => this.openUrl(details.url)}
               >
-                {verifiedDetails.url}
+                {details.url}
               </Text>
 
               <Text style={styles.detailsTitle}>{strings.fhLinkLabel}</Text>
               <Text
                 style={styles.url}
-                onPress={() => this.openUrl(this.fhLink(verifiedDetails.id))}
+                onPress={() => this.openUrl(this.fhLink(details.id))}
               >
-                {this.fhLink(verifiedDetails.id)}
+                {this.fhLink(details.id)}
               </Text>
 
               <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
                 {strings.expertReportLabel}
               </Text>
               <Text style={styles.dateLabel}>
-                {`${strings.verifiedDateLabel} ${this.dateFormatted(verifiedDetails?.expert?.date, 'DD.MM.YYYY HH:mm')}`}
+                {`${strings.verifiedDateLabel} ${this.dateFormatted(details?.expert?.date, 'DD.MM.YYYY HH:mm')}`}
               </Text>
-              <Text style={styles.detailsText}>{verifiedDetails?.expert?.comment}</Text>
+              <Text style={styles.detailsText}>{details?.expert?.comment}</Text>
 
             </View>
           </View>
@@ -206,11 +197,18 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-    fetchVerifiedDetailsRequest: (...args) => promiseDispatch(dispatch, fetchVerifiedDetailsRequest, ...args),
-    verifiedDetailsScreenUnmounted: () => dispatch(verifiedDetailsScreenUnmounted()),
+    details: state.articles.details.data,
+    isFetching: state.articles.details.isFetching,
+    error: state.articles.details.error,
   };
 };
 
-export default connect(null, mapDispatchToProps)(VerifiedDetailsScreen);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchVerifiedDetailsRequest: (...args) => dispatch(feedActions.details(...args)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(VerifiedDetailsScreen);
