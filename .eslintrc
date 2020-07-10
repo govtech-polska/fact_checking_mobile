@@ -1,14 +1,25 @@
+// {
+//   "extends": "rallycoding",
+//   "rules": {
+//     "arrow-body-style": 0,
+//     "global-require": 0,
+//     "prefer-template": 0,
+//     "no-named-as-default-member": 0,
+//     "max-len": 0,
+//     "camelcase": 0,
+//     "no-nested-ternary": 0,
+//     "no-useless-escape": 0,
+//     "no-extra-boolean-cast": 0
+//   }
+// }
 {
-  "extends": "rallycoding",
-  "rules": {
-    "arrow-body-style": 0,
-    "global-require": 0,
-    "prefer-template": 0,
-    "no-named-as-default-member": 0,
-    "max-len": 0,
-    "camelcase": 0,
-    "no-nested-ternary": 0,
-    "no-useless-escape": 0,
-    "no-extra-boolean-cast": 0
-  }
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "jest": true
+  },
+  "plugins": ["react"],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"]
 }
