@@ -105,7 +105,7 @@ class VerifiedDetailsScreen extends Component {
 
   onShare = async () => {
     try {
-      const { verifiedDetails: { id } } = this.state;
+      const { details: { id } } = this.props;
       const result = await Share.share({
         ...Platform.select({
           android: {
