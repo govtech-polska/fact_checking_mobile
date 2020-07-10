@@ -8,13 +8,14 @@ import {
 
 export const articles = combineReducers({
   verified: apiReducer(NEWS, ((nextState, action) => {
-    if (nextState.data) {
-      console.log('verifiedApiReducer nextState: ', nextState)
+    if (nextState.data 
+      && nextState.data.current_page !== action.data.current_page
+      && action.data.current_page !== 1) {
       const newResults = [...nextState.data?.results, ...action.data?.results]
       return {
         ...nextState,
         data: {
-          ...nextState.data,
+          ...action.data,
           results: newResults,
         }
       }

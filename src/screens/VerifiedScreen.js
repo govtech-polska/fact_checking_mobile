@@ -31,19 +31,12 @@ class VerifiedScreen extends Component {
 
   componentDidMount() {
     this.props.fetchVerifiedRequest();
-    this._focusListener = this.props.navigation.addListener('focus', () => {
-      this.onRefreshTriggered();
-    });
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError()
     }
-  }
-
-  componentWillUnmount() {
-    this._focusListener();
   }
 
   drawCell = ({ item }) => {
@@ -97,8 +90,8 @@ class VerifiedScreen extends Component {
 
   renderTitleIfNeeded = () => {
     const { articles } = this.props;
-    if(articles.length > 0) {
-      <Text style={styles.title}>{strings.verifiedTitle}</Text>
+    if (articles.length > 0) {
+      return <Text style={styles.title}>{strings.verifiedTitle}</Text>
     }
   }
 
@@ -111,7 +104,7 @@ class VerifiedScreen extends Component {
 
     return (
       <View style={styles.container}>
-        {this.renderTitleIfNeeded}
+        {this.renderTitleIfNeeded()}
         <FlatList
           data={articles}
           contentContainerStyle={{ flexGrow: 1 }}

@@ -12,9 +12,7 @@ export const apiSaga = type => {
   function* callApi(action) {
     try {
       let data;
-      console.log('ApiSaga url: ', action.endpoint);
       const { data: requestData } = yield call(request, action.method, action.endpoint, action.payload);
-      console.log('ApiSaga response: ', requestData);
       data = requestData;
       if (!data) {
         data = {
