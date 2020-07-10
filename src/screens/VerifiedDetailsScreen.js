@@ -39,7 +39,6 @@ class VerifiedDetailsScreen extends Component {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError()
     }
-    console.log('VerifiedDetailsScreen details: ', this.props.articles)
   }
 
   dateFormatted(date, format) {
