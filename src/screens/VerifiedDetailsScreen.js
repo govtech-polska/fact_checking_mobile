@@ -109,10 +109,10 @@ class VerifiedDetailsScreen extends Component {
       const result = await Share.share({
         ...Platform.select({
           android: {
-            message: `https://app.fakehunter.pap.pl/${id}`,
+            message: `${APP_URL}/${id}`,
           }
         }),
-        url: `https://app.fakehunter.pap.pl/${id}`,
+        url: `${APP_URL}/${id}`,
       });
     } catch (error) {
       DropDownAlert.showError();
