@@ -1,5 +1,5 @@
 {
-  "name": "FakeHunter",
+  "name": "fakehunter",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint -c .eslintrc src/**/*.js",
+    "lint:fix": "eslint --fix -c .eslintrc src/**/*.js"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
