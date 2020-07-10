@@ -8,6 +8,9 @@ import {
 import Moment from 'moment';
 
 import {
+  TouchableOpacityDebounce,
+} from './TouchableOpacityDebounce';
+import {
   WHITE_SMOKE,
   DARK_GRAY,
 } from '../constants/colors';
@@ -15,7 +18,7 @@ import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 
-const VerifiedCell = ({ item }) => {
+const VerifiedCell = ({ item, onCellTapped }) => {
 
   const verificationStatusImage = () => {
     switch (item.verdict) {
@@ -28,7 +31,10 @@ const VerifiedCell = ({ item }) => {
 
   return (
     <>
-      <View style={styles.container}>
+      <TouchableOpacityDebounce
+        style={styles.container}
+        onPress={() => onCellTapped()}
+      >
         <Image
           resizeMode='contain'
           style={styles.image}
@@ -40,7 +46,7 @@ const VerifiedCell = ({ item }) => {
           <Text style={styles.date}>{date}</Text>
         </View>
         {verificationStatusImage()}
-      </View>
+      </TouchableOpacityDebounce>
       <View style={styles.separator} />
     </>
   );
