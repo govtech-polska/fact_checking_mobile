@@ -6,8 +6,11 @@ import { VerifiedScreen, VerifiedDetailsScreen } from '../screens';
 import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
+import InfoScreen from '../screens/InfoScreen';
+import InfoAboutScreen from '../screens/InfoAboutScreen';
 
 const VerifiedStack = createStackNavigator();
+const InfoStack = createStackNavigator();
 
 function LogoTitle() {
   return (
@@ -17,19 +20,21 @@ function LogoTitle() {
   );
 }
 
+const mainScreenOptions = {
+  title: ' ',
+  headerStyle: {
+    backgroundColor: CINNABAR,
+  },
+  headerTitle: LogoTitle,
+};
+
 export const VerifiedStackScreen = () => {
   return (
     <VerifiedStack.Navigator>
       <VerifiedStack.Screen
         name={strings.verifiedTab}
         component={VerifiedScreen}
-        options={{
-          title: ' ',
-          headerStyle: {
-            backgroundColor: CINNABAR,
-          },
-          headerTitle: (props) => <LogoTitle {...props} />,
-        }}
+        options={mainScreenOptions}
       />
       <VerifiedStack.Screen
         name="VerifiedDetailsScreen"
@@ -37,5 +42,22 @@ export const VerifiedStackScreen = () => {
         options={{ title: '' }}
       />
     </VerifiedStack.Navigator>
+  );
+};
+
+export const InfoStackScreen = () => {
+  return (
+    <InfoStack.Navigator>
+      <InfoStack.Screen
+        name={strings.verifiedTab}
+        component={InfoScreen}
+        options={mainScreenOptions}
+      />
+      <InfoStack.Screen
+        name="InfoAboutScreen"
+        component={InfoAboutScreen}
+        options={{ title: '' }}
+      />
+    </InfoStack.Navigator>
   );
 };
