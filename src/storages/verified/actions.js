@@ -8,7 +8,7 @@ export const DETAILS = 'feed.NEWS_DETAILS';
 export const feedActions = {
   list: (page) =>
     apiAction(NEWS, resolveUrl(apiUrls.NEWS, { page: page || 1 }), {
-      clearOnRequest: page === 1 ? true : false
+      clearOnRequest: page === 1 ? true : false,
     }),
-  details: (id) => apiAction(DETAILS, resolveUrl(apiUrls.NEWS_DETAILS, { id }))
+  details: (id) => apiAction(DETAILS, resolveUrl(apiUrls.NEWS_DETAILS, { id })),
 };

@@ -6,7 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  Text
+  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -14,7 +14,7 @@ import {
   VerifiedCell,
   LoadingOverlay,
   DropDownAlert,
-  TouchableOpacityDebounce
+  TouchableOpacityDebounce,
 } from '../components';
 
 import { CINNABAR } from '../constants/colors';
@@ -24,7 +24,7 @@ import {
   getShouldLoadVerifiedNextPage,
   getVerifiedNextPage,
   getIsFetchingNextPage,
-  getIsFetchingInitial
+  getIsFetchingInitial,
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 
@@ -45,7 +45,7 @@ class VerifiedScreen extends Component {
         item={item}
         onCellTapped={() =>
           this.props.navigation.navigate('VerifiedDetailsScreen', {
-            id: item.id
+            id: item.id,
           })
         }
       />
@@ -59,7 +59,7 @@ class VerifiedScreen extends Component {
       shouldLoadNextPage,
       nextPage,
       isFetchingNextPage,
-      fetchVerifiedRequest
+      fetchVerifiedRequest,
     } = this.props;
 
     if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
@@ -132,40 +132,40 @@ class VerifiedScreen extends Component {
 // TODO: replace any with correct types
 VerifiedScreen.propTypes = {
   articles: PropTypes.shape({
-    length: PropTypes.number
+    length: PropTypes.number,
   }),
   error: PropTypes.any,
   fetchVerifiedRequest: PropTypes.func,
   isFetchingInitial: PropTypes.bool,
   isFetchingNextPage: PropTypes.bool,
   navigation: PropTypes.shape({
-    navigate: PropTypes.func
+    navigate: PropTypes.func,
   }),
   nextPage: PropTypes.any,
-  shouldLoadNextPage: PropTypes.bool
+  shouldLoadNextPage: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   loader: {
     alignItems: 'center',
     flex: 1,
-    padding: 24
+    padding: 24,
   },
   title: {
     color: 'black',
     fontSize: 24,
     marginTop: 16,
     marginBottom: 8,
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   emptyComponent: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   refreshButton: {
     width: 200,
@@ -173,13 +173,13 @@ const styles = StyleSheet.create({
     backgroundColor: CINNABAR,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10
+    borderRadius: 10,
   },
   refreshButtonText: {
     color: 'white',
     fontSize: 20,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -189,13 +189,13 @@ const mapStateToProps = (state) => {
     nextPage: getVerifiedNextPage(state.articles),
     isFetchingInitial: getIsFetchingInitial(state.articles),
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
-    error: state.articles.verified.error
+    error: state.articles.verified.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args))
+    fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
   };
 };
 

@@ -15,16 +15,16 @@ export const articles = combineReducers({
         ...nextState,
         data: {
           ...action.data,
-          results: newResults
-        }
+          results: newResults,
+        },
       };
     } else {
       return {
         ...nextState,
-        data: action.data
+        data: action.data,
       };
     }
   }),
 
-  details: apiReducer(DETAILS)
+  details: apiReducer(DETAILS),
 });

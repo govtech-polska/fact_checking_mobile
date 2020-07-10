@@ -21,12 +21,12 @@ export const apiSaga = (type) => {
       data = requestData;
       if (!data) {
         data = {
-          success: true
+          success: true,
         };
       }
       yield put({
         type: type + SUCCESS,
-        data
+        data,
       });
       if (action.afterSagaSuccess) {
         yield call(action.afterSagaSuccess, data);
@@ -34,7 +34,7 @@ export const apiSaga = (type) => {
     } catch (error) {
       yield put({
         type: type + FAILURE,
-        error: strings.error_general
+        error: strings.error_general,
       });
     }
   }

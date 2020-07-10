@@ -10,5 +10,5 @@ export const strings = {
   argumentLabel: 'Teza:',
   fhLinkLabel: 'Link do materiału:',
   expertReportLabel: 'Raport eksperta:',
-  verifiedDateLabel: 'Data werdyktu:'
+  verifiedDateLabel: 'Data werdyktu:',
 };

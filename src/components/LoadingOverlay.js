@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,
-    backgroundColor: WHITE_SMOKE
-  }
+    backgroundColor: WHITE_SMOKE,
+  },
 });
 
 export default memo(LoadingOverlay);

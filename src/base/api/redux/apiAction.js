@@ -16,6 +16,6 @@ export const apiAction = (type, endpoint, options = {}) => {
     method: options.method || 'GET',
     payload: options && options.payload,
     afterSagaSuccess: options && options.afterSagaSuccess,
-    clearOnRequest: options && options.clearOnRequest
+    clearOnRequest: options && options.clearOnRequest,
   };
 };

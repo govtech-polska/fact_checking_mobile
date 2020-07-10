@@ -26,9 +26,9 @@ export const VerifiedStackScreen = () => {
         options={{
           title: ' ',
           headerStyle: {
-            backgroundColor: CINNABAR
+            backgroundColor: CINNABAR,
           },
-          headerTitle: (props) => <LogoTitle {...props} />
+          headerTitle: (props) => <LogoTitle {...props} />,
         }}
       />
       <VerifiedStack.Screen

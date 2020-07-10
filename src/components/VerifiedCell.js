@@ -50,9 +50,9 @@ VerifiedCell.propTypes = {
     reported_at: PropTypes.string,
     screenshot_url: PropTypes.string,
     title: PropTypes.string,
-    verdict: PropTypes.string
+    verdict: PropTypes.string,
   }),
-  onCellTapped: PropTypes.func
+  onCellTapped: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -61,34 +61,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   image: {
     flex: 1,
     width: '25%',
     aspectRatio: 2,
     backgroundColor: WHITE_SMOKE,
-    marginRight: 12
+    marginRight: 12,
   },
   verificationResult: {
     width: 25,
-    marginLeft: 8
+    marginLeft: 8,
   },
   separator: {
     height: 1,
     backgroundColor: WHITE_SMOKE,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
     color: 'black',
     fontSize: 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   date: {
     color: DARK_GRAY,
     fontSize: 12,
-    marginTop: 4
-  }
+    marginTop: 4,
+  },
 });
 
 export default memo(VerifiedCell);

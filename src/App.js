@@ -18,7 +18,7 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator
           tabBarOptions={{
-            activeTintColor: CINNABAR
+            activeTintColor: CINNABAR,
           }}
         >
           {verifiedStack()}

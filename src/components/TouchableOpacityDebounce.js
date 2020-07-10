@@ -8,7 +8,7 @@ class TouchableOpacityDebounce extends PureComponent {
     super(props);
     this.onPress = debounce(this.onPress, 800, {
       leading: true,
-      trailing: false
+      trailing: false,
     });
   }
 
@@ -25,7 +25,7 @@ class TouchableOpacityDebounce extends PureComponent {
 
 TouchableOpacityDebounce.propTypes = {
   children: PropTypes.any,
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
 };
 
 export { TouchableOpacityDebounce };

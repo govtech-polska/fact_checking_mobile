@@ -12,7 +12,7 @@ export const request = (method, url, data) => {
   const requestConfig = {
     method,
     url: BASE_URL + url,
-    data
+    data,
   };
 
   return axios(requestConfig);

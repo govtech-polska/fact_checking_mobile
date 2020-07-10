@@ -9,7 +9,7 @@ import {
   ScrollView,
   Modal,
   Share,
-  Platform
+  Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Moment from 'moment';
@@ -18,7 +18,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import {
   LoadingOverlay,
   DropDownAlert,
-  TouchableOpacityDebounce
+  TouchableOpacityDebounce,
 } from '../components';
 import { strings } from '../constants/strings';
 import { DARK_GRAY } from '../constants/colors';
@@ -31,7 +31,7 @@ class VerifiedDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageViewerVisible: false
+      imageViewerVisible: false,
     };
 
     props.navigation.setOptions({
@@ -42,7 +42,7 @@ class VerifiedDetailsScreen extends Component {
         >
           <Image style={{ flex: 1 }} resizeMode="contain" source={shareImage} />
         </TouchableOpacityDebounce>
-      )
+      ),
     });
   }
 
@@ -77,7 +77,7 @@ class VerifiedDetailsScreen extends Component {
 
   toggleImageViewerVisibility = () => {
     this.setState((prevState) => ({
-      imageViewerVisible: !prevState.imageViewerVisible
+      imageViewerVisible: !prevState.imageViewerVisible,
     }));
   };
 
@@ -104,15 +104,15 @@ class VerifiedDetailsScreen extends Component {
   onShare = async () => {
     try {
       const {
-        details: { id }
+        details: { id },
       } = this.props;
       await Share.share({
         ...Platform.select({
           android: {
-            message: `${APP_URL}/${id}`
-          }
+            message: `${APP_URL}/${id}`,
+          },
         }),
-        url: `${APP_URL}/${id}`
+        url: `${APP_URL}/${id}`,
       });
     } catch (error) {
       DropDownAlert.showError();
@@ -182,93 +182,93 @@ class VerifiedDetailsScreen extends Component {
 VerifiedDetailsScreen.propTypes = {
   details: PropTypes.shape({
     expert: PropTypes.shape({
-      date: PropTypes.any
+      date: PropTypes.any,
     }),
     expert_opinion: PropTypes.shape({
-      comment: PropTypes.any
+      comment: PropTypes.any,
     }),
     id: PropTypes.any,
     reported_at: PropTypes.any,
     screenshot_url: PropTypes.string,
     title: PropTypes.any,
-    url: PropTypes.any
+    url: PropTypes.any,
   }),
   error: PropTypes.any,
   fetchVerifiedDetailsRequest: PropTypes.func,
   isFetching: PropTypes.any,
   navigation: PropTypes.shape({
-    setOptions: PropTypes.func
+    setOptions: PropTypes.func,
   }),
   route: PropTypes.shape({
-    params: PropTypes.any
-  })
+    params: PropTypes.any,
+  }),
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   titleContainer: {
     marginTop: 16,
     paddingHorizontal: 16,
-    marginBottom: 8
+    marginBottom: 8,
   },
   title: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 24,
-    marginBottom: 16
+    marginBottom: 16,
   },
   dateLabel: {
     color: DARK_GRAY,
-    fontSize: 12
+    fontSize: 12,
   },
   image: {
     width: '100%',
     aspectRatio: 1.5,
     backgroundColor: 'black',
     padding: 8,
-    marginTop: 8
+    marginTop: 8,
   },
   detailsContainer: {
     flex: 1,
     width: '100%',
-    paddingHorizontal: 16
+    paddingHorizontal: 16,
   },
   detailsTitle: {
     color: 'black',
     fontWeight: 'bold',
     fontSize: 14,
     textTransform: 'uppercase',
-    marginTop: 32
+    marginTop: 32,
   },
   detailsText: {
     color: 'black',
-    fontSize: 14
+    fontSize: 14,
   },
   url: {
     color: 'blue',
-    fontSize: 14
+    fontSize: 14,
   },
   shareButton: {
     width: 30,
-    height: 30
-  }
+    height: 30,
+  },
 });
 
 const mapStateToProps = (state) => {
   return {
     details: state.articles.details.data,
     isFetching: state.articles.details.isFetching,
-    error: state.articles.details.error
+    error: state.articles.details.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchVerifiedDetailsRequest: (...args) =>
-      dispatch(feedActions.details(...args))
+      dispatch(feedActions.details(...args)),
   };
 };
 

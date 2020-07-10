@@ -24,7 +24,7 @@ export const verifiedStack = () => {
               source={require('../resources/img/tabBar/verifiedTabIcon.png')}
             />
           );
-        }
+        },
       }}
     />
   );
@@ -44,7 +44,7 @@ export const reportStack = () => {
               style={{ width: size, height: size, backgroundColor: color }}
             />
           );
-        }
+        },
       }}
     />
   );
