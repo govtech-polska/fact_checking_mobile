@@ -13,40 +13,30 @@ import {
   VerifiedCell,
   LoadingOverlay,
   DropDownAlert,
+  TouchableOpacityDebounce,
 } from '../components';
-import {
-  promiseDispatch,
-  fetchVerifiedRequest,
-  fetchNextPageVerifiedRequest,
-} from '../actions';
+
 import { CINNABAR } from '../constants/colors';
 import { strings } from '../constants/strings';
 import {
   getVerifiedList,
   getShouldLoadVerifiedNextPage,
+  getVerifiedNextPage,
+  getIsFetchingNextPage,
+  getIsFetchingInitial,
 } from '../selectors';
+import { feedActions } from '../storages/verified/actions'
 
 class VerifiedScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isFetchingInitial: false,
-      isFetchingNextPage: false,
-      refreshing: false,
-    };
+
+  componentDidMount() {
+    this.props.fetchVerifiedRequest();
   }
 
-  async componentDidMount() {
-    this.setState({ isFetchingInitial: true });
-    await this.fetchData();
-    this.setState({ isFetchingInitial: false });
-    this._focusListener = this.props.navigation.addListener('focus', () => {
-      this.onRefreshTriggered();
-    });
-  }
-
-  componentWillUnmount() {
-    this._focusListener();
+  componentDidUpdate(prevProps) {
+    if (this.props.error && prevProps.error !== this.props.error) {
+      DropDownAlert.showError()
+    }
   }
 
   drawCell = ({ item }) => {
@@ -60,37 +50,22 @@ class VerifiedScreen extends Component {
 
   keyExtractor = (_item, index) => index.toString();
 
-  fetchData = async () => {
-    try {
-      await this.props.fetchVerifiedRequest();
-    } catch (error) {
-      DropDownAlert.showError();
-    }
-  }
-
   loadNextPage = async () => {
     const {
       shouldLoadNextPage,
-    } = this.props;
-    const {
+      nextPage,
       isFetchingNextPage,
-    } = this.state;
-    if (shouldLoadNextPage && !isFetchingNextPage) {
-      this.setState({ isFetchingNextPage: true });
-      try {
-        await this.props.fetchNextPageVerifiedRequest();
-        this.setState({ isFetchingNextPage: false });
-      } catch (error) {
-        DropDownAlert.showError();
-        this.setState({ isFetchingNextPage: false });
-      }
+      fetchVerifiedRequest,
+    } = this.props;
+
+    if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
+      fetchVerifiedRequest(nextPage);
     }
   }
 
   onRefreshTriggered = async () => {
-    this.setState({ refreshing: true });
-    await this.fetchData();
-    this.setState({ refreshing: false });
+    const { fetchVerifiedRequest } = this.props;
+    fetchVerifiedRequest();
   }
 
   renderListFooterComponent = () => (
@@ -99,30 +74,55 @@ class VerifiedScreen extends Component {
     </View>
   );
 
+  renderEmptyComponent = () => {
+    return (
+      <View style={styles.emptyComponent}>
+      <TouchableOpacityDebounce
+        onPress={this.onRefreshTriggered}
+        style={styles.refreshButton}
+      >
+        <Text style={styles.refreshButtonText}>
+          {strings.refresh}
+        </Text>
+      </TouchableOpacityDebounce>
+      </View>);
+  }
+
+  renderTitleIfNeeded = () => {
+    const { articles } = this.props;
+    if (articles.length > 0) {
+      return <Text style={styles.title}>{strings.verifiedTitle}</Text>
+    }
+  }
+
   render() {
     const {
+      isFetchingInitial,
       isFetchingNextPage,
-      refreshing,
-    } = this.state;
+      articles,
+    } = this.props;
+
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>{strings.verifiedTitle}</Text>
+        {this.renderTitleIfNeeded()}
         <FlatList
-          data={this.props.articles}
+          data={articles}
+          contentContainerStyle={{ flexGrow: 1 }}
           renderItem={this.drawCell}
           keyExtractor={this.keyExtractor}
           onEndReached={this.loadNextPage}
           onEndReachedThreshold={0.2}
-          ListFooterComponent={isFetchingNextPage ? this.renderListFooterComponent : null}
           refreshControl={
             <RefreshControl
-              refreshing={refreshing}
+              refreshing={isFetchingInitial}
               onRefresh={this.onRefreshTriggered}
               tintColor={CINNABAR}
             />
           }
+          ListFooterComponent={isFetchingNextPage ? this.renderListFooterComponent : null}
+          ListEmptyComponent={this.renderEmptyComponent}
         />
-        <LoadingOverlay visible={this.state.isFetchingInitial} />
+        <LoadingOverlay visible={isFetchingInitial} />
       </View>
     );
   }
@@ -145,19 +145,40 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 16,
   },
+  emptyComponent: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  refreshButton: {
+    width: 200,
+    height: 50,
+    backgroundColor: CINNABAR,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+  },
+  refreshButtonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+  }
 });
 
 const mapStateToProps = (state) => {
   return {
-    articles: getVerifiedList(state.verified),
-    shouldLoadNextPage: getShouldLoadVerifiedNextPage(state.verified),
+    articles: getVerifiedList(state.articles),
+    shouldLoadNextPage: getShouldLoadVerifiedNextPage(state.articles),
+    nextPage: getVerifiedNextPage(state.articles),
+    isFetchingInitial: getIsFetchingInitial(state.articles),
+    isFetchingNextPage: getIsFetchingNextPage(state.articles),
+    error: state.articles.verified.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchVerifiedRequest: () => promiseDispatch(dispatch, fetchVerifiedRequest),
-    fetchNextPageVerifiedRequest: () => promiseDispatch(dispatch, fetchNextPageVerifiedRequest),
+    fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
   };
 };
 

@@ -1,5 +1,6 @@
 export const strings = {
   error_general: 'Ups, coś poszło nie tak :(',
+  refresh: 'Odśwież',
 
   //MARK: Tab names
   verifiedTab: 'Zewryfikowane',

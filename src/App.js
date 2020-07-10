@@ -5,7 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import DropdownAlert from 'react-native-dropdownalert';
 
-import store from './store/configureStore';
+import store from './base/redux/configureStore';
 import {
   verifiedStack,
   reportStack,
