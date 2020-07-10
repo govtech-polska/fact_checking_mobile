@@ -18,12 +18,8 @@ if (process.env.NODE_ENV === 'development') {
 const store = configureStore();
 
 function configureStore(initialState) {
-    return createStore(
-        reducers,
-        initialState,
-        applyMiddleware(...middleware)
-    );
-  }
+  return createStore(reducers, initialState, applyMiddleware(...middleware));
+}
 
 sagaMiddleware.run(rootSaga);
 export default store;

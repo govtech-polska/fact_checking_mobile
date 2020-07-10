@@ -9,7 +9,7 @@ export const apiReducer = (type, reduceSuccess) => {
   const initialState = {
     data: null,
     error: null,
-    isFetching: false
+    isFetching: false,
   };
 
   return (state = initialState, action) => {
@@ -17,34 +17,34 @@ export const apiReducer = (type, reduceSuccess) => {
       case type + REQUEST:
         return {
           ...(action.clearOnRequest ? initialState : state),
-          isFetching: true
+          isFetching: true,
         };
       case type + SUCCESS: {
         const nextState = {
           ...state,
           error: initialState.error,
-          isFetching: initialState.isFetching
+          isFetching: initialState.isFetching,
         };
         if (reduceSuccess) {
           return reduceSuccess(nextState, action);
         }
         return {
           ...nextState,
-          data: action.data
+          data: action.data,
         };
       }
       case type + FAILURE:
         return {
           ...state,
           error: action.error,
-          isFetching: initialState.isFetching
+          isFetching: initialState.isFetching,
         };
       case type + CLEAR:
         return initialState;
       case type + CLEAR + FAILURE:
         return {
           ...state,
-          error: null
+          error: null,
         };
       default:
         return state;

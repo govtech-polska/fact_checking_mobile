@@ -1,17 +1,11 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 
-import {
-  VerifiedScreen,
-  VerifiedDetailsScreen,
-  ReportScreen,
-} from '../screens';
+import { VerifiedScreen, VerifiedDetailsScreen } from '../screens';
 import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
-import LogoHeader from '../resources/img/logo_fh.svg'
+import LogoHeader from '../resources/img/logo_fh.svg';
 
 const VerifiedStack = createStackNavigator();
 
@@ -34,14 +28,14 @@ export const VerifiedStackScreen = () => {
           headerStyle: {
             backgroundColor: CINNABAR,
           },
-          headerTitle: props => <LogoTitle {...props} />
+          headerTitle: (props) => <LogoTitle {...props} />,
         }}
       />
       <VerifiedStack.Screen
-        name='VerifiedDetailsScreen'
+        name="VerifiedDetailsScreen"
         component={VerifiedDetailsScreen}
         options={{ title: '' }}
       />
     </VerifiedStack.Navigator>
   );
-}
+};

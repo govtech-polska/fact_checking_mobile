@@ -5,19 +5,12 @@ import DropDownHolder from './DropDownHolder';
 import { strings } from '../constants/strings';
 
 class DropDownAlert extends Component {
-
   static showError() {
-    DropDownHolder.dropDown.alertWithType(
-      'error',
-      strings.error_general,
-      '',
-    );
+    DropDownHolder.dropDown.alertWithType('error', strings.error_general, '');
   }
 
   render() {
-    return (
-      <DropdownAlert ref={(ref) => DropDownHolder.setDropDown(ref)} />
-    );
+    return <DropdownAlert ref={(ref) => DropDownHolder.setDropDown(ref)} />;
   }
 }
 
