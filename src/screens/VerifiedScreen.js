@@ -50,7 +50,7 @@ class VerifiedScreen extends Component {
 
   keyExtractor = (_item, index) => index.toString();
 
-  loadNextPage = async () => {
+  loadNextPage = () => {
     const {
       shouldLoadNextPage,
       nextPage,
@@ -63,7 +63,7 @@ class VerifiedScreen extends Component {
     }
   }
 
-  onRefreshTriggered = async () => {
+  onRefreshTriggered = () => {
     const { fetchVerifiedRequest } = this.props;
     fetchVerifiedRequest();
   }
