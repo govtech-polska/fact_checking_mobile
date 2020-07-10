@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   StyleSheet,
@@ -7,7 +8,6 @@ import {
   Linking,
   ScrollView,
   Modal,
-  Button,
   Share,
   Platform
 } from 'react-native';
@@ -106,7 +106,7 @@ class VerifiedDetailsScreen extends Component {
       const {
         details: { id }
       } = this.props;
-      const result = await Share.share({
+      await Share.share({
         ...Platform.select({
           android: {
             message: `${APP_URL}/${id}`
@@ -178,6 +178,32 @@ class VerifiedDetailsScreen extends Component {
   }
 }
 
+// TODO: replace any with correct types
+VerifiedDetailsScreen.propTypes = {
+  details: PropTypes.shape({
+    expert: PropTypes.shape({
+      date: PropTypes.any
+    }),
+    expert_opinion: PropTypes.shape({
+      comment: PropTypes.any
+    }),
+    id: PropTypes.any,
+    reported_at: PropTypes.any,
+    screenshot_url: PropTypes.string,
+    title: PropTypes.any,
+    url: PropTypes.any
+  }),
+  error: PropTypes.any,
+  fetchVerifiedDetailsRequest: PropTypes.func,
+  isFetching: PropTypes.any,
+  navigation: PropTypes.shape({
+    setOptions: PropTypes.func
+  }),
+  route: PropTypes.shape({
+    params: PropTypes.any
+  })
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -199,7 +225,6 @@ const styles = StyleSheet.create({
     fontSize: 12
   },
   image: {
-    marginTop: 8,
     width: '100%',
     aspectRatio: 1.5,
     backgroundColor: 'black',

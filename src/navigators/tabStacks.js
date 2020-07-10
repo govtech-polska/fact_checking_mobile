@@ -1,9 +1,9 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
 import { Image } from 'react-native';
 
-import { VerifiedScreen, ReportScreen } from '../screens';
+import { ReportScreen } from '../screens';
 import { VerifiedStackScreen } from './stacks';
 import { strings } from '../constants/strings';
 

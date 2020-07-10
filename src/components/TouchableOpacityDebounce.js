@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { debounce } from 'lodash';
 
@@ -21,5 +22,10 @@ class TouchableOpacityDebounce extends PureComponent {
     );
   }
 }
+
+TouchableOpacityDebounce.propTypes = {
+  children: PropTypes.any,
+  onPress: PropTypes.func
+};
 
 export { TouchableOpacityDebounce };

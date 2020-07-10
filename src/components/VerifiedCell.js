@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Moment from 'moment';
 
@@ -42,6 +43,16 @@ const VerifiedCell = ({ item, onCellTapped }) => {
       <View style={styles.separator} />
     </>
   );
+};
+
+VerifiedCell.propTypes = {
+  item: PropTypes.shape({
+    reported_at: PropTypes.string,
+    screenshot_url: PropTypes.string,
+    title: PropTypes.string,
+    verdict: PropTypes.string
+  }),
+  onCellTapped: PropTypes.func
 };
 
 const styles = StyleSheet.create({

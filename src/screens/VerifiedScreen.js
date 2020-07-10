@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   FlatList,
@@ -127,6 +128,22 @@ class VerifiedScreen extends Component {
     );
   }
 }
+
+// TODO: replace any with correct types
+VerifiedScreen.propTypes = {
+  articles: PropTypes.shape({
+    length: PropTypes.number
+  }),
+  error: PropTypes.any,
+  fetchVerifiedRequest: PropTypes.func,
+  isFetchingInitial: PropTypes.bool,
+  isFetchingNextPage: PropTypes.bool,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func
+  }),
+  nextPage: PropTypes.any,
+  shouldLoadNextPage: PropTypes.bool
+};
 
 const styles = StyleSheet.create({
   container: {
