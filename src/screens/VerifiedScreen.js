@@ -21,7 +21,7 @@ import { strings } from '../constants/strings';
 import {
   getVerifiedList,
   getShouldLoadVerifiedNextPage,
-  getVerifiedNextPageUrl,
+  getVerifiedNextPage,
   getIsFetchingNextPage,
   getIsFetchingInitial,
 } from '../selectors';
@@ -31,19 +31,12 @@ class VerifiedScreen extends Component {
 
   componentDidMount() {
     this.props.fetchVerifiedRequest();
-    this._focusListener = this.props.navigation.addListener('focus', () => {
-      this.onRefreshTriggered();
-    });
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError()
     }
-  }
-
-  componentWillUnmount() {
-    this._focusListener();
   }
 
   drawCell = ({ item }) => {
@@ -60,13 +53,13 @@ class VerifiedScreen extends Component {
   loadNextPage = async () => {
     const {
       shouldLoadNextPage,
-      nextPageUrl,
+      nextPage,
       isFetchingNextPage,
       fetchVerifiedRequest,
     } = this.props;
 
-    if (shouldLoadNextPage && !isFetchingNextPage && nextPageUrl) {
-      fetchVerifiedRequest(nextPageUrl);
+    if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
+      fetchVerifiedRequest(nextPage);
     }
   }
 
@@ -97,8 +90,8 @@ class VerifiedScreen extends Component {
 
   renderTitleIfNeeded = () => {
     const { articles } = this.props;
-    if(articles.length > 0) {
-      <Text style={styles.title}>{strings.verifiedTitle}</Text>
+    if (articles.length > 0) {
+      return <Text style={styles.title}>{strings.verifiedTitle}</Text>
     }
   }
 
@@ -111,7 +104,7 @@ class VerifiedScreen extends Component {
 
     return (
       <View style={styles.container}>
-        {this.renderTitleIfNeeded}
+        {this.renderTitleIfNeeded()}
         <FlatList
           data={articles}
           contentContainerStyle={{ flexGrow: 1 }}
@@ -176,7 +169,7 @@ const mapStateToProps = (state) => {
   return {
     articles: getVerifiedList(state.articles),
     shouldLoadNextPage: getShouldLoadVerifiedNextPage(state.articles),
-    nextPageUrl: getVerifiedNextPageUrl(state.articles),
+    nextPage: getVerifiedNextPage(state.articles),
     isFetchingInitial: getIsFetchingInitial(state.articles),
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
     error: state.articles.verified.error,
