@@ -21,7 +21,7 @@ import { strings } from '../constants/strings';
 import {
   getVerifiedList,
   getShouldLoadVerifiedNextPage,
-  getVerifiedNextPageUrl,
+  getVerifiedNextPage,
   getIsFetchingNextPage,
   getIsFetchingInitial,
 } from '../selectors';
@@ -60,13 +60,13 @@ class VerifiedScreen extends Component {
   loadNextPage = async () => {
     const {
       shouldLoadNextPage,
-      nextPageUrl,
+      nextPage,
       isFetchingNextPage,
       fetchVerifiedRequest,
     } = this.props;
 
-    if (shouldLoadNextPage && !isFetchingNextPage && nextPageUrl) {
-      fetchVerifiedRequest(nextPageUrl);
+    if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
+      fetchVerifiedRequest(nextPage);
     }
   }
 
@@ -176,7 +176,7 @@ const mapStateToProps = (state) => {
   return {
     articles: getVerifiedList(state.articles),
     shouldLoadNextPage: getShouldLoadVerifiedNextPage(state.articles),
-    nextPageUrl: getVerifiedNextPageUrl(state.articles),
+    nextPage: getVerifiedNextPage(state.articles),
     isFetchingInitial: getIsFetchingInitial(state.articles),
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
     error: state.articles.verified.error,

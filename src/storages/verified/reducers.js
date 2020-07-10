@@ -7,14 +7,15 @@ import {
 } from './actions'
 
 export const articles = combineReducers({
-  verified: apiReducer(NEWS, (nextState, action) => {
+  verified: apiReducer(NEWS, ((nextState, action) => {
     if (nextState.data) {
+      console.log('verifiedApiReducer nextState: ', nextState)
       const newResults = [...nextState.data?.results, ...action.data?.results]
       return {
         ...nextState,
         data: {
           ...nextState.data,
-          results: newResults
+          results: newResults,
         }
       }
     } else {
@@ -23,6 +24,7 @@ export const articles = combineReducers({
         data: action.data
       }
     }
-  }),
+  })),
+
   details: apiReducer(DETAILS),
 })

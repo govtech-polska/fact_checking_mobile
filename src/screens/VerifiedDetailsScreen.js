@@ -39,6 +39,7 @@ class VerifiedDetailsScreen extends Component {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError()
     }
+    console.log('VerifiedDetailsScreen details: ', this.props.articles)
   }
 
   dateFormatted(date, format) {
@@ -98,7 +99,7 @@ class VerifiedDetailsScreen extends Component {
           <View style={styles.container}>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>
-                {details?.expert?.title}
+                {details?.title}
               </Text>
               <Text style={styles.dateLabel}>{`${strings.reportDateLabel} ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
             </View>
@@ -137,7 +138,7 @@ class VerifiedDetailsScreen extends Component {
               <Text style={styles.dateLabel}>
                 {`${strings.verifiedDateLabel} ${this.dateFormatted(details?.expert?.date, 'DD.MM.YYYY HH:mm')}`}
               </Text>
-              <Text style={styles.detailsText}>{details?.expert?.comment}</Text>
+              <Text style={styles.detailsText}>{details?.expert_opinion?.comment}</Text>
 
             </View>
           </View>

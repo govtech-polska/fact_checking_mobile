@@ -7,6 +7,6 @@ export const NEWS = 'feed.NEWS_LIST';
 export const DETAILS = 'feed.NEWS_DETAILS';
 
 export const feedActions = {
-  list: url => apiAction(NEWS, url || resolveUrl(apiUrls.NEWS, { page: 1 }), { clearOnRequest: url ? false : true }),
+  list: page => apiAction(NEWS, resolveUrl(apiUrls.NEWS, { page: page || 1 }), { clearOnRequest: page === 1 ? true : false }),
   details: id => apiAction(DETAILS, resolveUrl(apiUrls.NEWS_DETAILS, { id })),
 }

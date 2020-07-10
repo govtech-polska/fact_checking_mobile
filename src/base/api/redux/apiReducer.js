@@ -13,6 +13,9 @@ export const apiReducer = (type, reduceSuccess) => {
   };
 
   return (state = initialState, action) => {
+    console.log('ApiReducer type: ', action.type)
+    console.log('ApiReducer action: ', action)
+    console.log('ApiReducer reduceSuccess: ', reduceSuccess)
     switch (action.type) {
       case type + REQUEST:
         return {
