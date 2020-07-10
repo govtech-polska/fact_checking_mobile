@@ -25,6 +25,8 @@ import { DARK_GRAY } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions'
 import { APP_URL } from '../constants/api';
 
+const shareImage = require('../resources/img/share.png');
+
 class VerifiedDetailsScreen extends Component {
   constructor(props) {
     super(props);
@@ -35,13 +37,13 @@ class VerifiedDetailsScreen extends Component {
     props.navigation.setOptions({
       headerRight: () => (
         <TouchableOpacityDebounce
-          style={{ width: 30, height: 30 }}
+          style={styles.shareButton}
           onPress={this.onShare}
         >
           <Image
             style={{ flex: 1 }}
             resizeMode='contain'
-            source={require('../resources/img/share.png')}
+            source={shareImage}
           />
         </TouchableOpacityDebounce>
       ),
@@ -88,7 +90,7 @@ class VerifiedDetailsScreen extends Component {
       <Modal
         visible={imageViewerVisible}
         transparent={true}
-        animationType="slide"
+        animationType="fade"
       >
         <ImageViewer
           enableSwipeDown
@@ -228,7 +230,11 @@ const styles = StyleSheet.create({
   url: {
     color: 'blue',
     fontSize: 14,
-  }
+  }, 
+  shareButton: {
+    width: 30,
+    height: 30,
+  },
 });
 
 const mapStateToProps = (state) => {
