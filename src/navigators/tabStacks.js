@@ -1,14 +1,9 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  Image,
-} from 'react-native';
+import { Image } from 'react-native';
 
-import {
-  VerifiedScreen,
-  ReportScreen,
-} from '../screens';
+import { VerifiedScreen, ReportScreen } from '../screens';
 import { VerifiedStackScreen } from './stacks';
 import { strings } from '../constants/strings';
 
@@ -24,16 +19,16 @@ export const verifiedStack = () => {
         tabBarIcon: ({ color, size }) => {
           return (
             <Image
-              resizeMode='contain'
+              resizeMode="contain"
               style={{ width: size, height: size, tintColor: color }}
               source={require('../resources/img/tabBar/verifiedTabIcon.png')}
             />
           );
-        },
+        }
       }}
     />
   );
-}
+};
 
 export const reportStack = () => {
   return (
@@ -45,12 +40,12 @@ export const reportStack = () => {
         tabBarIcon: ({ color, size }) => {
           return (
             <Image
-              resizeMode='contain'
+              resizeMode="contain"
               style={{ width: size, height: size, backgroundColor: color }}
             />
           );
-        },
+        }
       }}
     />
   );
-}
+};

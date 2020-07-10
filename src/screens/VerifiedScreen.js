@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  Text,
+  Text
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -13,7 +13,7 @@ import {
   VerifiedCell,
   LoadingOverlay,
   DropDownAlert,
-  TouchableOpacityDebounce,
+  TouchableOpacityDebounce
 } from '../components';
 
 import { CINNABAR } from '../constants/colors';
@@ -23,19 +23,18 @@ import {
   getShouldLoadVerifiedNextPage,
   getVerifiedNextPage,
   getIsFetchingNextPage,
-  getIsFetchingInitial,
+  getIsFetchingInitial
 } from '../selectors';
-import { feedActions } from '../storages/verified/actions'
+import { feedActions } from '../storages/verified/actions';
 
 class VerifiedScreen extends Component {
-
   componentDidMount() {
     this.props.fetchVerifiedRequest();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.error && prevProps.error !== this.props.error) {
-      DropDownAlert.showError()
+      DropDownAlert.showError();
     }
   }
 
@@ -43,10 +42,14 @@ class VerifiedScreen extends Component {
     return (
       <VerifiedCell
         item={item}
-        onCellTapped={() => this.props.navigation.navigate('VerifiedDetailsScreen', { id: item.id })}
+        onCellTapped={() =>
+          this.props.navigation.navigate('VerifiedDetailsScreen', {
+            id: item.id
+          })
+        }
       />
     );
-  }
+  };
 
   keyExtractor = (_item, index) => index.toString();
 
@@ -55,52 +58,47 @@ class VerifiedScreen extends Component {
       shouldLoadNextPage,
       nextPage,
       isFetchingNextPage,
-      fetchVerifiedRequest,
+      fetchVerifiedRequest
     } = this.props;
 
     if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
       fetchVerifiedRequest(nextPage);
     }
-  }
+  };
 
   onRefreshTriggered = () => {
     const { fetchVerifiedRequest } = this.props;
     fetchVerifiedRequest();
-  }
+  };
 
   renderListFooterComponent = () => (
     <View style={styles.loader}>
-      <ActivityIndicator size='large' color={CINNABAR} />
+      <ActivityIndicator size="large" color={CINNABAR} />
     </View>
   );
 
   renderEmptyComponent = () => {
     return (
       <View style={styles.emptyComponent}>
-      <TouchableOpacityDebounce
-        onPress={this.onRefreshTriggered}
-        style={styles.refreshButton}
-      >
-        <Text style={styles.refreshButtonText}>
-          {strings.refresh}
-        </Text>
-      </TouchableOpacityDebounce>
-      </View>);
-  }
+        <TouchableOpacityDebounce
+          onPress={this.onRefreshTriggered}
+          style={styles.refreshButton}
+        >
+          <Text style={styles.refreshButtonText}>{strings.refresh}</Text>
+        </TouchableOpacityDebounce>
+      </View>
+    );
+  };
 
   renderTitleIfNeeded = () => {
     const { articles } = this.props;
     if (articles.length > 0) {
-      return <Text style={styles.title}>{strings.verifiedTitle}</Text>
+      return <Text style={styles.title}>{strings.verifiedTitle}</Text>;
     }
-  }
+  };
 
   render() {
-    const {
-      isFetchingInitial,
-      isFetchingNextPage,
-      articles,
-    } = this.props;
+    const { isFetchingInitial, isFetchingNextPage, articles } = this.props;
 
     return (
       <View style={styles.container}>
@@ -119,7 +117,9 @@ class VerifiedScreen extends Component {
               tintColor={CINNABAR}
             />
           }
-          ListFooterComponent={isFetchingNextPage ? this.renderListFooterComponent : null}
+          ListFooterComponent={
+            isFetchingNextPage ? this.renderListFooterComponent : null
+          }
           ListEmptyComponent={this.renderEmptyComponent}
         />
         <LoadingOverlay visible={isFetchingInitial} />
@@ -136,19 +136,19 @@ const styles = StyleSheet.create({
   loader: {
     alignItems: 'center',
     flex: 1,
-    padding: 24,
+    padding: 24
   },
   title: {
     color: 'black',
     fontSize: 24,
     marginTop: 16,
     marginBottom: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 16
   },
   emptyComponent: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   refreshButton: {
     width: 200,
@@ -156,12 +156,12 @@ const styles = StyleSheet.create({
     backgroundColor: CINNABAR,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
+    borderRadius: 10
   },
   refreshButtonText: {
     color: 'white',
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   }
 });
 
@@ -172,13 +172,13 @@ const mapStateToProps = (state) => {
     nextPage: getVerifiedNextPage(state.articles),
     isFetchingInitial: getIsFetchingInitial(state.articles),
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
-    error: state.articles.verified.error,
+    error: state.articles.verified.error
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
+    fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args))
   };
 };
 

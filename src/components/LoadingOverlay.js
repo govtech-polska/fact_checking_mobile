@@ -1,15 +1,12 @@
 import React, { memo } from 'react';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
-import {
-  CINNABAR,
-  WHITE_SMOKE,
-} from '../constants/colors';
+import { CINNABAR, WHITE_SMOKE } from '../constants/colors';
 
 const LoadingOverlay = ({ visible }) => {
   if (visible) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size='large' color={CINNABAR} />
+        <ActivityIndicator size="large" color={CINNABAR} />
       </View>
     );
   }
@@ -25,7 +22,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 100,
-    backgroundColor: WHITE_SMOKE,
+    backgroundColor: WHITE_SMOKE
   }
 });
 

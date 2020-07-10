@@ -1,33 +1,25 @@
 import React, { memo } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-} from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import Moment from 'moment';
 
-import {
-  TouchableOpacityDebounce,
-} from './TouchableOpacityDebounce';
-import {
-  WHITE_SMOKE,
-  DARK_GRAY,
-} from '../constants/colors';
+import { TouchableOpacityDebounce } from './TouchableOpacityDebounce';
+import { WHITE_SMOKE, DARK_GRAY } from '../constants/colors';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 
 const VerifiedCell = ({ item, onCellTapped }) => {
-
   const verificationStatusImage = () => {
     switch (item.verdict) {
-      case 'true': return <VerifiedOk width={25} height={25} style={{ marginLeft: 8 }} />;
-      case 'false': return <VerifiedBad width={25} height={25} style={{ marginLeft: 8 }} />;
-      default: return <VerifiedNot width={25} height={25} style={{ marginLeft: 8 }} />;
+      case 'true':
+        return <VerifiedOk width={25} height={25} style={{ marginLeft: 8 }} />;
+      case 'false':
+        return <VerifiedBad width={25} height={25} style={{ marginLeft: 8 }} />;
+      default:
+        return <VerifiedNot width={25} height={25} style={{ marginLeft: 8 }} />;
     }
-  }
-  const date = Moment(item.reported_at).format('DD.MM.YYYY')
+  };
+  const date = Moment(item.reported_at).format('DD.MM.YYYY');
 
   return (
     <>
@@ -36,7 +28,7 @@ const VerifiedCell = ({ item, onCellTapped }) => {
         onPress={() => onCellTapped()}
       >
         <Image
-          resizeMode='contain'
+          resizeMode="contain"
           style={styles.image}
           defaultSource={require('../resources/img/verifiedCell/logoPlaceholder.png')}
           source={{ uri: item.screenshot_url || '' }}
@@ -58,33 +50,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     width: '100%',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image: {
     flex: 1,
     width: '25%',
     aspectRatio: 2,
     backgroundColor: WHITE_SMOKE,
-    marginRight: 12,
+    marginRight: 12
   },
   verificationResult: {
     width: 25,
-    marginLeft: 8,
+    marginLeft: 8
   },
   separator: {
     height: 1,
     backgroundColor: WHITE_SMOKE,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
   title: {
     color: 'black',
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   date: {
     color: DARK_GRAY,
     fontSize: 12,
-    marginTop: 4,
+    marginTop: 4
   }
 });
 
