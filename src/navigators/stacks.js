@@ -14,6 +14,7 @@ import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg'
 
 const VerifiedStack = createStackNavigator();
+const ReportStack = createStackNavigator();
 
 function LogoTitle() {
   return (
@@ -43,5 +44,23 @@ export const VerifiedStackScreen = () => {
         options={{ title: '' }}
       />
     </VerifiedStack.Navigator>
+  );
+}
+
+export const ReportStackScreen = () => {
+  return (
+    <ReportStack.Navigator>
+      <ReportStack.Screen
+        name={strings.reportTab}
+        component={ReportScreen}
+        options={{
+          title: ' ',
+          headerStyle: {
+            backgroundColor: CINNABAR,
+          },
+          headerTitle: props => <LogoTitle {...props} />
+        }}
+      />
+    </ReportStack.Navigator>
   );
 }
