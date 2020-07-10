@@ -7,6 +7,9 @@ import {
   Linking,
   ScrollView,
   Modal,
+  Button,
+  Share,
+  Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Moment from 'moment';
@@ -22,12 +25,29 @@ import { DARK_GRAY } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions'
 import { APP_URL } from '../constants/api';
 
+const shareImage = require('../resources/img/share.png');
+
 class VerifiedDetailsScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       imageViewerVisible: false,
     };
+
+    props.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacityDebounce
+          style={styles.shareButton}
+          onPress={this.onShare}
+        >
+          <Image
+            style={{ flex: 1 }}
+            resizeMode='contain'
+            source={shareImage}
+          />
+        </TouchableOpacityDebounce>
+      ),
+    });
   }
 
   componentDidMount() {
@@ -70,7 +90,7 @@ class VerifiedDetailsScreen extends Component {
       <Modal
         visible={imageViewerVisible}
         transparent={true}
-        animationType="slide"
+        animationType="fade"
       >
         <ImageViewer
           enableSwipeDown
@@ -84,6 +104,22 @@ class VerifiedDetailsScreen extends Component {
       </Modal>
     )
   }
+
+  onShare = async () => {
+    try {
+      const { details: { id } } = this.props;
+      const result = await Share.share({
+        ...Platform.select({
+          android: {
+            message: `${APP_URL}/${id}`,
+          }
+        }),
+        url: `${APP_URL}/${id}`,
+      });
+    } catch (error) {
+      DropDownAlert.showError();
+    }
+  };
 
   render() {
     const {
@@ -194,7 +230,11 @@ const styles = StyleSheet.create({
   url: {
     color: 'blue',
     fontSize: 14,
-  }
+  }, 
+  shareButton: {
+    width: 30,
+    height: 30,
+  },
 });
 
 const mapStateToProps = (state) => {
