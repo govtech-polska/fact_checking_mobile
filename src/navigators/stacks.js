@@ -6,6 +6,7 @@ import {
 
 import {
   VerifiedScreen,
+  VerifiedDetailsScreen,
   ReportScreen,
 } from '../screens';
 import { strings } from '../constants/strings';
@@ -29,11 +30,17 @@ export const VerifiedStackScreen = () => {
         name={strings.verifiedTab}
         component={VerifiedScreen}
         options={{
+          title: ' ',
           headerStyle: {
             backgroundColor: CINNABAR,
           },
           headerTitle: props => <LogoTitle {...props} />
         }}
+      />
+      <VerifiedStack.Screen
+        name='VerifiedDetailsScreen'
+        component={VerifiedDetailsScreen}
+        options={{ title: '' }}
       />
     </VerifiedStack.Navigator>
   );
