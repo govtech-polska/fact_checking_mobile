@@ -1,19 +1,14 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import DropdownAlert from 'react-native-dropdownalert';
 
 import store from './base/redux/configureStore';
-import {
-  verifiedStack,
-  reportStack,
-} from './navigators/tabStacks';
+import { verifiedStack, reportStack } from './navigators/tabStacks';
 import { CINNABAR } from './constants/colors';
-import {
-  DropDownAlert,
-} from './components';
+import { DropDownAlert } from './components';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,7 +22,7 @@ export default function App() {
           }}
         >
           {verifiedStack()}
-          { reportStack() }
+          {reportStack()}
         </Tab.Navigator>
       </NavigationContainer>
       <DropDownAlert />

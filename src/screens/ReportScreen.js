@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   Text,
-  View,
   StyleSheet,
   SafeAreaView,
   TextInput,
@@ -38,9 +37,9 @@ class ReportScreen extends Component {
           <Text style={styles.label}>
             {strings.addLinkLabel}
           </Text>
-          <TextInput 
-          style={styles.inputLabel}
-          multiline={true}
+          <TextInput
+            style={styles.inputLabel}
+            multiline={true}
           />
 
           <Text style={styles.label}>

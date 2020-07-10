@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View,
   FlatList,
@@ -25,17 +26,16 @@ import {
   getIsFetchingNextPage,
   getIsFetchingInitial,
 } from '../selectors';
-import { feedActions } from '../storages/verified/actions'
+import { feedActions } from '../storages/verified/actions';
 
 class VerifiedScreen extends Component {
-
   componentDidMount() {
     this.props.fetchVerifiedRequest();
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.error && prevProps.error !== this.props.error) {
-      DropDownAlert.showError()
+      DropDownAlert.showError();
     }
   }
 
@@ -43,10 +43,14 @@ class VerifiedScreen extends Component {
     return (
       <VerifiedCell
         item={item}
-        onCellTapped={() => this.props.navigation.navigate('VerifiedDetailsScreen', { id: item.id })}
+        onCellTapped={() =>
+          this.props.navigation.navigate('VerifiedDetailsScreen', {
+            id: item.id,
+          })
+        }
       />
     );
-  }
+  };
 
   keyExtractor = (_item, index) => index.toString();
 
@@ -61,46 +65,41 @@ class VerifiedScreen extends Component {
     if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
       fetchVerifiedRequest(nextPage);
     }
-  }
+  };
 
   onRefreshTriggered = () => {
     const { fetchVerifiedRequest } = this.props;
     fetchVerifiedRequest();
-  }
+  };
 
   renderListFooterComponent = () => (
     <View style={styles.loader}>
-      <ActivityIndicator size='large' color={CINNABAR} />
+      <ActivityIndicator size="large" color={CINNABAR} />
     </View>
   );
 
   renderEmptyComponent = () => {
     return (
       <View style={styles.emptyComponent}>
-      <TouchableOpacityDebounce
-        onPress={this.onRefreshTriggered}
-        style={styles.refreshButton}
-      >
-        <Text style={styles.refreshButtonText}>
-          {strings.refresh}
-        </Text>
-      </TouchableOpacityDebounce>
-      </View>);
-  }
+        <TouchableOpacityDebounce
+          onPress={this.onRefreshTriggered}
+          style={styles.refreshButton}
+        >
+          <Text style={styles.refreshButtonText}>{strings.refresh}</Text>
+        </TouchableOpacityDebounce>
+      </View>
+    );
+  };
 
   renderTitleIfNeeded = () => {
     const { articles } = this.props;
     if (articles.length > 0) {
-      return <Text style={styles.title}>{strings.verifiedTitle}</Text>
+      return <Text style={styles.title}>{strings.verifiedTitle}</Text>;
     }
-  }
+  };
 
   render() {
-    const {
-      isFetchingInitial,
-      isFetchingNextPage,
-      articles,
-    } = this.props;
+    const { isFetchingInitial, isFetchingNextPage, articles } = this.props;
 
     return (
       <View style={styles.container}>
@@ -119,7 +118,9 @@ class VerifiedScreen extends Component {
               tintColor={CINNABAR}
             />
           }
-          ListFooterComponent={isFetchingNextPage ? this.renderListFooterComponent : null}
+          ListFooterComponent={
+            isFetchingNextPage ? this.renderListFooterComponent : null
+          }
           ListEmptyComponent={this.renderEmptyComponent}
         />
         <LoadingOverlay visible={isFetchingInitial} />
@@ -128,10 +129,26 @@ class VerifiedScreen extends Component {
   }
 }
 
+// TODO: replace any with correct types
+VerifiedScreen.propTypes = {
+  articles: PropTypes.shape({
+    length: PropTypes.number,
+  }),
+  error: PropTypes.any,
+  fetchVerifiedRequest: PropTypes.func,
+  isFetchingInitial: PropTypes.bool,
+  isFetchingNextPage: PropTypes.bool,
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }),
+  nextPage: PropTypes.any,
+  shouldLoadNextPage: PropTypes.bool,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
   },
   loader: {
     alignItems: 'center',
@@ -162,7 +179,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
-  }
+  },
 });
 
 const mapStateToProps = (state) => {

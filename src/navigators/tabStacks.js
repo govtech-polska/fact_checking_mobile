@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -19,11 +20,11 @@ export const verifiedStack = () => {
       component={VerifiedStackScreen}
       options={{
         tabBarLabel: strings.verifiedTab,
-        tabBarIcon: ({ color, size }) => <VerifiedTabIcon width={size} height={size} fill={color}/>
+        tabBarIcon: ({ color, size }) => <VerifiedTabIcon width={size} height={size} fill={color} />
       }}
     />
   );
-}
+};
 
 export const reportStack = () => {
   return (
@@ -32,8 +33,8 @@ export const reportStack = () => {
       component={ReportStackScreen}
       options={{
         tabBarLabel: strings.reportTab,
-        tabBarIcon: ({ color, size }) => <ReportTabIcon width={size} height={size} fill={color}/>
+        tabBarIcon: ({ color, size }) => <ReportTabIcon width={size} height={size} fill={color} />
       }}
     />
   );
-}
+};
