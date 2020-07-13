@@ -2,13 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import { WHITE, BLACK, WHITE_SMOKE } from '../constants/colors';
+import { Title } from '../components';
+import { WHITE, WHITE_SMOKE } from '../constants/colors';
 import { strings } from '../constants/strings';
+import { routes } from '../constants/routes';
 
 const INFO_LINKS = [
   {
     label: strings.info.links.aboutProject,
-    route: 'InfoAboutScreen',
+    route: routes.infoAbout,
   },
   {
     label: strings.info.links.team,
@@ -33,7 +35,7 @@ const InfoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{strings.info.title}</Text>
+      <Title title={strings.info.title} />
       {INFO_LINKS.map(({ label, route }) => (
         <TouchableHighlight
           key={label}
@@ -51,13 +53,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: WHITE,
-  },
-  title: {
-    color: BLACK,
-    fontSize: 24,
-    marginTop: 16,
-    marginBottom: 8,
-    paddingHorizontal: 16,
   },
   item: {
     fontSize: 15,

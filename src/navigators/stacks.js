@@ -8,6 +8,7 @@ import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
 import InfoScreen from '../screens/InfoScreen';
 import InfoAboutScreen from '../screens/InfoAboutScreen';
+import { routes } from '../constants/routes';
 
 const VerifiedStack = createStackNavigator();
 const InfoStack = createStackNavigator();
@@ -37,7 +38,7 @@ export const VerifiedStackScreen = () => {
         options={mainScreenOptions}
       />
       <VerifiedStack.Screen
-        name="VerifiedDetailsScreen"
+        name={routes.verifiedDetails}
         component={VerifiedDetailsScreen}
         options={{ title: '' }}
       />
@@ -54,7 +55,7 @@ export const InfoStackScreen = () => {
         options={mainScreenOptions}
       />
       <InfoStack.Screen
-        name="InfoAboutScreen"
+        name={routes.infoAbout}
         component={InfoAboutScreen}
         options={{ title: '' }}
       />
