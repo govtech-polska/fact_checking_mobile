@@ -92,7 +92,7 @@ class VerifiedDetailsScreen extends Component {
       >
         <ImageViewer
           enableSwipeDown
-          renderIndicator={() => {}}
+          renderIndicator={() => { }}
           imageUrls={[{ url: details?.screenshot_url || '' }]}
           onRequestClose={this.toggleImageViewerVisibility}
           onCancel={this.toggleImageViewerVisibility}
@@ -132,7 +132,7 @@ class VerifiedDetailsScreen extends Component {
             <Text style={styles.title}>{details?.title}</Text>
             <Text style={styles.dateLabel}>{`${
               strings.reportDateLabel
-            } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
+              } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
           </View>
 
           <TouchableOpacityDebounce onPress={this.toggleImageViewerVisibility}>

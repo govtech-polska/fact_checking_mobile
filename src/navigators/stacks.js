@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { View } from 'react-native';
 
-import { VerifiedScreen, VerifiedDetailsScreen } from '../screens';
+import { VerifiedScreen, VerifiedDetailsScreen, ReportScreen } from '../screens';
 import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
