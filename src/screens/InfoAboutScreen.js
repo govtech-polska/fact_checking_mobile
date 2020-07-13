@@ -1,27 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { BLACK, WHITE } from '../constants/colors';
+import { strings } from '../constants/strings';
 
 const InfoAboutScreen = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>O projekcie</Text>
-      <Text style={styles.text}>
-        #FakeHunter to społeczny projekt weryfikacji treści publikowanych w
-        internecie, uruchomiony przez Polską Agencję Prasową wspólnie z GovTech
-        Polska, którego celem jest demaskowanie nieprawdziwych wiadomości
-        dotyczących wirusa SARS-CoV-2. Każdy internauta będzie mógł zgłosić
-        wątpliwą treść do weryfikacji, a następnie otrzymać wiarygodną
-        odpowiedź, zweryfikowaną przez społecznych liderów opinii oraz ekspertów
-        PAP.
-      </Text>
-      <Text style={styles.text}>
-        W przestrzeni internetowej pojawia się coraz więcej fałszywych
-        wiadomości, a ich zadaniem jest dezinformacja i sianie paniki w czasie
-        zagrożenia epidemicznego. Projekt #FakeHunter zrodził się z potrzeby
-        przeciwstawienia się takiej sytuacji, a także z dążenia do tego, by
-        portale internetowe i wszyscy użytkownicy mediów społecznościowych w
-        sposób odpowiedzialny dzielili się wyłącznie prawdziwymi przekazami.
-      </Text>
+      <Text style={styles.title}>{strings.infoAbout.title}</Text>
+      <Text style={styles.text}>{strings.infoAbout.projectDescription1}</Text>
+      <Text style={styles.text}>{strings.infoAbout.projectDescription2}</Text>
     </View>
   );
 };
@@ -29,10 +16,10 @@ const InfoAboutScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: WHITE,
   },
   title: {
-    color: 'black',
+    color: BLACK,
     fontSize: 24,
     marginTop: 16,
     marginBottom: 8,

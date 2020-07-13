@@ -1,45 +1,47 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { TouchableHighlight } from 'react-native-gesture-handler';
+import { WHITE, BLACK, WHITE_SMOKE } from '../constants/colors';
+import { strings } from '../constants/strings';
 
 const INFO_LINKS = [
   {
-    label: 'O projekcie',
+    label: strings.info.links.aboutProject,
     route: 'InfoAboutScreen',
   },
   {
-    label: 'Zespół',
+    label: strings.info.links.team,
     route: '#',
   },
   {
-    label: 'Reguły weryfikacji faktów',
+    label: strings.info.links.verificationRules,
     route: '#',
   },
   {
-    label: 'Polityka korekt',
+    label: strings.info.links.verificationPolicy,
     route: '#',
   },
   {
-    label: 'Polityka prywatności',
+    label: strings.info.links.privacyPolicy,
     route: '#',
   },
 ];
 
-// TODO: extract title to component
 const InfoScreen = () => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>O aplikacji</Text>
+      <Text style={styles.title}>{strings.info.title}</Text>
       {INFO_LINKS.map(({ label, route }) => (
-        <Text
+        <TouchableHighlight
           key={label}
+          underlayColor={WHITE_SMOKE}
           onPress={() => navigation.push(route)}
-          style={styles.item}
         >
-          {label}
-        </Text>
+          <Text style={styles.item}>{label}</Text>
+        </TouchableHighlight>
       ))}
     </View>
   );
@@ -48,10 +50,10 @@ const InfoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: WHITE,
   },
   title: {
-    color: 'black',
+    color: BLACK,
     fontSize: 24,
     marginTop: 16,
     marginBottom: 8,

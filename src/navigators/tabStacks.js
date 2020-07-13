@@ -6,6 +6,7 @@ import { Image } from 'react-native';
 import { ReportScreen } from '../screens';
 import { VerifiedStackScreen, InfoStackScreen } from './stacks';
 import { strings } from '../constants/strings';
+import InfoTabIcon from '../resources/img/tabBar/infoTabIcon.svg';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,15 +57,10 @@ export const infoStack = () => {
       name="Info"
       component={InfoStackScreen}
       options={{
-        tabBarLabel: 'Info',
-        tabBarIcon: ({ color, size }) => {
-          return (
-            <Image
-              resizeMode="contain"
-              style={{ width: size, height: size, backgroundColor: color }}
-            />
-          );
-        },
+        tabBarLabel: strings.info.title,
+        tabBarIcon: ({ color, size }) => (
+          <InfoTabIcon width={size} height={size} fill={color} />
+        ),
       }}
     />
   );
