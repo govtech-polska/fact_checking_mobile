@@ -74,7 +74,7 @@ class ReportScreen extends Component {
           enableOnAndroid
           keyboardShouldPersistTaps="never"
           keyboardDismissMode={'interactive'}
-          style={{ padding: 16 }}
+          style={{ paddingHorizontal: 16 }}
         >
           <Text style={styles.title}>
             {strings.report.title}
