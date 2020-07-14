@@ -178,6 +178,9 @@ class VerifiedDetailsScreen extends Component {
             </View>
 
             <View style={styles.verdictContainer}>
+              <Text style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}>
+                {strings.report.verdict}
+              </Text>
               {this.verificationStatusImage()}
               <Text style={{ ...styles.verdictText, color: this.verificationStatusColor() }}>{this.verificationStatusText()}</Text>
             </View>
