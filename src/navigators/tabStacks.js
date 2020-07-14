@@ -4,8 +4,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Image } from 'react-native';
 
 import { ReportScreen } from '../screens';
-import { VerifiedStackScreen } from './stacks';
+import { VerifiedStackScreen, InfoStackScreen } from './stacks';
 import { strings } from '../constants/strings';
+import InfoTabIcon from '../resources/img/tabBar/infoTabIcon.svg';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,6 +46,21 @@ export const reportStack = () => {
             />
           );
         },
+      }}
+    />
+  );
+};
+
+export const infoStack = () => {
+  return (
+    <Tab.Screen
+      name="Info"
+      component={InfoStackScreen}
+      options={{
+        tabBarLabel: strings.info.title,
+        tabBarIcon: ({ color, size }) => (
+          <InfoTabIcon width={size} height={size} fill={color} />
+        ),
       }}
     />
   );

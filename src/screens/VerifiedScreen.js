@@ -15,6 +15,7 @@ import {
   LoadingOverlay,
   DropDownAlert,
   TouchableOpacityDebounce,
+  Title,
 } from '../components';
 
 import { CINNABAR } from '../constants/colors';
@@ -27,6 +28,7 @@ import {
   getIsFetchingInitial,
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
+import { routes } from '../constants/routes';
 
 class VerifiedScreen extends Component {
   componentDidMount() {
@@ -44,7 +46,7 @@ class VerifiedScreen extends Component {
       <VerifiedCell
         item={item}
         onCellTapped={() =>
-          this.props.navigation.navigate('VerifiedDetailsScreen', {
+          this.props.navigation.navigate(routes.verifiedDetails, {
             id: item.id,
           })
         }
@@ -94,7 +96,7 @@ class VerifiedScreen extends Component {
   renderTitleIfNeeded = () => {
     const { articles } = this.props;
     if (articles.length > 0) {
-      return <Text style={styles.title}>{strings.verifiedTitle}</Text>;
+      return <Title title={strings.verifiedTitle} />;
     }
   };
 
@@ -154,13 +156,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     padding: 24,
-  },
-  title: {
-    color: 'black',
-    fontSize: 24,
-    marginTop: 16,
-    marginBottom: 8,
-    paddingHorizontal: 16,
   },
   emptyComponent: {
     flex: 1,
