@@ -1,16 +1,16 @@
+/* eslint-disable react/prop-types */
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import {
-  Image,
-} from 'react-native';
 
 import {
-  VerifiedScreen,
-  ReportScreen,
-} from '../screens';
-import { VerifiedStackScreen } from './stacks';
+  VerifiedStackScreen,
+  ReportStackScreen,
+  InfoStackScreen,
+} from './stacks';
 import { strings } from '../constants/strings';
+import VerifiedTabIcon from '../resources/img/tabBar/verifiedTabIcon.svg';
+import ReportTabIcon from '../resources/img/tabBar/reportTabIcon.svg';
+import InfoTabIcon from '../resources/img/tabBar/infoTabIcon.svg';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,36 +21,36 @@ export const verifiedStack = () => {
       component={VerifiedStackScreen}
       options={{
         tabBarLabel: strings.verifiedTab,
-        tabBarIcon: ({ color, size }) => {
-          return (
-            <Image
-              resizeMode='contain'
-              style={{ width: size, height: size, tintColor: color }}
-              source={require('../resources/img/tabBar/verifiedTabIcon.png')}
-            />
-          );
-        },
+        tabBarIcon: ({ color, size }) => <VerifiedTabIcon width={size} height={size} fill={color} />
       }}
     />
   );
-}
+};
 
 export const reportStack = () => {
   return (
     <Tab.Screen
       name="Report"
-      component={ReportScreen}
+      component={ReportStackScreen}
       options={{
-        tabBarLabel: 'Report',
-        tabBarIcon: ({ color, size }) => {
-          return (
-            <Image
-              resizeMode='contain'
-              style={{ width: size, height: size, backgroundColor: color }}
-            />
-          );
-        },
+        tabBarLabel: strings.reportTab,
+        tabBarIcon: ({ color, size }) => <ReportTabIcon width={size} height={size} fill={color} />
       }}
     />
   );
-}
+};
+
+export const infoStack = () => {
+  return (
+    <Tab.Screen
+      name="Info"
+      component={InfoStackScreen}
+      options={{
+        tabBarLabel: strings.info.title,
+        tabBarIcon: ({ color, size }) => (
+          <InfoTabIcon width={size} height={size} fill={color} />
+        ),
+      }}
+    />
+  );
+};

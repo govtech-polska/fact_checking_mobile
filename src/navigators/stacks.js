@@ -1,19 +1,22 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  View,
-} from 'react-native';
+import { View } from 'react-native';
 
 import {
   VerifiedScreen,
   VerifiedDetailsScreen,
   ReportScreen,
+  InfoScreen,
+  InfoAboutScreen,
 } from '../screens';
 import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
-import LogoHeader from '../resources/img/logo_fh.svg'
+import LogoHeader from '../resources/img/logo_fh.svg';
+import { routes } from '../constants/routes';
 
 const VerifiedStack = createStackNavigator();
+const ReportStack = createStackNavigator();
+const InfoStack = createStackNavigator();
 
 function LogoTitle() {
   return (
@@ -23,25 +26,56 @@ function LogoTitle() {
   );
 }
 
+const mainScreenOptions = {
+  title: ' ',
+  headerStyle: {
+    backgroundColor: CINNABAR,
+  },
+  headerTitle: LogoTitle,
+};
+
 export const VerifiedStackScreen = () => {
   return (
     <VerifiedStack.Navigator>
       <VerifiedStack.Screen
         name={strings.verifiedTab}
         component={VerifiedScreen}
-        options={{
-          title: ' ',
-          headerStyle: {
-            backgroundColor: CINNABAR,
-          },
-          headerTitle: props => <LogoTitle {...props} />
-        }}
+        options={mainScreenOptions}
       />
       <VerifiedStack.Screen
-        name='VerifiedDetailsScreen'
+        name={routes.verifiedDetails}
         component={VerifiedDetailsScreen}
         options={{ title: '' }}
       />
     </VerifiedStack.Navigator>
   );
-}
+};
+
+export const ReportStackScreen = () => {
+  return (
+    <ReportStack.Navigator>
+      <ReportStack.Screen
+        name={strings.reportTab}
+        component={ReportScreen}
+        options={mainScreenOptions}
+      />
+    </ReportStack.Navigator>
+  );
+};
+
+export const InfoStackScreen = () => {
+  return (
+    <InfoStack.Navigator>
+      <InfoStack.Screen
+        name={strings.verifiedTab}
+        component={InfoScreen}
+        options={mainScreenOptions}
+      />
+      <InfoStack.Screen
+        name={routes.infoAbout}
+        component={InfoAboutScreen}
+        options={{ title: '' }}
+      />
+    </InfoStack.Navigator>
+  );
+};

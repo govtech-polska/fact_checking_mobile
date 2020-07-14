@@ -1,5 +1,5 @@
 {
-  "name": "FakeHunter",
+  "name": "fakehunter",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint -c .eslintrc src/**/*.js",
+    "lint:fix": "eslint --fix -c .eslintrc src/**/*.js"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
@@ -20,7 +21,9 @@
     "react-native": "0.62.2",
     "react-native-dropdownalert": "^4.2.1",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-image-crop-picker": "^0.32.2",
     "react-native-image-zoom-viewer": "^3.0.1",
+    "react-native-keyboard-aware-scroll-view": "^0.9.1",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.6",
     "react-native-screens": "^2.9.0",
@@ -36,11 +39,14 @@
     "@babel/core": "7.10.3",
     "@babel/runtime": "7.10.3",
     "@react-native-community/eslint-config": "0.0.5",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "24.9.0",
     "eslint": "6.8.0",
-    "eslint-config-rallycoding": "^3.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-react": "^7.20.3",
     "jest": "24.9.0",
     "metro-react-native-babel-preset": "0.58.0",
+    "prettier": "^2.0.5",
     "react-native-svg-transformer": "^0.14.3",
     "react-test-renderer": "16.11.0"
   },
