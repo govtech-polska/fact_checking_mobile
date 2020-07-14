@@ -56,6 +56,6 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Test</string>
+	<string>Dodanie zrzutu ekranu</string>
 </dict>
 </plist>
