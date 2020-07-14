@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import {
   VerifiedScreen,
   VerifiedDetailsScreen,
+  ReportScreen,
   InfoScreen,
   InfoAboutScreen,
 } from '../screens';
@@ -14,6 +15,7 @@ import LogoHeader from '../resources/img/logo_fh.svg';
 import { routes } from '../constants/routes';
 
 const VerifiedStack = createStackNavigator();
+const ReportStack = createStackNavigator();
 const InfoStack = createStackNavigator();
 
 function LogoTitle() {
@@ -46,6 +48,18 @@ export const VerifiedStackScreen = () => {
         options={{ title: '' }}
       />
     </VerifiedStack.Navigator>
+  );
+};
+
+export const ReportStackScreen = () => {
+  return (
+    <ReportStack.Navigator>
+      <ReportStack.Screen
+        name={strings.reportTab}
+        component={ReportScreen}
+        options={mainScreenOptions}
+      />
+    </ReportStack.Navigator>
   );
 };
 

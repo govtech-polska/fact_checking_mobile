@@ -4,6 +4,9 @@ export const strings = {
 
   //MARK: Tab names
   verifiedTab: 'Zewryfikowane',
+  reportTab: 'Raport',
+
+  //MARK: Verified screen
   verifiedTitle: 'Zweryfikowane informacje',
   reportDateLabel: 'Data zgłoszenia: ',
   informationSourceLabel: 'Źródło informacji:',
@@ -12,6 +15,14 @@ export const strings = {
   expertReportLabel: 'Raport eksperta:',
   verifiedDateLabel: 'Data werdyktu:',
 
+  report: {
+    title: 'Zgłaszam fake newsa',
+    addLinkLabel: 'Dodaj link do materiału',
+    whatIsWrong: 'Co w tej informacji budzi Twoją wątpliwość:',
+    imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU', 
+    emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
+    sendButton: 'Wyślij',
+  },
   info: {
     title: 'O aplikacji',
     links: {
