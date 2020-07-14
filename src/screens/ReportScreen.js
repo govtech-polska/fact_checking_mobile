@@ -34,6 +34,7 @@ class ReportScreen extends Component {
     ImagePicker.openPicker({
       cropping: false
     }).then(image => {
+      console.log('ImagePath: ', image.path);
       this.setState({ imagePath: image.path });
     });
   }
@@ -58,9 +59,10 @@ class ReportScreen extends Component {
     return (
       <TouchableOpacityDebounce
         onPress={() => this.selectPhotoTapped()}
+        style={styles.imageContainer}
       >
         <Image
-          resizeMode="contain"
+          // resizeMode="contain"
           style={styles.image}
           source={{ uri: imagePath || '' }}
         />
@@ -146,14 +148,17 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
   },
-  image: {
+  imageContainer: {
     marginTop: 24,
     width: '100%',
-    backgroundColor: 'black',
-    aspectRatio: 1.3,
     backgroundColor: 'rgb(250, 250, 250)',
+    aspectRatio: 1.3,
     borderWidth: 1,
     borderColor: GAINSBORO,
+  },
+  image: {
+    flex: 1,
+    resizeMode: 'contain',
   }
 });
 
