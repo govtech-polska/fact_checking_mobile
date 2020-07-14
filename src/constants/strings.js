@@ -22,6 +22,10 @@ export const strings = {
     imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU', 
     emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
     sendButton: 'Wyślij',
+    verdict: 'Werdykt:',
+    fakeNews: 'Fake news',
+    unverifiable: 'Nieweryfikowalny',
+    authentic: 'Prawda',
   },
   info: {
     title: 'O aplikacji',
