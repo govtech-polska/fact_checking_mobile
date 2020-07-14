@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
+import Voice from '@react-native-community/voice';
 
 import { strings } from '../constants/strings';
 import {
@@ -29,12 +30,21 @@ class ReportScreen extends Component {
     };
   }
 
+  componentDidMount() {
+    this.checkVoiceAvailability(); 
+  }
+
   selectPhotoTapped = () => {
     ImagePicker.openPicker({
       cropping: false
     }).then(image => {
       this.setState({ imagePath: image.path });
     });
+  }
+
+  async checkVoiceAvailability() {
+   const voice = await Voice.isAvailable();
+   console.log('voice: ', voice)
   }
 
   renderProperImageView = () => {
@@ -52,7 +62,6 @@ class ReportScreen extends Component {
 
       );
     }
-
 
     return (
       <TouchableOpacityDebounce
