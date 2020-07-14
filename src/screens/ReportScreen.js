@@ -46,7 +46,7 @@ class ReportScreen extends Component {
           onPress={() => this.selectPhotoTapped()}
         >
           <Text style={styles.buttonLabel}>
-            {strings.imageButtonLabel}
+            {strings.report.imageButtonLabel}
           </Text>
         </TouchableOpacityDebounce>
 
@@ -77,11 +77,11 @@ class ReportScreen extends Component {
           style={{ padding: 16 }}
         >
           <Text style={styles.title}>
-            {strings.reportTitle}
+            {strings.report.title}
           </Text>
 
           <Text style={styles.label}>
-            {strings.addLinkLabel}
+            {strings.report.addLinkLabel}
           </Text>
           <TextInput
             style={styles.inputLabel}
@@ -89,14 +89,14 @@ class ReportScreen extends Component {
           />
 
           <Text style={styles.label}>
-            {strings.whatIsWrong}
+            {strings.report.whatIsWrong}
           </Text>
           <TextInput style={styles.inputLabel} />
 
           {this.renderProperImageView()}
 
           <Text style={styles.label}>
-            {strings.emailLabel}
+            {strings.report.emailLabel}
           </Text>
           <TextInput style={styles.inputLabel} />
 
@@ -105,7 +105,7 @@ class ReportScreen extends Component {
             onPress={() => DropDownAlert.showError()}
           >
             <Text style={styles.buttonLabel}>
-              {strings.sendButton}
+              {strings.report.sendButton}
             </Text>
           </TouchableOpacityDebounce>
         </KeyboardAwareScrollView>
@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
   buttonLabel: {
     color: 'white',
     fontSize: 14,
+    textTransform: 'uppercase',
   },
   imageContainer: {
     marginTop: 24,
