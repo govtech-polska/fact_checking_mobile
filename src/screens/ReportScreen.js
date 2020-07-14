@@ -16,7 +16,6 @@ import {
   EMPRESS,
 } from '../constants/colors';
 import {
-  LoadingOverlay,
   DropDownAlert,
   TouchableOpacityDebounce,
 } from '../components';
@@ -34,7 +33,6 @@ class ReportScreen extends Component {
     ImagePicker.openPicker({
       cropping: false
     }).then(image => {
-      console.log('ImagePath: ', image.path);
       this.setState({ imagePath: image.path });
     });
   }
@@ -62,7 +60,6 @@ class ReportScreen extends Component {
         style={styles.imageContainer}
       >
         <Image
-          // resizeMode="contain"
           style={styles.image}
           source={{ uri: imagePath || '' }}
         />
@@ -77,7 +74,6 @@ class ReportScreen extends Component {
           enableOnAndroid
           keyboardShouldPersistTaps="never"
           keyboardDismissMode={'interactive'}
-          // extraScrollHeight={100}
           style={{ padding: 16 }}
         >
           <Text style={styles.title}>
@@ -106,7 +102,7 @@ class ReportScreen extends Component {
 
           <TouchableOpacityDebounce
             style={{ ...styles.button, backgroundColor: CINNABAR }}
-            onPress={() => console.log('SEND')}
+            onPress={() => DropDownAlert.showError()}
           >
             <Text style={styles.buttonLabel}>
               {strings.sendButton}
