@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Image,
-  View,
-} from 'react-native';
+import { Text, StyleSheet, SafeAreaView, TextInput, Image, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 import Voice from '@react-native-community/voice';
@@ -14,21 +7,12 @@ import Mic from '../resources/img/mic.svg'
 import Record from '../resources/img/recording.svg';
 
 import { strings } from '../constants/strings';
-import {
-  GAINSBORO,
-  CINNABAR,
-  EMPRESS,
-  DARK_GRAY,
-} from '../constants/colors';
-import {
-  DropDownAlert,
-  TouchableOpacityDebounce,
-} from '../components';
+import { GAINSBORO, CINNABAR, EMPRESS, DARK_GRAY } from '../constants/colors';
+import { DropDownAlert, TouchableOpacityDebounce } from '../components';
 
 class ReportScreen extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       imagePath: null,
       speechRecognitionAvailable: false,
@@ -54,11 +38,11 @@ class ReportScreen extends Component {
 
   selectPhotoTapped = () => {
     ImagePicker.openPicker({
-      cropping: false
-    }).then(image => {
+      cropping: false,
+    }).then((image) => {
       this.setState({ imagePath: image.path });
     });
-  }
+  };
 
   async checkVoiceAvailability() {
     const voice = await Voice.isAvailable();
@@ -143,7 +127,6 @@ class ReportScreen extends Component {
             {strings.report.imageButtonLabel}
           </Text>
         </TouchableOpacityDebounce>
-
       );
     }
 
@@ -152,13 +135,10 @@ class ReportScreen extends Component {
         onPress={() => this.selectPhotoTapped()}
         style={styles.imageContainer}
       >
-        <Image
-          style={styles.image}
-          source={{ uri: imagePath || '' }}
-        />
+        <Image style={styles.image} source={{ uri: imagePath || '' }} />
       </TouchableOpacityDebounce>
     );
-  }
+  };
 
   renderSpeechRecognitionButtonIfNeeded = () => {
     const { speechRecognitionAvailable, started } = this.state;
@@ -198,25 +178,16 @@ class ReportScreen extends Component {
           keyboardDismissMode={'interactive'}
           style={{ padding: 16 }}
         >
-          <Text style={styles.title}>
-            {strings.report.title}
-          </Text>
+          <Text style={styles.title}>{strings.report.title}</Text>
 
-          <Text style={styles.label}>
-            {strings.report.addLinkLabel}
-          </Text>
-          <TextInput
-            style={styles.inputLabel}
-            multiline={true}
-          />
+          <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
+          <TextInput style={styles.inputLabel} multiline={true} />
 
-          <Text style={styles.label}>
-            {strings.report.whatIsWrong}
-          </Text>
+          <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
+          <TextInput style={styles.inputLabel} />
 
           <View style={styles.inputLabel}>
             <TextInput
-              // style={styles.inputLabel}
               style={{ flex: 1 }}
               value={end ? whatIsWrong : (whatIsWrong + recognitionResult)}
               multiline={true}
@@ -225,28 +196,16 @@ class ReportScreen extends Component {
             {this.renderSpeechRecognitionButtonIfNeeded()}
           </View>
 
-          <TouchableOpacityDebounce
-            style={{ ...styles.button, backgroundColor: CINNABAR }}
-            onPress={() => this.toggleRecognizing()}
-          >
-            <Text style={styles.buttonLabel}>
-              Nagraj
-            </Text>
-          </TouchableOpacityDebounce>
           {this.renderProperImageView()}
 
-          <Text style={styles.label}>
-            {strings.report.emailLabel}
-          </Text>
+          <Text style={styles.label}>{strings.report.emailLabel}</Text>
           <TextInput style={styles.inputLabel} />
 
           <TouchableOpacityDebounce
             style={{ ...styles.button, backgroundColor: CINNABAR }}
             onPress={() => DropDownAlert.showError()}
           >
-            <Text style={styles.buttonLabel}>
-              {strings.report.sendButton}
-            </Text>
+            <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
           </TouchableOpacityDebounce>
         </KeyboardAwareScrollView>
       </SafeAreaView>
