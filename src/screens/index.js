@@ -1,5 +1,5 @@
-export VerifiedScreen from './VerifiedScreen';
-export ReportScreen from './ReportScreen';
-export VerifiedDetailsScreen from './VerifiedDetailsScreen';
-export InfoScreen from './InfoScreen';
-export InfoAboutScreen from './InfoAboutScreen';
+export { default as VerifiedScreen } from './VerifiedScreen';
+export { default as ReportScreen } from './ReportScreen';
+export { default as VerifiedDetailsScreen } from './VerifiedDetailsScreen';
+export { default as InfoScreen } from './InfoScreen';
+export { default as InfoAboutScreen } from './InfoAboutScreen';
