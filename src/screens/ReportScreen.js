@@ -1,14 +1,24 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, SafeAreaView, TextInput, Image, View } from 'react-native';
+import {
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TextInput,
+  Image,
+  View,
+  Platform,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 import Voice from '@react-native-community/voice';
-import Mic from '../resources/img/mic.svg'
+import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
 
 import { strings } from '../constants/strings';
 import { GAINSBORO, CINNABAR, EMPRESS, DARK_GRAY } from '../constants/colors';
 import { DropDownAlert, TouchableOpacityDebounce } from '../components';
+
+const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
 
 class ReportScreen extends Component {
   constructor(props) {
@@ -46,16 +56,14 @@ class ReportScreen extends Component {
 
   async checkVoiceAvailability() {
     const voice = await Voice.isAvailable();
-    this.setState({ speechRecognitionAvailable: !!voice })
+    this.setState({ speechRecognitionAvailable: !!voice });
   }
 
   onSpeechStart = (e) => {
-    console.log('SpeechStart');
     this.setState({ started: true });
   };
 
   onSpeechEnd = (e) => {
-    console.log('SpeechEnd');
     const { whatIsWrong, recognitionResult } = this.state;
     this.setState({
       started: false,
@@ -65,7 +73,6 @@ class ReportScreen extends Component {
   };
 
   onSpeechError = (e) => {
-    this._stopRecognizing()
     this.setState({ error: true, end: true, started: false });
   };
 
@@ -109,11 +116,11 @@ class ReportScreen extends Component {
   toggleRecognizing = () => {
     const { started, end } = this.state;
     if ((end && !started) || (!end && !started)) {
-      this._startRecognizing()
+      this._startRecognizing();
     } else {
-      this._stopRecognizing()
+      this._stopRecognizing();
     }
-  }
+  };
 
   renderProperImageView = () => {
     const { imagePath } = this.state;
@@ -155,17 +162,16 @@ class ReportScreen extends Component {
         <View
           style={{
             width: 40,
+            justifyContent: 'center',
           }}
         >
-          <TouchableOpacityDebounce
-            onPress={() => this.toggleRecognizing()}
-          >
+          <TouchableOpacityDebounce onPress={this.toggleRecognizing}>
             {image()}
           </TouchableOpacityDebounce>
         </View>
       );
     }
-  }
+  };
 
   render() {
     const { end, recognitionResult, whatIsWrong } = this.state;
@@ -176,22 +182,24 @@ class ReportScreen extends Component {
           enableOnAndroid
           keyboardShouldPersistTaps="never"
           keyboardDismissMode={'interactive'}
-          style={{ padding: 16 }}
+          style={{ paddingHorizontal: 16 }}
         >
           <Text style={styles.title}>{strings.report.title}</Text>
 
           <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
-          <TextInput style={styles.inputLabel} multiline={true} />
+          <TextInput
+            style={styles.inputLabel}
+            multiline={true}
+            autoCorrect={false}
+          />
 
           <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
-          <TextInput style={styles.inputLabel} />
-
-          <View style={styles.inputLabel}>
+          <View style={styles.labelWithButtonContainer}>
             <TextInput
-              style={{ flex: 1 }}
-              value={end ? whatIsWrong : (whatIsWrong + recognitionResult)}
+              style={styles.inputLabelWithButton}
+              value={end ? whatIsWrong : whatIsWrong + recognitionResult}
               multiline={true}
-              onChangeText={text => this.setState({ whatIsWrong: text })}
+              onChangeText={(text) => this.setState({ whatIsWrong: text })}
             />
             {this.renderSpeechRecognitionButtonIfNeeded()}
           </View>
@@ -199,7 +207,7 @@ class ReportScreen extends Component {
           {this.renderProperImageView()}
 
           <Text style={styles.label}>{strings.report.emailLabel}</Text>
-          <TextInput style={styles.inputLabel} />
+          <TextInput style={styles.inputLabel} keyboardType={'email-address'} />
 
           <TouchableOpacityDebounce
             style={{ ...styles.button, backgroundColor: CINNABAR }}
@@ -216,7 +224,7 @@ class ReportScreen extends Component {
 const styles = StyleSheet.create({
   title: {
     color: 'black',
-    fontSize: 24,
+    fontSize: Platform.OS === 'ios' ? 30 : 24,
   },
   label: {
     color: 'black',
@@ -229,8 +237,26 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: GAINSBORO,
     marginTop: 8,
-    padding: 8,
+    padding: 2,
     flexDirection: 'row',
+    fontSize: FONT_SIZE,
+  },
+  labelWithButtonContainer: {
+    flexDirection: 'row',
+    marginTop: 8,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: GAINSBORO,
+    alignItems: 'center',
+    minHeight: 40,
+  },
+  inputLabelWithButton: {
+    flex: 1,
+    marginLeft: 2,
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    textAlignVertical: 'center',
+    fontSize: FONT_SIZE,
   },
   button: {
     height: 40,
@@ -256,7 +282,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: 'contain',
-  }
+  },
 });
 
 export default ReportScreen;
