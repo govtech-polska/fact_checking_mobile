@@ -5,16 +5,20 @@ import {
   SafeAreaView,
   TextInput,
   Image,
+  View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 import Voice from '@react-native-community/voice';
+import Mic from '../resources/img/mic.svg'
+import Record from '../resources/img/recording.svg';
 
 import { strings } from '../constants/strings';
 import {
   GAINSBORO,
   CINNABAR,
   EMPRESS,
+  DARK_GRAY,
 } from '../constants/colors';
 import {
   DropDownAlert,
@@ -27,11 +31,25 @@ class ReportScreen extends Component {
     super(props)
     this.state = {
       imagePath: null,
+      speechRecognitionAvailable: false,
+      whatIsWrong: '',
+      error: false,
+      end: false,
+      started: false,
+      recognitionResult: '',
     };
+    Voice.onSpeechStart = this.onSpeechStart;
+    Voice.onSpeechEnd = this.onSpeechEnd;
+    Voice.onSpeechError = this.onSpeechError;
+    Voice.onSpeechResults = this.onSpeechResults;
   }
 
   componentDidMount() {
-    this.checkVoiceAvailability(); 
+    this.checkVoiceAvailability();
+  }
+
+  componentWillUnmount() {
+    Voice.destroy().then(Voice.removeAllListeners);
   }
 
   selectPhotoTapped = () => {
@@ -43,8 +61,74 @@ class ReportScreen extends Component {
   }
 
   async checkVoiceAvailability() {
-   const voice = await Voice.isAvailable();
-   console.log('voice: ', voice)
+    const voice = await Voice.isAvailable();
+    this.setState({ speechRecognitionAvailable: !!voice })
+  }
+
+  onSpeechStart = (e) => {
+    console.log('SpeechStart');
+    this.setState({ started: true });
+  };
+
+  onSpeechEnd = (e) => {
+    console.log('SpeechEnd');
+    const { whatIsWrong, recognitionResult } = this.state;
+    this.setState({
+      started: false,
+      end: true,
+      whatIsWrong: whatIsWrong + recognitionResult,
+    });
+  };
+
+  onSpeechError = (e) => {
+    this._stopRecognizing()
+    this.setState({ error: true, end: true, started: false });
+  };
+
+  onSpeechResults = (e) => {
+    if (e.value.length > 0) {
+      this.setState({ recognitionResult: e.value[0] });
+    }
+  };
+
+  _startRecognizing = async () => {
+    this.setState({
+      error: false,
+      started: false,
+      recognitionResult: '',
+      end: false,
+    });
+
+    try {
+      await Voice.start('pl-PL');
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  _stopRecognizing = async () => {
+    try {
+      await Voice.stop();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  _cancelRecognizing = async () => {
+    try {
+      await Voice.cancel();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  toggleRecognizing = () => {
+    const { started, end } = this.state;
+    if ((end && !started) || (!end && !started)) {
+      this._startRecognizing()
+    } else {
+      this._stopRecognizing()
+    }
   }
 
   renderProperImageView = () => {
@@ -76,7 +160,36 @@ class ReportScreen extends Component {
     );
   }
 
+  renderSpeechRecognitionButtonIfNeeded = () => {
+    const { speechRecognitionAvailable, started } = this.state;
+
+    const image = () => {
+      if (started) {
+        return <Record width={40} height={25} fill={CINNABAR} />;
+      }
+      return <Mic width={40} height={25} fill={DARK_GRAY} />;
+    };
+
+    if (speechRecognitionAvailable) {
+      return (
+        <View
+          style={{
+            width: 40,
+          }}
+        >
+          <TouchableOpacityDebounce
+            onPress={() => this.toggleRecognizing()}
+          >
+            {image()}
+          </TouchableOpacityDebounce>
+        </View>
+      );
+    }
+  }
+
   render() {
+    const { end, recognitionResult, whatIsWrong } = this.state;
+
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
         <KeyboardAwareScrollView
@@ -100,8 +213,26 @@ class ReportScreen extends Component {
           <Text style={styles.label}>
             {strings.report.whatIsWrong}
           </Text>
-          <TextInput style={styles.inputLabel} />
 
+          <View style={styles.inputLabel}>
+            <TextInput
+              // style={styles.inputLabel}
+              style={{ flex: 1 }}
+              value={end ? whatIsWrong : (whatIsWrong + recognitionResult)}
+              multiline={true}
+              onChangeText={text => this.setState({ whatIsWrong: text })}
+            />
+            {this.renderSpeechRecognitionButtonIfNeeded()}
+          </View>
+
+          <TouchableOpacityDebounce
+            style={{ ...styles.button, backgroundColor: CINNABAR }}
+            onPress={() => this.toggleRecognizing()}
+          >
+            <Text style={styles.buttonLabel}>
+              Nagraj
+            </Text>
+          </TouchableOpacityDebounce>
           {this.renderProperImageView()}
 
           <Text style={styles.label}>
@@ -140,13 +271,14 @@ const styles = StyleSheet.create({
     borderColor: GAINSBORO,
     marginTop: 8,
     padding: 8,
+    flexDirection: 'row',
   },
   button: {
     height: 40,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'red',
+    backgroundColor: CINNABAR,
     marginTop: 24,
   },
   buttonLabel: {
