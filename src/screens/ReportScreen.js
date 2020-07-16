@@ -70,7 +70,7 @@ class ReportScreen extends Component {
     }
 
     return (
-      <View style={styles.imageContainer}>
+      <View style={styles.imageView}>
         <TouchableOpacityDebounce
           style={styles.imageWrapper}
           onPress={() => this.selectPhotoTapped()}
@@ -168,12 +168,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textTransform: 'uppercase',
   },
-  imageContainer: {
+  imageView: {
     marginTop: 24,
     width: '100%',
     backgroundColor: 'rgb(250, 250, 250)',
     borderWidth: 1,
     borderColor: GAINSBORO,
+    borderRadius: 4,
   },
   imageWrapper: {
     aspectRatio: 1.3,
@@ -185,12 +186,13 @@ const styles = StyleSheet.create({
   editBtn: {
     backgroundColor: BLACK,
     position: 'absolute',
-    top: 0,
-    right: 0,
-    width: 42,
-    height: 42,
+    top: 3,
+    right: 4,
+    width: 46,
+    height: 46,
     alignItems: 'center',
     justifyContent: 'center',
+    borderRadius: 4,
     zIndex: 9,
   },
 });

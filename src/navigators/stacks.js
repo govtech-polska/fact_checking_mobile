@@ -6,13 +6,13 @@ import {
   VerifiedScreen,
   VerifiedDetailsScreen,
   ReportScreen,
+  ReportImageEditScreen,
   InfoScreen,
   InfoAboutScreen,
 } from '../screens';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
 import { routes } from '../constants/routes';
-import ReportImageEditScreen from '../screens/ReportImageEditScreen';
 
 const VerifiedStack = createStackNavigator();
 const ReportStack = createStackNavigator();
