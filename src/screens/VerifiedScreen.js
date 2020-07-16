@@ -16,6 +16,7 @@ import {
   DropDownAlert,
   TouchableOpacityDebounce,
   Title,
+  Container,
 } from '../components';
 
 import { CINNABAR } from '../constants/colors';
@@ -105,7 +106,7 @@ class VerifiedScreen extends Component {
 
     return (
       <View style={styles.container}>
-        {this.renderTitleIfNeeded()}
+        <Container>{this.renderTitleIfNeeded()}</Container>
         <FlatList
           data={articles}
           contentContainerStyle={{ flexGrow: 1 }}

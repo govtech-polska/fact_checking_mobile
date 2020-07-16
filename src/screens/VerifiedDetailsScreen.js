@@ -19,11 +19,15 @@ import {
   LoadingOverlay,
   DropDownAlert,
   TouchableOpacityDebounce,
+  Container,
 } from '../components';
 import { strings } from '../constants/strings';
-import { DARK_GRAY } from '../constants/colors';
+import { DARK_GRAY, CINNABAR } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions';
 import { APP_URL } from '../constants/api';
+import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
+import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
+import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 
 const shareImage = require('../resources/img/share.png');
 
@@ -92,7 +96,7 @@ class VerifiedDetailsScreen extends Component {
       >
         <ImageViewer
           enableSwipeDown
-          renderIndicator={() => { }}
+          renderIndicator={() => {}}
           imageUrls={[{ url: details?.screenshot_url || '' }]}
           onRequestClose={this.toggleImageViewerVisibility}
           onCancel={this.toggleImageViewerVisibility}
@@ -119,6 +123,45 @@ class VerifiedDetailsScreen extends Component {
     }
   };
 
+  verificationStatusImage = () => {
+    const { details } = this.props;
+    if (!details) return null;
+    switch (details.verdict) {
+      case 'true':
+        return <VerifiedOk width={40} height={40} style={{ color: 'green' }} />;
+      case 'false':
+        return <VerifiedBad width={40} height={40} style={{ color: 'red' }} />;
+      default:
+        return <VerifiedNot width={40} height={40} style={{ color: 'gray' }} />;
+    }
+  };
+
+  verificationStatusText = () => {
+    const { details } = this.props;
+    if (!details) return null;
+    switch (details.verdict) {
+      case 'true':
+        return strings.report.authentic;
+      case 'false':
+        return strings.report.fakeNews;
+      default:
+        return strings.report.unverifiable;
+    }
+  };
+
+  verificationStatusColor = () => {
+    const { details } = this.props;
+    if (!details) return null;
+    switch (details.verdict) {
+      case 'true':
+        return 'green';
+      case 'false':
+        return CINNABAR;
+      default:
+        return 'gray';
+    }
+  };
+
   render() {
     const { details, isFetching } = this.props;
 
@@ -128,12 +171,29 @@ class VerifiedDetailsScreen extends Component {
       <ScrollView style={{ backgroundColor: 'white' }}>
         {this.renderImageModalIfNeeded()}
         <View style={styles.container}>
-          <View style={styles.titleContainer}>
+          <Container style={styles.titleContainer}>
             <Text style={styles.title}>{details?.title}</Text>
             <Text style={styles.dateLabel}>{`${
               strings.reportDateLabel
-              } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
-          </View>
+            } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
+          </Container>
+
+          <Container style={styles.verdictContainer}>
+            <Text
+              style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}
+            >
+              {strings.report.verdict}
+            </Text>
+            {this.verificationStatusImage()}
+            <Text
+              style={{
+                ...styles.verdictText,
+                color: this.verificationStatusColor(),
+              }}
+            >
+              {this.verificationStatusText()}
+            </Text>
+          </Container>
 
           <TouchableOpacityDebounce onPress={this.toggleImageViewerVisibility}>
             <Image
@@ -143,7 +203,7 @@ class VerifiedDetailsScreen extends Component {
             />
           </TouchableOpacityDebounce>
 
-          <View style={styles.detailsContainer}>
+          <Container style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>
               {strings.informationSourceLabel}
             </Text>
@@ -171,7 +231,7 @@ class VerifiedDetailsScreen extends Component {
             <Text style={styles.detailsText}>
               {details?.expert_opinion?.comment}
             </Text>
-          </View>
+          </Container>
         </View>
       </ScrollView>
     );
@@ -192,6 +252,7 @@ VerifiedDetailsScreen.propTypes = {
     screenshot_url: PropTypes.string,
     title: PropTypes.any,
     url: PropTypes.any,
+    verdict: PropTypes.any,
   }),
   error: PropTypes.any,
   fetchVerifiedDetailsRequest: PropTypes.func,
@@ -211,7 +272,6 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: 16,
-    paddingHorizontal: 16,
     marginBottom: 8,
   },
   title: {
@@ -224,6 +284,16 @@ const styles = StyleSheet.create({
     color: DARK_GRAY,
     fontSize: 12,
   },
+  verdictContainer: {
+    flexDirection: 'row',
+    height: 40,
+    alignItems: 'center',
+  },
+  verdictText: {
+    marginLeft: 8,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
   image: {
     width: '100%',
     aspectRatio: 1.5,
@@ -234,7 +304,6 @@ const styles = StyleSheet.create({
   detailsContainer: {
     flex: 1,
     width: '100%',
-    paddingHorizontal: 16,
   },
   detailsTitle: {
     color: 'black',
