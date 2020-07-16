@@ -21,9 +21,12 @@ import {
   TouchableOpacityDebounce,
 } from '../components';
 import { strings } from '../constants/strings';
-import { DARK_GRAY } from '../constants/colors';
+import { DARK_GRAY, CINNABAR } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions';
 import { APP_URL } from '../constants/api';
+import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
+import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
+import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 
 const shareImage = require('../resources/img/share.png');
 
@@ -92,7 +95,7 @@ class VerifiedDetailsScreen extends Component {
       >
         <ImageViewer
           enableSwipeDown
-          renderIndicator={() => { }}
+          renderIndicator={() => {}}
           imageUrls={[{ url: details?.screenshot_url || '' }]}
           onRequestClose={this.toggleImageViewerVisibility}
           onCancel={this.toggleImageViewerVisibility}
@@ -119,6 +122,45 @@ class VerifiedDetailsScreen extends Component {
     }
   };
 
+  verificationStatusImage = () => {
+    const { details } = this.props;
+    if (!details) return null;
+    switch (details.verdict) {
+      case 'true':
+        return <VerifiedOk width={40} height={40} style={{ color: 'green' }} />;
+      case 'false':
+        return <VerifiedBad width={40} height={40} style={{ color: 'red' }} />;
+      default:
+        return <VerifiedNot width={40} height={40} style={{ color: 'gray' }} />;
+    }
+  };
+
+  verificationStatusText = () => {
+    const { details } = this.props;
+    if (!details) return null;
+    switch (details.verdict) {
+      case 'true':
+        return strings.report.authentic;
+      case 'false':
+        return strings.report.fakeNews;
+      default:
+        return strings.report.unverifiable;
+    }
+  };
+
+  verificationStatusColor = () => {
+    const { details } = this.props;
+    if (!details) return null;
+    switch (details.verdict) {
+      case 'true':
+        return 'green';
+      case 'false':
+        return CINNABAR;
+      default:
+        return 'gray';
+    }
+  };
+
   render() {
     const { details, isFetching } = this.props;
 
@@ -132,7 +174,24 @@ class VerifiedDetailsScreen extends Component {
             <Text style={styles.title}>{details?.title}</Text>
             <Text style={styles.dateLabel}>{`${
               strings.reportDateLabel
-              } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
+            } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
+          </View>
+
+          <View style={styles.verdictContainer}>
+            <Text
+              style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}
+            >
+              {strings.report.verdict}
+            </Text>
+            {this.verificationStatusImage()}
+            <Text
+              style={{
+                ...styles.verdictText,
+                color: this.verificationStatusColor(),
+              }}
+            >
+              {this.verificationStatusText()}
+            </Text>
           </View>
 
           <TouchableOpacityDebounce onPress={this.toggleImageViewerVisibility}>
@@ -192,6 +251,7 @@ VerifiedDetailsScreen.propTypes = {
     screenshot_url: PropTypes.string,
     title: PropTypes.any,
     url: PropTypes.any,
+    verdict: PropTypes.any,
   }),
   error: PropTypes.any,
   fetchVerifiedDetailsRequest: PropTypes.func,
@@ -223,6 +283,17 @@ const styles = StyleSheet.create({
   dateLabel: {
     color: DARK_GRAY,
     fontSize: 12,
+  },
+  verdictContainer: {
+    flexDirection: 'row',
+    height: 40,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+  },
+  verdictText: {
+    marginLeft: 8,
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   image: {
     width: '100%',
