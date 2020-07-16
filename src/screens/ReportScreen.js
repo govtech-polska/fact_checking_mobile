@@ -59,26 +59,26 @@ class ReportScreen extends Component {
     this.setState({ speechRecognitionAvailable: !!voice });
   }
 
-  onSpeechStart = (e) => {
+  onSpeechStart = () => {
     this.setState({ started: true });
   };
 
-  onSpeechEnd = (e) => {
-    const { whatIsWrong, recognitionResult } = this.state;
+  onSpeechEnd = () => {
     this.setState({
       started: false,
       end: true,
-      whatIsWrong: whatIsWrong + recognitionResult,
     });
   };
 
-  onSpeechError = (e) => {
+  onSpeechError = () => {
     this.setState({ error: true, end: true, started: false });
   };
 
   onSpeechResults = (e) => {
     if (e.value.length > 0) {
-      this.setState({ recognitionResult: e.value[0] });
+      this.setState(({ whatIsWrong }) => ({
+        whatIsWrong: whatIsWrong + e.value[0],
+      }));
     }
   };
 
