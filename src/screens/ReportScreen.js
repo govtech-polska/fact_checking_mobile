@@ -1,11 +1,31 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, SafeAreaView, TextInput, Image } from 'react-native';
+import PropTypes from 'prop-types';
+import {
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  View,
+  TextInput,
+  Image,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import { strings } from '../constants/strings';
-import { GAINSBORO, CINNABAR, EMPRESS } from '../constants/colors';
+import {
+  GAINSBORO,
+  CINNABAR,
+  EMPRESS,
+  BLACK,
+  WHITE,
+} from '../constants/colors';
 import { DropDownAlert, TouchableOpacityDebounce } from '../components';
+import {
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
+import CropSvg from '../resources/img/crop.svg';
+import { routes } from '../constants/routes';
 
 class ReportScreen extends Component {
   constructor(props) {
@@ -39,12 +59,23 @@ class ReportScreen extends Component {
     }
 
     return (
-      <TouchableOpacityDebounce
-        onPress={() => this.selectPhotoTapped()}
-        style={styles.imageContainer}
-      >
-        <Image style={styles.image} source={{ uri: imagePath || '' }} />
-      </TouchableOpacityDebounce>
+      <View style={styles.imageContainer}>
+        <TouchableOpacityDebounce
+          style={styles.imageWrapper}
+          onPress={() => this.selectPhotoTapped()}
+        >
+          <Image style={styles.image} source={{ uri: imagePath || '' }} />
+        </TouchableOpacityDebounce>
+        <View style={styles.editBtn}>
+          <TouchableOpacity
+            onPress={() =>
+              this.props.navigation.push(routes.reportImageEdit, { imagePath })
+            }
+          >
+            <CropSvg width={24} height={24} fill={WHITE} />
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
@@ -82,6 +113,12 @@ class ReportScreen extends Component {
   }
 }
 
+ReportScreen.propTypes = {
+  navigation: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+};
+
 const styles = StyleSheet.create({
   title: {
     color: 'black',
@@ -117,13 +154,26 @@ const styles = StyleSheet.create({
     marginTop: 24,
     width: '100%',
     backgroundColor: 'rgb(250, 250, 250)',
-    aspectRatio: 1.3,
     borderWidth: 1,
     borderColor: GAINSBORO,
+  },
+  imageWrapper: {
+    aspectRatio: 1.3,
   },
   image: {
     flex: 1,
     resizeMode: 'contain',
+  },
+  editBtn: {
+    backgroundColor: BLACK,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    width: 42,
+    height: 42,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 9,
   },
 });
 

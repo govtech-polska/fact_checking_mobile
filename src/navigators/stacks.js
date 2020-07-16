@@ -13,6 +13,7 @@ import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
 import { routes } from '../constants/routes';
+import ReportImageEditScreen from '../screens/ReportImageEditScreen';
 
 const VerifiedStack = createStackNavigator();
 const ReportStack = createStackNavigator();
@@ -58,6 +59,11 @@ export const ReportStackScreen = () => {
         name={strings.reportTab}
         component={ReportScreen}
         options={mainScreenOptions}
+      />
+      <InfoStack.Screen
+        name={routes.reportImageEdit}
+        component={ReportImageEditScreen}
+        options={{ title: '' }}
       />
     </ReportStack.Navigator>
   );
