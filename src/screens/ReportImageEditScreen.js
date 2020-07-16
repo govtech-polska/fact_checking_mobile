@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
@@ -6,11 +6,19 @@ import {
   Image,
   PanResponder,
   Animated,
+  Text,
 } from 'react-native';
+import ViewShot from 'react-native-view-shot';
+import { useNavigation } from '@react-navigation/native';
+import { TouchableOpacityDebounce } from '../components';
+import { strings } from '../constants/strings';
+import { CINNABAR_OPACITY } from '../constants/colors';
 
 const getStartValue = (start, move) => (start > move ? move : start);
 
 const ReportImageEditScreen = ({ route }) => {
+  const navigation = useNavigation();
+  const screenshotView = useRef(null);
   const startValues = useRef(new Animated.ValueXY()).current;
   const sizeValues = useRef(new Animated.ValueXY()).current;
 
@@ -27,21 +35,15 @@ const ReportImageEditScreen = ({ route }) => {
           y: 0,
         });
       },
-      onPanResponderMove: Animated.event([null, null], {
-        useNativeDriver: false,
-        listener: (_, { moveX, moveY, x0, y0, dx, dy }) => {
-          startValues.setValue({
-            x: getStartValue(x0, moveX),
-            y: getStartValue(y0, moveY),
-          });
-          sizeValues.setValue({
-            x: Math.abs(dx),
-            y: Math.abs(dy),
-          });
-        },
-      }),
-      onPanResponderRelease: () => {
-        console.log('onPanResponderRelease');
+      onPanResponderMove: (_, { moveX, moveY, x0, y0, dx, dy }) => {
+        startValues.setValue({
+          x: getStartValue(x0, moveX),
+          y: getStartValue(y0, moveY),
+        });
+        sizeValues.setValue({
+          x: Math.abs(dx),
+          y: Math.abs(dy),
+        });
       },
     })
   ).current;
@@ -67,25 +69,44 @@ const ReportImageEditScreen = ({ route }) => {
     })
   ).current;
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacityDebounce onPress={handleImageSave}>
+          <Text style={styles.saveBtn}>
+            {strings.reportImageEdit.saveButton}
+          </Text>
+        </TouchableOpacityDebounce>
+      ),
+    });
+  }, [navigation]);
+
+  const handleImageSave = async () => {
+    const uri = await screenshotView.current.capture();
+    navigation.navigate(strings.reportTab, { imagePath: uri });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-      <Image
-        style={styles.image}
-        source={{ uri: route.params.imagePath }}
-        {...panResponder.panHandlers}
-      />
-      <Animated.View
-        style={{
-          ...styles.box,
-          width: sizeValues.x,
-          height: sizeValues.y,
-          transform: [
-            { translateX: startValues.x },
-            { translateY: startValues.y },
-          ],
-        }}
-        {...moveResponder.panHandlers}
-      />
+      <ViewShot ref={screenshotView}>
+        <Image
+          style={styles.image}
+          source={{ uri: route.params.rawImagePath }}
+          {...panResponder.panHandlers}
+        />
+        <Animated.View
+          style={{
+            ...styles.box,
+            width: sizeValues.x,
+            height: sizeValues.y,
+            transform: [
+              { translateX: startValues.x },
+              { translateY: startValues.y },
+            ],
+          }}
+          {...moveResponder.panHandlers}
+        />
+      </ViewShot>
     </SafeAreaView>
   );
 };
@@ -93,7 +114,7 @@ const ReportImageEditScreen = ({ route }) => {
 ReportImageEditScreen.propTypes = {
   route: PropTypes.shape({
     params: PropTypes.shape({
-      imagePath: PropTypes.string,
+      rawImagePath: PropTypes.string,
     }),
   }),
 };
@@ -105,13 +126,17 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   box: {
-    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+    backgroundColor: CINNABAR_OPACITY,
     borderRadius: 3,
     position: 'absolute',
     top: 0,
     left: 0,
     width: 50,
     height: 50,
+  },
+  saveBtn: {
+    marginRight: 16,
+    textTransform: 'uppercase',
   },
 });
 

@@ -20,10 +20,6 @@ import {
   WHITE,
 } from '../constants/colors';
 import { DropDownAlert, TouchableOpacityDebounce } from '../components';
-import {
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
 import CropSvg from '../resources/img/crop.svg';
 import { routes } from '../constants/routes';
 
@@ -31,20 +27,35 @@ class ReportScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      rawImagePath: null,
       imagePath: null,
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { rawImagePath } = this.state;
+    const { route } = this.props;
+
+    if (prevState.rawImagePath !== rawImagePath) {
+      this.setState({ imagePath: rawImagePath });
+    }
+
+    const nextImagePath = route.params?.imagePath;
+    if (prevProps.route.params?.imagePath !== nextImagePath) {
+      this.setState({ imagePath: nextImagePath });
+    }
   }
 
   selectPhotoTapped = () => {
     ImagePicker.openPicker({
       cropping: false,
     }).then((image) => {
-      this.setState({ imagePath: image.path });
+      this.setState({ rawImagePath: image.path, imagePath: null });
     });
   };
 
   renderProperImageView = () => {
-    const { imagePath } = this.state;
+    const { rawImagePath, imagePath } = this.state;
     if (!imagePath) {
       return (
         <TouchableOpacityDebounce
@@ -67,13 +78,15 @@ class ReportScreen extends Component {
           <Image style={styles.image} source={{ uri: imagePath || '' }} />
         </TouchableOpacityDebounce>
         <View style={styles.editBtn}>
-          <TouchableOpacity
+          <TouchableOpacityDebounce
             onPress={() =>
-              this.props.navigation.push(routes.reportImageEdit, { imagePath })
+              this.props.navigation.push(routes.reportImageEdit, {
+                rawImagePath,
+              })
             }
           >
             <CropSvg width={24} height={24} fill={WHITE} />
-          </TouchableOpacity>
+          </TouchableOpacityDebounce>
         </View>
       </View>
     );
@@ -116,6 +129,11 @@ class ReportScreen extends Component {
 ReportScreen.propTypes = {
   navigation: PropTypes.shape({
     push: PropTypes.func,
+  }),
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      imagePath: PropTypes.string,
+    }),
   }),
 };
 
