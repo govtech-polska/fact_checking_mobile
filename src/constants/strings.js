@@ -19,7 +19,7 @@ export const strings = {
     title: 'Zgłaszam fake newsa',
     addLinkLabel: 'Dodaj link do materiału',
     whatIsWrong: 'Co w tej informacji budzi Twoją wątpliwość:',
-    imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU', 
+    imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU',
     emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
     sendButton: 'Wyślij',
     verdict: 'Werdykt:',

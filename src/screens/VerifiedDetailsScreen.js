@@ -95,7 +95,7 @@ class VerifiedDetailsScreen extends Component {
       >
         <ImageViewer
           enableSwipeDown
-          renderIndicator={() => { }}
+          renderIndicator={() => {}}
           imageUrls={[{ url: details?.screenshot_url || '' }]}
           onRequestClose={this.toggleImageViewerVisibility}
           onCancel={this.toggleImageViewerVisibility}
@@ -167,64 +167,73 @@ class VerifiedDetailsScreen extends Component {
     return isFetching || !details ? (
       <LoadingOverlay loading />
     ) : (
-        <ScrollView style={{ backgroundColor: 'white' }}>
-          {this.renderImageModalIfNeeded()}
-          <View style={styles.container}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{details?.title}</Text>
-              <Text style={styles.dateLabel}>{`${
-                strings.reportDateLabel
-                } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
-            </View>
-
-            <View style={styles.verdictContainer}>
-              <Text style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}>
-                {strings.report.verdict}
-              </Text>
-              {this.verificationStatusImage()}
-              <Text style={{ ...styles.verdictText, color: this.verificationStatusColor() }}>{this.verificationStatusText()}</Text>
-            </View>
-
-            <TouchableOpacityDebounce onPress={this.toggleImageViewerVisibility}>
-              <Image
-                resizeMode="contain"
-                style={styles.image}
-                source={{ uri: details.screenshot_url || '' }}
-              />
-            </TouchableOpacityDebounce>
-
-            <View style={styles.detailsContainer}>
-              <Text style={styles.detailsTitle}>
-                {strings.informationSourceLabel}
-              </Text>
-              <Text style={styles.url} onPress={() => this.openUrl(details.url)}>
-                {details.url}
-              </Text>
-
-              <Text style={styles.detailsTitle}>{strings.fhLinkLabel}</Text>
-              <Text
-                style={styles.url}
-                onPress={() => this.openUrl(this.fhLink(details.id))}
-              >
-                {this.fhLink(details.id)}
-              </Text>
-
-              <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
-                {strings.expertReportLabel}
-              </Text>
-              <Text style={styles.dateLabel}>
-                {`${strings.verifiedDateLabel} ${this.dateFormatted(
-                  details?.expert?.date,
-                  'DD.MM.YYYY HH:mm'
-                )}`}
-              </Text>
-              <Text style={styles.detailsText}>
-                {details?.expert_opinion?.comment}
-              </Text>
-            </View>
+      <ScrollView style={{ backgroundColor: 'white' }}>
+        {this.renderImageModalIfNeeded()}
+        <View style={styles.container}>
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>{details?.title}</Text>
+            <Text style={styles.dateLabel}>{`${
+              strings.reportDateLabel
+            } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
           </View>
-        </ScrollView>
-      );
+
+          <View style={styles.verdictContainer}>
+            <Text
+              style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}
+            >
+              {strings.report.verdict}
+            </Text>
+            {this.verificationStatusImage()}
+            <Text
+              style={{
+                ...styles.verdictText,
+                color: this.verificationStatusColor(),
+              }}
+            >
+              {this.verificationStatusText()}
+            </Text>
+          </View>
+
+          <TouchableOpacityDebounce onPress={this.toggleImageViewerVisibility}>
+            <Image
+              resizeMode="contain"
+              style={styles.image}
+              source={{ uri: details.screenshot_url || '' }}
+            />
+          </TouchableOpacityDebounce>
+
+          <View style={styles.detailsContainer}>
+            <Text style={styles.detailsTitle}>
+              {strings.informationSourceLabel}
+            </Text>
+            <Text style={styles.url} onPress={() => this.openUrl(details.url)}>
+              {details.url}
+            </Text>
+
+            <Text style={styles.detailsTitle}>{strings.fhLinkLabel}</Text>
+            <Text
+              style={styles.url}
+              onPress={() => this.openUrl(this.fhLink(details.id))}
+            >
+              {this.fhLink(details.id)}
+            </Text>
+
+            <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
+              {strings.expertReportLabel}
+            </Text>
+            <Text style={styles.dateLabel}>
+              {`${strings.verifiedDateLabel} ${this.dateFormatted(
+                details?.expert?.date,
+                'DD.MM.YYYY HH:mm'
+              )}`}
+            </Text>
+            <Text style={styles.detailsText}>
+              {details?.expert_opinion?.comment}
+            </Text>
+          </View>
+        </View>
+      </ScrollView>
+    );
   }
 }
 

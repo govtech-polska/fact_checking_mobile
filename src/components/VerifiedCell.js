@@ -13,11 +13,29 @@ const VerifiedCell = ({ item, onCellTapped }) => {
   const verificationStatusImage = () => {
     switch (item.verdict) {
       case 'true':
-        return <VerifiedOk width={25} height={25} style={{ marginLeft: 8, color: 'green' }} />;
+        return (
+          <VerifiedOk
+            width={25}
+            height={25}
+            style={{ marginLeft: 8, color: 'green' }}
+          />
+        );
       case 'false':
-        return <VerifiedBad width={25} height={25} style={{ marginLeft: 8, color: CINNABAR }} />;
+        return (
+          <VerifiedBad
+            width={25}
+            height={25}
+            style={{ marginLeft: 8, color: CINNABAR }}
+          />
+        );
       default:
-        return <VerifiedNot width={25} height={25} style={{ marginLeft: 8, color: 'gray' }} />;
+        return (
+          <VerifiedNot
+            width={25}
+            height={25}
+            style={{ marginLeft: 8, color: 'gray' }}
+          />
+        );
     }
   };
   const date = Moment(item.reported_at).format('DD.MM.YYYY');
