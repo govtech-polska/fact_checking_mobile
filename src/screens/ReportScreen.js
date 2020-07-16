@@ -64,10 +64,15 @@ class ReportScreen extends Component {
   };
 
   onSpeechEnd = () => {
-    this.setState({
+    const newState = {
       started: false,
       end: true,
-    });
+    };
+    if (Platform.OS === 'ios') {
+      const { whatIsWrong, recognitionResult } = this.state;
+      newState.whatIsWrong = whatIsWrong + recognitionResult;
+    }
+    this.setState(newState);
   };
 
   onSpeechError = () => {
@@ -76,9 +81,13 @@ class ReportScreen extends Component {
 
   onSpeechResults = (e) => {
     if (e.value.length > 0) {
-      this.setState(({ whatIsWrong }) => ({
-        whatIsWrong: whatIsWrong + e.value[0],
-      }));
+      if (Platform.OS == 'ios') {
+        this.setState({ recognitionResult: e.value[0] });
+      } else {
+        this.setState(({ whatIsWrong }) => ({
+          whatIsWrong: whatIsWrong + e.value[0],
+        }));
+      }
     }
   };
 
