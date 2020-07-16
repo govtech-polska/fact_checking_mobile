@@ -16,7 +16,12 @@ import Record from '../resources/img/recording.svg';
 
 import { strings } from '../constants/strings';
 import { GAINSBORO, CINNABAR, EMPRESS, DARK_GRAY } from '../constants/colors';
-import { DropDownAlert, TouchableOpacityDebounce } from '../components';
+import {
+  DropDownAlert,
+  TouchableOpacityDebounce,
+  Title,
+  Container,
+} from '../components';
 
 const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
 
@@ -64,15 +69,18 @@ class ReportScreen extends Component {
   };
 
   onSpeechEnd = () => {
-    const newState = {
-      started: false,
-      end: true,
-    };
     if (Platform.OS === 'ios') {
-      const { whatIsWrong, recognitionResult } = this.state;
-      newState.whatIsWrong = whatIsWrong + recognitionResult;
+      this.setState(({ whatIsWrong, recognitionResult }) => ({
+        started: false,
+        end: true,
+        whatIsWrong: whatIsWrong + recognitionResult,
+      }));
+    } else {
+      this.setState({
+        started: false,
+        end: true,
+      });
     }
-    this.setState(newState);
   };
 
   onSpeechError = () => {
@@ -91,7 +99,7 @@ class ReportScreen extends Component {
     }
   };
 
-  _startRecognizing = async () => {
+  startRecognizing = async () => {
     this.setState({
       error: false,
       started: false,
@@ -106,17 +114,9 @@ class ReportScreen extends Component {
     }
   };
 
-  _stopRecognizing = async () => {
+  stopRecognizing = async () => {
     try {
       await Voice.stop();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  _cancelRecognizing = async () => {
-    try {
-      await Voice.cancel();
     } catch (e) {
       console.error(e);
     }
@@ -191,39 +191,41 @@ class ReportScreen extends Component {
           enableOnAndroid
           keyboardShouldPersistTaps="never"
           keyboardDismissMode={'interactive'}
-          style={{ paddingHorizontal: 16 }}
         >
-          <Text style={styles.title}>{strings.report.title}</Text>
+          <Container>
+            <Title title={strings.report.title} />
 
-          <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
-          <TextInput
-            style={styles.inputLabel}
-            multiline={true}
-            autoCorrect={false}
-          />
+            <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
+            <TextInput style={styles.inputLabel} autoCorrect={false} />
 
-          <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
-          <View style={styles.labelWithButtonContainer}>
+            <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
+            <View style={styles.labelWithButtonContainer}>
+              <TextInput
+                style={styles.inputLabelWithButton}
+                value={end ? whatIsWrong : whatIsWrong + recognitionResult}
+                multiline={true}
+                onChangeText={(text) => this.setState({ whatIsWrong: text })}
+              />
+              {this.renderSpeechRecognitionButtonIfNeeded()}
+            </View>
+
+            {this.renderProperImageView()}
+
+            <Text style={styles.label}>{strings.report.emailLabel}</Text>
             <TextInput
-              style={styles.inputLabelWithButton}
-              value={end ? whatIsWrong : whatIsWrong + recognitionResult}
-              multiline={true}
-              onChangeText={(text) => this.setState({ whatIsWrong: text })}
+              style={styles.inputLabel}
+              keyboardType={'email-address'}
             />
-            {this.renderSpeechRecognitionButtonIfNeeded()}
-          </View>
 
-          {this.renderProperImageView()}
-
-          <Text style={styles.label}>{strings.report.emailLabel}</Text>
-          <TextInput style={styles.inputLabel} keyboardType={'email-address'} />
-
-          <TouchableOpacityDebounce
-            style={{ ...styles.button, backgroundColor: CINNABAR }}
-            onPress={() => DropDownAlert.showError()}
-          >
-            <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
-          </TouchableOpacityDebounce>
+            <TouchableOpacityDebounce
+              style={{ ...styles.button, backgroundColor: CINNABAR }}
+              onPress={() => DropDownAlert.showError()}
+            >
+              <Text style={styles.buttonLabel}>
+                {strings.report.sendButton}
+              </Text>
+            </TouchableOpacityDebounce>
+          </Container>
         </KeyboardAwareScrollView>
       </SafeAreaView>
     );
@@ -261,9 +263,7 @@ const styles = StyleSheet.create({
   },
   inputLabelWithButton: {
     flex: 1,
-    marginLeft: 2,
-    paddingHorizontal: 5,
-    paddingVertical: 10,
+    padding: 2,
     textAlignVertical: 'center',
     fontSize: FONT_SIZE,
   },
