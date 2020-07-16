@@ -19,6 +19,7 @@ import {
   LoadingOverlay,
   DropDownAlert,
   TouchableOpacityDebounce,
+  Container,
 } from '../components';
 import { strings } from '../constants/strings';
 import { DARK_GRAY, CINNABAR } from '../constants/colors';
@@ -170,14 +171,14 @@ class VerifiedDetailsScreen extends Component {
       <ScrollView style={{ backgroundColor: 'white' }}>
         {this.renderImageModalIfNeeded()}
         <View style={styles.container}>
-          <View style={styles.titleContainer}>
+          <Container style={styles.titleContainer}>
             <Text style={styles.title}>{details?.title}</Text>
             <Text style={styles.dateLabel}>{`${
               strings.reportDateLabel
             } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
-          </View>
+          </Container>
 
-          <View style={styles.verdictContainer}>
+          <Container style={styles.verdictContainer}>
             <Text
               style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}
             >
@@ -192,7 +193,7 @@ class VerifiedDetailsScreen extends Component {
             >
               {this.verificationStatusText()}
             </Text>
-          </View>
+          </Container>
 
           <TouchableOpacityDebounce onPress={this.toggleImageViewerVisibility}>
             <Image
@@ -202,7 +203,7 @@ class VerifiedDetailsScreen extends Component {
             />
           </TouchableOpacityDebounce>
 
-          <View style={styles.detailsContainer}>
+          <Container style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>
               {strings.informationSourceLabel}
             </Text>
@@ -230,7 +231,7 @@ class VerifiedDetailsScreen extends Component {
             <Text style={styles.detailsText}>
               {details?.expert_opinion?.comment}
             </Text>
-          </View>
+          </Container>
         </View>
       </ScrollView>
     );
@@ -271,7 +272,6 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     marginTop: 16,
-    paddingHorizontal: 16,
     marginBottom: 8,
   },
   title: {
@@ -287,7 +287,6 @@ const styles = StyleSheet.create({
   verdictContainer: {
     flexDirection: 'row',
     height: 40,
-    paddingHorizontal: 16,
     alignItems: 'center',
   },
   verdictText: {
@@ -305,7 +304,6 @@ const styles = StyleSheet.create({
   detailsContainer: {
     flex: 1,
     width: '100%',
-    paddingHorizontal: 16,
   },
   detailsTitle: {
     color: 'black',

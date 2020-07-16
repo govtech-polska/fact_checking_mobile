@@ -57,5 +57,9 @@
 	<false/>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Dodanie zrzutu ekranu</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Dyktowanie zamiast pisania</string>
+		<key>NSMicrophoneUsageDescription</key>
+	<string>Dyktowanie zamiast pisania</string>
 </dict>
 </plist>
