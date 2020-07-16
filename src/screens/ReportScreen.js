@@ -1,29 +1,15 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TextInput,
-  Image,
-} from 'react-native';
+import { Text, StyleSheet, SafeAreaView, TextInput, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 
 import { strings } from '../constants/strings';
-import {
-  GAINSBORO,
-  CINNABAR,
-  EMPRESS,
-} from '../constants/colors';
-import {
-  DropDownAlert,
-  TouchableOpacityDebounce,
-} from '../components';
+import { GAINSBORO, CINNABAR, EMPRESS } from '../constants/colors';
+import { DropDownAlert, TouchableOpacityDebounce } from '../components';
 
 class ReportScreen extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       imagePath: null,
     };
@@ -31,11 +17,11 @@ class ReportScreen extends Component {
 
   selectPhotoTapped = () => {
     ImagePicker.openPicker({
-      cropping: false
-    }).then(image => {
+      cropping: false,
+    }).then((image) => {
       this.setState({ imagePath: image.path });
     });
-  }
+  };
 
   renderProperImageView = () => {
     const { imagePath } = this.state;
@@ -49,23 +35,18 @@ class ReportScreen extends Component {
             {strings.report.imageButtonLabel}
           </Text>
         </TouchableOpacityDebounce>
-
       );
     }
-
 
     return (
       <TouchableOpacityDebounce
         onPress={() => this.selectPhotoTapped()}
         style={styles.imageContainer}
       >
-        <Image
-          style={styles.image}
-          source={{ uri: imagePath || '' }}
-        />
+        <Image style={styles.image} source={{ uri: imagePath || '' }} />
       </TouchableOpacityDebounce>
     );
-  }
+  };
 
   render() {
     return (
@@ -76,37 +57,24 @@ class ReportScreen extends Component {
           keyboardDismissMode={'interactive'}
           style={{ paddingHorizontal: 16 }}
         >
-          <Text style={styles.title}>
-            {strings.report.title}
-          </Text>
+          <Text style={styles.title}>{strings.report.title}</Text>
 
-          <Text style={styles.label}>
-            {strings.report.addLinkLabel}
-          </Text>
-          <TextInput
-            style={styles.inputLabel}
-            multiline={true}
-          />
+          <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
+          <TextInput style={styles.inputLabel} multiline={true} />
 
-          <Text style={styles.label}>
-            {strings.report.whatIsWrong}
-          </Text>
+          <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
           <TextInput style={styles.inputLabel} />
 
           {this.renderProperImageView()}
 
-          <Text style={styles.label}>
-            {strings.report.emailLabel}
-          </Text>
+          <Text style={styles.label}>{strings.report.emailLabel}</Text>
           <TextInput style={styles.inputLabel} />
 
           <TouchableOpacityDebounce
             style={{ ...styles.button, backgroundColor: CINNABAR }}
             onPress={() => DropDownAlert.showError()}
           >
-            <Text style={styles.buttonLabel}>
-              {strings.report.sendButton}
-            </Text>
+            <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
           </TouchableOpacityDebounce>
         </KeyboardAwareScrollView>
       </SafeAreaView>
@@ -156,7 +124,7 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     resizeMode: 'contain',
-  }
+  },
 });
 
 export default ReportScreen;
