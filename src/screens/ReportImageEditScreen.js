@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacityDebounce } from '../components';
 import { strings } from '../constants/strings';
 import { CINNABAR_OPACITY } from '../constants/colors';
+import { routes } from '../constants/routes';
 
 const getStartValue = (start, move) => (start > move ? move : start);
 
@@ -83,7 +84,7 @@ const ReportImageEditScreen = ({ route }) => {
 
   const handleImageSave = async () => {
     const uri = await screenshotView.current.capture();
-    navigation.navigate(strings.reportTab, { imagePath: uri });
+    navigation.navigate(routes.report, { imagePath: uri });
   };
 
   return (

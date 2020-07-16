@@ -1,5 +1,10 @@
 export const routes = {
+  verified: 'Verified',
   verifiedDetails: 'VerifiedDetailsScreen',
-  infoAbout: 'InfoAboutScreen',
+
+  report: 'Report',
   reportImageEdit: 'ReportImageEdit',
+
+  info: 'Info',
+  infoAbout: 'InfoAboutScreen',
 };
