@@ -29,12 +29,18 @@ export const strings = {
   },
   info: {
     title: 'O aplikacji',
-    links: {
-      aboutProject: 'O projekcie',
-      team: 'Zespół',
-      verificationRules: 'Reguły weryfikacji faktów',
-      verificationPolicy: 'Polityka korekt',
-      privacyPolicy: 'Polityka prywatności',
+    aboutProject: 'O projekcie',
+    team: 'Zespół',
+    verificationRules: 'Reguły weryfikacji faktów',
+    verificationPolicy: 'Polityka korekt',
+    privacyPolicy: 'Polityka prywatności',
+    urls: {
+      verificationRules:
+        'https://fakehunter.pap.pl/attachments/reguly_weryfikacji_faktow.pdf',
+      verificationPolicy:
+        'https://fakehunter.pap.pl/attachments/polityka_korekt.pdf',
+      privacyPolicy:
+        'https://fakehunter.pap.pl/attachments/polityka_prywatnosci.pdf',
     },
   },
   infoAbout: {

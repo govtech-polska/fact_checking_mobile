@@ -11,10 +11,10 @@ const InfoTeamScreen = () => {
     <ScrollView style={styles.bg}>
       <Container>
         <Title title={strings.infoTeam.title} />
-        {TEAM.map((person) => (
-          <View key={person.name} style={styles.person}>
-            <Text style={styles.personName}>{person.name}</Text>
-            <Text style={styles.personDescription}>{person.description}</Text>
+        {TEAM.map(({ name, description }) => (
+          <View key={name} style={styles.itemWrapper}>
+            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.description}>{description}</Text>
           </View>
         ))}
       </Container>
@@ -27,15 +27,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WHITE,
   },
-  person: {
+  itemWrapper: {
     marginBottom: 16,
   },
-  personName: {
+  name: {
     fontWeight: 'bold',
     fontSize: 15,
     marginBottom: 3,
   },
-  personDescription: {
+  description: {
     fontSize: 15,
   },
 });
