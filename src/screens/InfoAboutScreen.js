@@ -6,8 +6,8 @@ import { strings } from '../constants/strings';
 
 const InfoAboutScreen = () => {
   return (
-    <ScrollView>
-      <Container style={styles.container}>
+    <ScrollView style={styles.bg}>
+      <Container>
         <Title title={strings.infoAbout.title} />
         <Text style={styles.text}>{strings.infoAbout.projectDescription1}</Text>
         <Text style={styles.text}>{strings.infoAbout.projectDescription2}</Text>
@@ -17,14 +17,14 @@ const InfoAboutScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  bg: {
     flex: 1,
     backgroundColor: WHITE,
   },
   text: {
     fontSize: 15,
     lineHeight: 22,
-    paddingVertical: 16,
+    paddingVertical: 8,
   },
 });
 

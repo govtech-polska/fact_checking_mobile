@@ -8,6 +8,7 @@ import {
   ReportScreen,
   InfoScreen,
   InfoAboutScreen,
+  InfoTeamScreen,
 } from '../screens';
 import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
@@ -74,6 +75,11 @@ export const InfoStackScreen = () => {
       <InfoStack.Screen
         name={routes.infoAbout}
         component={InfoAboutScreen}
+        options={{ title: '' }}
+      />
+      <InfoStack.Screen
+        name={routes.infoTeam}
+        component={InfoTeamScreen}
         options={{ title: '' }}
       />
     </InfoStack.Navigator>
