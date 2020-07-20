@@ -1,27 +1,38 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   StyleSheet,
   SafeAreaView,
+  View,
   TextInput,
   Image,
-  View,
   Platform,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 import Voice from '@react-native-community/voice';
-import Mic from '../resources/img/mic.svg';
-import Record from '../resources/img/recording.svg';
 
 import { strings } from '../constants/strings';
-import { GAINSBORO, CINNABAR, EMPRESS, DARK_GRAY } from '../constants/colors';
+import {
+  GAINSBORO,
+  CINNABAR,
+  EMPRESS,
+  DARK_GRAY,
+  BLACK,
+  WHITE,
+} from '../constants/colors';
+import { routes } from '../constants/routes';
+
 import {
   DropDownAlert,
   TouchableOpacityDebounce,
   Title,
   Container,
 } from '../components';
+import Mic from '../resources/img/mic.svg';
+import Record from '../resources/img/recording.svg';
+import CropSvg from '../resources/img/crop.svg';
 
 const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
 
@@ -29,6 +40,7 @@ class ReportScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      rawImagePath: null,
       imagePath: null,
       speechRecognitionAvailable: false,
       whatIsWrong: '',
@@ -51,11 +63,25 @@ class ReportScreen extends Component {
     Voice.destroy().then(Voice.removeAllListeners);
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { rawImagePath } = this.state;
+    const { route } = this.props;
+
+    if (prevState.rawImagePath !== rawImagePath) {
+      this.setState({ imagePath: rawImagePath });
+    }
+
+    const nextImagePath = route.params?.imagePath;
+    if (prevProps.route.params?.imagePath !== nextImagePath) {
+      this.setState({ imagePath: nextImagePath });
+    }
+  }
+
   selectPhotoTapped = () => {
     ImagePicker.openPicker({
       cropping: false,
     }).then((image) => {
-      this.setState({ imagePath: image.path });
+      this.setState({ rawImagePath: image.path, imagePath: null });
     });
   };
 
@@ -132,7 +158,7 @@ class ReportScreen extends Component {
   };
 
   renderProperImageView = () => {
-    const { imagePath } = this.state;
+    const { rawImagePath, imagePath } = this.state;
     if (!imagePath) {
       return (
         <TouchableOpacityDebounce
@@ -147,12 +173,25 @@ class ReportScreen extends Component {
     }
 
     return (
-      <TouchableOpacityDebounce
-        onPress={() => this.selectPhotoTapped()}
-        style={styles.imageContainer}
-      >
-        <Image style={styles.image} source={{ uri: imagePath || '' }} />
-      </TouchableOpacityDebounce>
+      <View style={styles.imageView}>
+        <TouchableOpacityDebounce
+          style={styles.imageWrapper}
+          onPress={() => this.selectPhotoTapped()}
+        >
+          <Image style={styles.image} source={{ uri: imagePath || '' }} />
+        </TouchableOpacityDebounce>
+        <View style={styles.editBtn}>
+          <TouchableOpacityDebounce
+            onPress={() =>
+              this.props.navigation.push(routes.reportImageEdit, {
+                rawImagePath,
+              })
+            }
+          >
+            <CropSvg width={24} height={24} fill={WHITE} />
+          </TouchableOpacityDebounce>
+        </View>
+      </View>
     );
   };
 
@@ -186,7 +225,7 @@ class ReportScreen extends Component {
     const { end, recognitionResult, whatIsWrong } = this.state;
 
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
         <KeyboardAwareScrollView
           enableOnAndroid
           keyboardShouldPersistTaps="never"
@@ -232,13 +271,24 @@ class ReportScreen extends Component {
   }
 }
 
+ReportScreen.propTypes = {
+  navigation: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      imagePath: PropTypes.string,
+    }),
+  }),
+};
+
 const styles = StyleSheet.create({
   title: {
-    color: 'black',
+    color: BLACK,
     fontSize: Platform.OS === 'ios' ? 30 : 24,
   },
   label: {
-    color: 'black',
+    color: BLACK,
     fontSize: 14,
     marginTop: 24,
   },
@@ -276,21 +326,36 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   buttonLabel: {
-    color: 'white',
+    color: WHITE,
     fontSize: 14,
     textTransform: 'uppercase',
   },
-  imageContainer: {
+  imageView: {
     marginTop: 24,
     width: '100%',
     backgroundColor: 'rgb(250, 250, 250)',
-    aspectRatio: 1.3,
     borderWidth: 1,
     borderColor: GAINSBORO,
+    borderRadius: 4,
+  },
+  imageWrapper: {
+    aspectRatio: 1.3,
   },
   image: {
     flex: 1,
     resizeMode: 'contain',
+  },
+  editBtn: {
+    backgroundColor: BLACK,
+    position: 'absolute',
+    top: 3,
+    right: 4,
+    width: 46,
+    height: 46,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    zIndex: 9,
   },
 });
 
