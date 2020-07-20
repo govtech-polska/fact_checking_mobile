@@ -3,7 +3,7 @@ export const strings = {
   refresh: 'Odśwież',
 
   //MARK: Tab names
-  verifiedTab: 'Zewryfikowane',
+  verifiedTab: 'Zweryfikowane',
   reportTab: 'Raport',
 
   //MARK: Verified screen
