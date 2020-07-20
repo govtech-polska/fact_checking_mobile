@@ -125,9 +125,9 @@ class ReportScreen extends Component {
   toggleRecognizing = () => {
     const { started, end } = this.state;
     if ((end && !started) || (!end && !started)) {
-      this._startRecognizing();
+      this.startRecognizing();
     } else {
-      this._stopRecognizing();
+      this.stopRecognizing();
     }
   };
 
