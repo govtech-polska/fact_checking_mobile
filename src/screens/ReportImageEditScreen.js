@@ -20,26 +20,31 @@ const getStartValue = (start, move) => (start > move ? move : start);
 const ReportImageEditScreen = ({ route }) => {
   const navigation = useNavigation();
   const screenshotView = useRef(null);
+  const initialValues = useRef(new Animated.ValueXY()).current;
   const startValues = useRef(new Animated.ValueXY()).current;
   const sizeValues = useRef(new Animated.ValueXY()).current;
 
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
-      onPanResponderGrant: (evt, gestureState) => {
+      onPanResponderGrant: ({ nativeEvent }) => {
+        initialValues.setValue({
+          x: nativeEvent.locationX,
+          y: nativeEvent.locationY,
+        });
         startValues.setValue({
-          x: gestureState.x0,
-          y: gestureState.y0,
+          x: nativeEvent.locationX,
+          y: nativeEvent.locationY,
         });
         sizeValues.setValue({
           x: 0,
           y: 0,
         });
       },
-      onPanResponderMove: (_, { moveX, moveY, x0, y0, dx, dy }) => {
+      onPanResponderMove: ({ nativeEvent }, { dx, dy }) => {
         startValues.setValue({
-          x: getStartValue(x0, moveX),
-          y: getStartValue(y0, moveY),
+          x: getStartValue(initialValues.x._value, nativeEvent.locationX),
+          y: getStartValue(initialValues.y._value, nativeEvent.locationY),
         });
         sizeValues.setValue({
           x: Math.abs(dx),
