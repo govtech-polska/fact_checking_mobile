@@ -4,3 +4,4 @@ export { default as ReportImageEditScreen } from './ReportImageEditScreen';
 export { default as VerifiedDetailsScreen } from './VerifiedDetailsScreen';
 export { default as InfoScreen } from './InfoScreen';
 export { default as InfoAboutScreen } from './InfoAboutScreen';
+export { default as InfoTeamScreen } from './InfoTeamScreen';

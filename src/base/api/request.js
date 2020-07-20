@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { BASE_URL } from '../../constants/api';
+import { BASE_URL } from '../../constants/urls';
 
 /**
  * Creates an API request.

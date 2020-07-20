@@ -5,3 +5,7 @@ export const apiUrls = {
   NEWS: '/news/published/news?page=:page',
   NEWS_DETAILS: '/news/published/news/:id',
 };
+
+export const urls = {
+  INFO_ATTACHMENTS: 'https://fakehunter.pap.pl/attachments/:fileName',
+};

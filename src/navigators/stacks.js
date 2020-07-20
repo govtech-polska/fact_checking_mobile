@@ -9,6 +9,7 @@ import {
   ReportImageEditScreen,
   InfoScreen,
   InfoAboutScreen,
+  InfoTeamScreen,
 } from '../screens';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
@@ -79,6 +80,11 @@ export const InfoStackScreen = () => {
       <InfoStack.Screen
         name={routes.infoAbout}
         component={InfoAboutScreen}
+        options={{ title: '' }}
+      />
+      <InfoStack.Screen
+        name={routes.infoTeam}
+        component={InfoTeamScreen}
         options={{ title: '' }}
       />
     </InfoStack.Navigator>

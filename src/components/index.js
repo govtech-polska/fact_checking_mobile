@@ -1,6 +1,6 @@
-export VerifiedCell from './VerifiedCell';
-export LoadingOverlay from './LoadingOverlay';
-export DropDownAlert from './DropDownAlert';
-export Title from './Title';
+export { default as VerifiedCell } from './VerifiedCell';
+export { default as LoadingOverlay } from './LoadingOverlay';
+export { default as DropDownAlert } from './DropDownAlert';
+export { default as Title } from './Title';
 export * from './TouchableOpacityDebounce';
-export Container from './Container';
+export { default as Container } from './Container';
