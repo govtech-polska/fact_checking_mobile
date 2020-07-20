@@ -17,6 +17,8 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* FakeHunterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* FakeHunterTests.m */; };
+		8AF66DFF24C5A86300CC5785 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF66DFE24C5A86300CC5785 /* ShareViewController.swift */; };
+		8AF66E0624C5A86300CC5785 /* ShareEx.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8AF66DFC24C5A86300CC5785 /* ShareEx.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8EAF0876E8D6FEB14B83E601 /* libPods-FakeHunter-FakeHunterTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FE4A99BA5A0688A1B831E7 /* libPods-FakeHunter-FakeHunterTests.a */; };
 		A21B8BB1C06E5C05CE1B3DDD /* libPods-FakeHunter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD92202C170BAC0A47CE3992 /* libPods-FakeHunter.a */; };
 		D0D95A72FF084C2EABB523AC /* libPods-FakeHunter-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A2D2F54CAA38B7BF1782F6 /* libPods-FakeHunter-tvOSTests.a */; };
@@ -37,7 +39,28 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "FakeHunter-tvOS";
 		};
+		8AF66E0424C5A86300CC5785 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8AF66DFB24C5A86300CC5785;
+			remoteInfo = ShareEx;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8AF66E0724C5A86300CC5785 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8AF66E0624C5A86300CC5785 /* ShareEx.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
@@ -59,6 +82,13 @@
 		2FAE5F5A5AE5E85F5ABA19F9 /* libPods-FakeHunter-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FakeHunter-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB873C961739B65A80C4C5 /* Pods-FakeHunter-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOSTests/Pods-FakeHunter-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D66B7B556A2296B63303145 /* Pods-FakeHunter-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		8AF66DFC24C5A86300CC5785 /* ShareEx.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareEx.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		8AF66DFE24C5A86300CC5785 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		8AF66E0324C5A86300CC5785 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8AF66E0C24C5AD8700CC5785 /* FakeHunterAdHoc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterAdHoc.entitlements; path = FakeHunter/FakeHunterAdHoc.entitlements; sourceTree = "<group>"; };
+		8AF66E0D24C5ADCD00CC5785 /* ShareEx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareEx.entitlements; sourceTree = "<group>"; };
+		8AF66E0E24C5C52400CC5785 /* FakeHunterDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterDebug.entitlements; path = FakeHunter/FakeHunterDebug.entitlements; sourceTree = "<group>"; };
+		8AF66E0F24C5C52F00CC5785 /* FakeHunterRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterRelease.entitlements; path = FakeHunter/FakeHunterRelease.entitlements; sourceTree = "<group>"; };
 		9F5C8E130FA98E8BB2021F03 /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-FakeHunterTests/Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A86C8E0E2232D2B1BD6E6D34 /* Pods-FakeHunter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter/Pods-FakeHunter.release.xcconfig"; sourceTree = "<group>"; };
 		A99BE67B3DB1BA8DE3076C41 /* Pods-FakeHunter-tvOS.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -106,6 +136,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8AF66DF924C5A86300CC5785 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -129,6 +166,9 @@
 		13B07FAE1A68108700A75B9A /* FakeHunter */ = {
 			isa = PBXGroup;
 			children = (
+				8AF66E0F24C5C52F00CC5785 /* FakeHunterRelease.entitlements */,
+				8AF66E0E24C5C52400CC5785 /* FakeHunterDebug.entitlements */,
+				8AF66E0C24C5AD8700CC5785 /* FakeHunterAdHoc.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -185,6 +225,7 @@
 				13B07FAE1A68108700A75B9A /* FakeHunter */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* FakeHunterTests */,
+				8AF66DFD24C5A86300CC5785 /* ShareEx */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				395C7746225027606A6968ED /* Pods */,
@@ -201,8 +242,19 @@
 				00E356EE1AD99517003FC87E /* FakeHunterTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* FakeHunter-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* FakeHunter-tvOSTests.xctest */,
+				8AF66DFC24C5A86300CC5785 /* ShareEx.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8AF66DFD24C5A86300CC5785 /* ShareEx */ = {
+			isa = PBXGroup;
+			children = (
+				8AF66E0D24C5ADCD00CC5785 /* ShareEx.entitlements */,
+				8AF66DFE24C5A86300CC5785 /* ShareViewController.swift */,
+				8AF66E0324C5A86300CC5785 /* Info.plist */,
+			);
+			path = ShareEx;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,10 +291,12 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				FCCE540C264DFF8263EDE500 /* [CP] Copy Pods Resources */,
+				8AF66E0724C5A86300CC5785 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8AF66E0524C5A86300CC5785 /* PBXTargetDependency */,
 			);
 			name = FakeHunter;
 			productName = FakeHunter;
@@ -288,12 +342,30 @@
 			productReference = 2D02E4901E0B4A5D006451C7 /* FakeHunter-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		8AF66DFB24C5A86300CC5785 /* ShareEx */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8AF66E0B24C5A86300CC5785 /* Build configuration list for PBXNativeTarget "ShareEx" */;
+			buildPhases = (
+				8AF66DF824C5A86300CC5785 /* Sources */,
+				8AF66DF924C5A86300CC5785 /* Frameworks */,
+				8AF66DFA24C5A86300CC5785 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ShareEx;
+			productName = ShareEx;
+			productReference = 8AF66DFC24C5A86300CC5785 /* ShareEx.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1150;
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -314,6 +386,11 @@
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
+					8AF66DFB24C5A86300CC5785 = {
+						CreatedOnToolsVersion = 11.5;
+						DevelopmentTeam = K36E9SFT27;
+						ProvisioningStyle = Manual;
+					};
 				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "FakeHunter" */;
@@ -333,6 +410,7 @@
 				00E356ED1AD99517003FC87E /* FakeHunterTests */,
 				2D02E47A1E0B4A5D006451C7 /* FakeHunter-tvOS */,
 				2D02E48F1E0B4A5D006451C7 /* FakeHunter-tvOSTests */,
+				8AF66DFB24C5A86300CC5785 /* ShareEx */,
 			);
 		};
 /* End PBXProject section */
@@ -363,6 +441,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2D02E48E1E0B4A5D006451C7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8AF66DFA24C5A86300CC5785 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -603,6 +688,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8AF66DF824C5A86300CC5785 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8AF66DFF24C5A86300CC5785 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -615,6 +708,11 @@
 			isa = PBXTargetDependency;
 			target = 2D02E47A1E0B4A5D006451C7 /* FakeHunter-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+		};
+		8AF66E0524C5A86300CC5785 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8AF66DFB24C5A86300CC5785 /* ShareEx */;
+			targetProxy = 8AF66E0424C5A86300CC5785 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -678,8 +776,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 253BBA43BC169F81FE560521 /* Pods-FakeHunter.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = FakeHunter/FakeHunterDebug.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = K36E9SFT27;
@@ -708,8 +808,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A86C8E0E2232D2B1BD6E6D34 /* Pods-FakeHunter.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = FakeHunter/FakeHunterRelease.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1009,8 +1111,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2D69D775D0219C1B1FFB2836 /* Pods-FakeHunter.adhoc.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = FakeHunter/FakeHunterAdHoc.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1105,6 +1209,96 @@
 			};
 			name = AdHoc;
 		};
+		8AF66E0824C5A86300CC5785 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareEx.entitlements;
+				CODE_SIGN_STYLE = Manual;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = K36E9SFT27;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ShareEx/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev.ShareEx;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter Share Dev";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		8AF66E0924C5A86300CC5785 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareEx.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = K36E9SFT27;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ShareEx/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev.ShareEx;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Share Prod";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		8AF66E0A24C5A86300CC5785 /* AdHoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareEx.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = K36E9SFT27;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ShareEx/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev.ShareEx;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter Share AdHoc";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = AdHoc;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1154,6 +1348,16 @@
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
 				8AD650CA24A4C66200536082 /* AdHoc */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8AF66E0B24C5A86300CC5785 /* Build configuration list for PBXNativeTarget "ShareEx" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8AF66E0824C5A86300CC5785 /* Debug */,
+				8AF66E0924C5A86300CC5785 /* Release */,
+				8AF66E0A24C5A86300CC5785 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
