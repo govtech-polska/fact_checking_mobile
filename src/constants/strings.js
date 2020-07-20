@@ -34,13 +34,10 @@ export const strings = {
     verificationRules: 'Reguły weryfikacji faktów',
     verificationPolicy: 'Polityka korekt',
     privacyPolicy: 'Polityka prywatności',
-    urls: {
-      verificationRules:
-        'https://fakehunter.pap.pl/attachments/reguly_weryfikacji_faktow.pdf',
-      verificationPolicy:
-        'https://fakehunter.pap.pl/attachments/polityka_korekt.pdf',
-      privacyPolicy:
-        'https://fakehunter.pap.pl/attachments/polityka_prywatnosci.pdf',
+    fileNames: {
+      verificationRules: 'reguly_weryfikacji_faktow.pdf',
+      verificationPolicy: 'polityka_korekt.pdf',
+      privacyPolicy: 'polityka_prywatnosci.pdf',
     },
   },
   infoAbout: {

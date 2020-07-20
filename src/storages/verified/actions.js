@@ -1,5 +1,5 @@
 import { apiAction } from '../../base/api/redux';
-import { apiUrls } from '../../constants/api';
+import { apiUrls } from '../../constants/urls';
 import { resolveUrl } from '../../utils/url';
 
 export const NEWS = 'feed.NEWS_LIST';

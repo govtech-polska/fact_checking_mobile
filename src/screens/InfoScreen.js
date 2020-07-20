@@ -5,7 +5,8 @@ import { Title, Container, TouchableOpacityDebounce } from '../components';
 import { WHITE, WHITE_SMOKE } from '../constants/colors';
 import { strings } from '../constants/strings';
 import { routes } from '../constants/routes';
-import { openUrl } from '../utils/url';
+import { urls } from '../constants/urls';
+import { openUrl, resolveUrl } from '../utils/url';
 
 const INFO_LINKS = [
   {
@@ -18,37 +19,37 @@ const INFO_LINKS = [
   },
   {
     label: strings.info.verificationRules,
-    url: strings.info.urls.verificationRules,
+    fileName: strings.info.fileNames.verificationRules,
   },
   {
     label: strings.info.verificationPolicy,
-    url: strings.info.urls.verificationPolicy,
+    fileName: strings.info.fileNames.verificationPolicy,
   },
   {
     label: strings.info.privacyPolicy,
-    url: strings.info.urls.privacyPolicy,
+    fileName: strings.info.fileNames.privacyPolicy,
   },
 ];
 
 const InfoScreen = () => {
   const navigation = useNavigation();
 
-  const handlePress = ({ route, url }) => () => {
+  const handlePress = ({ route, fileName }) => () => {
     if (route) {
       navigation.push(route);
-    } else if (url) {
-      openUrl(url);
+    } else if (fileName) {
+      openUrl(resolveUrl(urls.INFO_ATTACHMENTS, { fileName }));
     }
   };
 
   return (
     <Container style={styles.container}>
       <Title title={strings.info.title} />
-      {INFO_LINKS.map(({ label, route, url }) => (
+      {INFO_LINKS.map(({ label, route, fileName }) => (
         <TouchableOpacityDebounce
           key={label}
           underlayColor={WHITE_SMOKE}
-          onPress={handlePress({ route, url })}
+          onPress={handlePress({ route, fileName })}
         >
           <Text style={styles.item}>{label}</Text>
         </TouchableOpacityDebounce>

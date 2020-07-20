@@ -23,7 +23,7 @@ import {
 import { strings } from '../constants/strings';
 import { DARK_GRAY, CINNABAR } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions';
-import { APP_URL } from '../constants/api';
+import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
