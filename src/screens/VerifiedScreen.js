@@ -7,6 +7,9 @@ import {
   ActivityIndicator,
   RefreshControl,
   Text,
+  NativeModules,
+  Platform,
+  AppState,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -31,15 +34,38 @@ import {
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
 
+const { SharedModule } = NativeModules;
+
 class VerifiedScreen extends Component {
   componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
     this.props.fetchVerifiedRequest();
+    if (Platform.OS === 'ios') {
+      this.checkShareUrl();
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError();
     }
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+  }
+
+  handleAppStateChange = (nextState) => {
+    if (nextState === 'active' && Platform.OS === 'ios') {
+      this.checkShareUrl();
+    }
+  };
+
+  checkShareUrl() {
+    SharedModule.getShareUrl((error, url) => {
+      SharedModule.clearShareUrl();
+      console.log('ShareUrl: ', url);
+    });
   }
 
   drawCell = ({ item }) => {

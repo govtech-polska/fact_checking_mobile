@@ -19,6 +19,8 @@
 		2DCD954D1E0B4F2C00145EB5 /* FakeHunterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* FakeHunterTests.m */; };
 		8AF66DFF24C5A86300CC5785 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF66DFE24C5A86300CC5785 /* ShareViewController.swift */; };
 		8AF66E0624C5A86300CC5785 /* ShareEx.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8AF66DFC24C5A86300CC5785 /* ShareEx.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8AF66E1624C5CF4400CC5785 /* SharedModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AF66E1524C5CF4400CC5785 /* SharedModule.swift */; };
+		8AF66E1824C5D1F200CC5785 /* SharedModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AF66E1724C5D1F200CC5785 /* SharedModule.m */; };
 		8EAF0876E8D6FEB14B83E601 /* libPods-FakeHunter-FakeHunterTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C1FE4A99BA5A0688A1B831E7 /* libPods-FakeHunter-FakeHunterTests.a */; };
 		A21B8BB1C06E5C05CE1B3DDD /* libPods-FakeHunter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD92202C170BAC0A47CE3992 /* libPods-FakeHunter.a */; };
 		D0D95A72FF084C2EABB523AC /* libPods-FakeHunter-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A2D2F54CAA38B7BF1782F6 /* libPods-FakeHunter-tvOSTests.a */; };
@@ -89,6 +91,9 @@
 		8AF66E0D24C5ADCD00CC5785 /* ShareEx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareEx.entitlements; sourceTree = "<group>"; };
 		8AF66E0E24C5C52400CC5785 /* FakeHunterDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterDebug.entitlements; path = FakeHunter/FakeHunterDebug.entitlements; sourceTree = "<group>"; };
 		8AF66E0F24C5C52F00CC5785 /* FakeHunterRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterRelease.entitlements; path = FakeHunter/FakeHunterRelease.entitlements; sourceTree = "<group>"; };
+		8AF66E1424C5CF4400CC5785 /* FakeHunter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FakeHunter-Bridging-Header.h"; sourceTree = "<group>"; };
+		8AF66E1524C5CF4400CC5785 /* SharedModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModule.swift; sourceTree = "<group>"; };
+		8AF66E1724C5D1F200CC5785 /* SharedModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SharedModule.m; sourceTree = "<group>"; };
 		9F5C8E130FA98E8BB2021F03 /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-FakeHunterTests/Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A86C8E0E2232D2B1BD6E6D34 /* Pods-FakeHunter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter/Pods-FakeHunter.release.xcconfig"; sourceTree = "<group>"; };
 		A99BE67B3DB1BA8DE3076C41 /* Pods-FakeHunter-tvOS.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -176,6 +181,9 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				8AF66E1524C5CF4400CC5785 /* SharedModule.swift */,
+				8AF66E1724C5D1F200CC5785 /* SharedModule.m */,
+				8AF66E1424C5CF4400CC5785 /* FakeHunter-Bridging-Header.h */,
 			);
 			name = FakeHunter;
 			sourceTree = "<group>";
@@ -374,7 +382,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = K36E9SFT27;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1150;
 						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -668,6 +676,8 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				8AF66E1824C5D1F200CC5785 /* SharedModule.m in Sources */,
+				8AF66E1624C5CF4400CC5785 /* SharedModule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -733,6 +743,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C615C8D28B61B3A27CCF3104 /* Pods-FakeHunter-FakeHunterTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -756,6 +767,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D48E222D4AE54F53B5DD52B0 /* Pods-FakeHunter-FakeHunterTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = FakeHunterTests/Info.plist;
@@ -798,6 +810,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
 				PRODUCT_NAME = FakeHunter;
 				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter Dev";
+				SWIFT_OBJC_BRIDGING_HEADER = "FakeHunter-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -826,6 +839,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
 				PRODUCT_NAME = FakeHunter;
 				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Prod";
+				SWIFT_OBJC_BRIDGING_HEADER = "FakeHunter-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1129,6 +1143,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
 				PRODUCT_NAME = FakeHunter;
 				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter AdHoc";
+				SWIFT_OBJC_BRIDGING_HEADER = "FakeHunter-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1138,6 +1153,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 9F5C8E130FA98E8BB2021F03 /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = FakeHunterTests/Info.plist;

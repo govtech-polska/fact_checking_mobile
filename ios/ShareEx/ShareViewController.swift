@@ -17,27 +17,43 @@ class ShareViewController: UIViewController {
     setupInitialComponentValues()
   }
   
+  private func redirectToHostApp() {
+    let url = URL(string: "ShareWithFH://dataUrl")
+    var responder = self as UIResponder?
+    let selectorOpenURL = sel_registerName("openURL:")
+    
+    while (responder != nil) {
+      if (responder?.responds(to: selectorOpenURL))! {
+        let _ = responder?.perform(selectorOpenURL, with: url)
+      }
+      responder = responder!.next
+    }
+    extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+  }
+  
   private func setupInitialComponentValues() {
     if let item = extensionContext?.inputItems.first as? NSExtensionItem {
       if let attachments = item.attachments {
-            for attachment: NSItemProvider in attachments {
-                if attachment.hasItemConformingToTypeIdentifier("public.url") {
-                  attachment.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { (url, error) in
-                        if let shareURL = url as? URL {
-                          let userDefaults = UserDefaults(suiteName: "group.fakehunter.share")
-                          userDefaults?.set(shareURL.absoluteString, forKey: "shareUrl")
-                          userDefaults?.synchronize()
-                        }
-                    })
-                } else if attachment.hasItemConformingToTypeIdentifier("public.plain-text") {
-                  attachment.loadItem(forTypeIdentifier: "public.plain-text", options: nil, completionHandler: { url, error in
-                      let userDefaults = UserDefaults(suiteName: "group.fakehunter.share")
-                      userDefaults?.set(url, forKey: "shareUrl")
-                      userDefaults?.synchronize()
-                  })
-               }
-            }
+        for attachment: NSItemProvider in attachments {
+          if attachment.hasItemConformingToTypeIdentifier("public.url") {
+            attachment.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { [unowned self] (url, error) in
+              if let shareURL = url as? URL {
+                let userDefaults = UserDefaults(suiteName: "group.fakehunter.share")
+                userDefaults?.set(shareURL.absoluteString, forKey: "shareUrl")
+                userDefaults?.synchronize()
+                self.redirectToHostApp()
+              }
+            })
+          } else if attachment.hasItemConformingToTypeIdentifier("public.plain-text") {
+            attachment.loadItem(forTypeIdentifier: "public.plain-text", options: nil, completionHandler: { [unowned self] url, error in
+              let userDefaults = UserDefaults(suiteName: "group.fakehunter.share")
+              userDefaults?.set(url, forKey: "shareUrl")
+              userDefaults?.synchronize()
+              self.redirectToHostApp()
+            })
+          }
         }
+      }
     }
   }
 }
