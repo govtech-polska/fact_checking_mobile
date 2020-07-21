@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   StyleSheet,
   SafeAreaView,
+  View,
   TextInput,
   Image,
-  View,
   Platform,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useThrottle } from '@react-hook/throttle';
 
+import {
+  DropDownAlert,
+  TouchableOpacityDebounce,
+  Title,
+  Container,
+} from '../components';
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
+import CropSvg from '../resources/img/crop.svg';
 
 import { strings } from '../constants/strings';
 import {
@@ -24,20 +32,16 @@ import {
   BLACK,
   WHITE,
 } from '../constants/colors';
-import {
-  DropDownAlert,
-  TouchableOpacityDebounce,
-  Title,
-  Container,
-} from '../components';
+import { routes } from '../constants/routes';
 import { useVoiceRecognition } from '../utils/useVoiceRecognition';
 
 const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
-const ReportScreen = () => {
-  const [imagePath, setImagePath] = useState(null);
-
+const ReportScreen = ({ navigation, route }) => {
   const [partialRecognition, setPartialRecognition] = useThrottle('');
   const [whatIsWrong, setWhatIsWrong] = useState('');
+
+  const [imagePath, setImagePath] = useState(null);
+  const [rawImagePath, setRawImagePath] = useState(null);
 
   const {
     isAvailable,
@@ -48,6 +52,13 @@ const ReportScreen = () => {
     onSpeechResult: (value) => setWhatIsWrong((old) => old + value),
     onSpeechPartialResults: (value) => setPartialRecognition(value),
   });
+
+  useEffect(() => {
+    const nextImagePath = route.params?.imagePath;
+    if (nextImagePath !== imagePath) {
+      setImagePath(nextImagePath);
+    }
+  }, [route.params?.imagePath]);
 
   const toggleRecognizing = () => {
     if (!isStarted) {
@@ -63,6 +74,7 @@ const ReportScreen = () => {
       cropping: false,
     }).then((image) => {
       setImagePath(image.path);
+      setRawImagePath(image.path);
     });
   };
 
@@ -81,12 +93,25 @@ const ReportScreen = () => {
     }
 
     return (
-      <TouchableOpacityDebounce
-        onPress={selectPhotoTapped}
-        style={styles.imageContainer}
-      >
-        <Image style={styles.image} source={{ uri: imagePath || '' }} />
-      </TouchableOpacityDebounce>
+      <View style={styles.imageView}>
+        <TouchableOpacityDebounce
+          style={styles.imageWrapper}
+          onPress={selectPhotoTapped}
+        >
+          <Image style={styles.image} source={{ uri: imagePath || '' }} />
+        </TouchableOpacityDebounce>
+        <View style={styles.editBtn}>
+          <TouchableOpacityDebounce
+            onPress={() =>
+              navigation.push(routes.reportImageEdit, {
+                rawImagePath,
+              })
+            }
+          >
+            <CropSvg width={24} height={24} fill={WHITE} />
+          </TouchableOpacityDebounce>
+        </View>
+      </View>
     );
   };
 
@@ -136,6 +161,17 @@ const ReportScreen = () => {
   );
 };
 
+ReportScreen.propTypes = {
+  navigation: PropTypes.shape({
+    push: PropTypes.func,
+  }),
+  route: PropTypes.shape({
+    params: PropTypes.shape({
+      imagePath: PropTypes.string,
+    }),
+  }),
+};
+
 const inputContainerStyles = {
   minHeight: 40,
   borderWidth: 1,
@@ -182,21 +218,36 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   buttonLabel: {
-    color: 'white',
+    color: WHITE,
     fontSize: 14,
     textTransform: 'uppercase',
   },
-  imageContainer: {
+  imageView: {
     marginTop: 24,
     width: '100%',
     backgroundColor: 'rgb(250, 250, 250)',
-    aspectRatio: 1.3,
     borderWidth: 1,
     borderColor: GAINSBORO,
+    borderRadius: 4,
+  },
+  imageWrapper: {
+    aspectRatio: 1.3,
   },
   image: {
     flex: 1,
     resizeMode: 'contain',
+  },
+  editBtn: {
+    backgroundColor: BLACK,
+    position: 'absolute',
+    top: 3,
+    right: 4,
+    width: 46,
+    height: 46,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 4,
+    zIndex: 9,
   },
 });
 

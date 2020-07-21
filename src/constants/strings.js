@@ -27,6 +27,9 @@ export const strings = {
     unverifiable: 'Nieweryfikowalny',
     authentic: 'Prawda',
   },
+  reportImageEdit: {
+    saveButton: 'Zapisz',
+  },
   info: {
     title: 'O aplikacji',
     aboutProject: 'O projekcie',
