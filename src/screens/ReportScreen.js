@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   StyleSheet,
@@ -10,134 +10,68 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
-import Voice from '@react-native-community/voice';
+import { useThrottle } from '@react-hook/throttle';
+
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
 
 import { strings } from '../constants/strings';
-import { GAINSBORO, CINNABAR, EMPRESS, DARK_GRAY } from '../constants/colors';
+import {
+  GAINSBORO,
+  CINNABAR,
+  EMPRESS,
+  DARK_GRAY,
+  BLACK,
+  WHITE,
+} from '../constants/colors';
 import {
   DropDownAlert,
   TouchableOpacityDebounce,
   Title,
   Container,
 } from '../components';
+import { useVoiceRecognition } from '../utils/useVoiceRecognition';
 
 const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
+const ReportScreen = () => {
+  const [imagePath, setImagePath] = useState(null);
 
-class ReportScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      imagePath: null,
-      speechRecognitionAvailable: false,
-      whatIsWrong: '',
-      error: false,
-      end: false,
-      started: false,
-      recognitionResult: '',
-    };
-    Voice.onSpeechStart = this.onSpeechStart;
-    Voice.onSpeechEnd = this.onSpeechEnd;
-    Voice.onSpeechError = this.onSpeechError;
-    Voice.onSpeechResults = this.onSpeechResults;
-  }
+  const [partialRecognition, setPartialRecognition] = useThrottle('');
+  const [whatIsWrong, setWhatIsWrong] = useState('');
 
-  componentDidMount() {
-    this.checkVoiceAvailability();
-  }
+  const {
+    isAvailable,
+    isStarted,
+    startRecognizing,
+    stopRecognizing,
+  } = useVoiceRecognition({
+    onSpeechResult: (value) => setWhatIsWrong((old) => old + value),
+    onSpeechPartialResults: (value) => setPartialRecognition(value),
+  });
 
-  componentWillUnmount() {
-    Voice.destroy().then(Voice.removeAllListeners);
-  }
+  const toggleRecognizing = () => {
+    if (!isStarted) {
+      setPartialRecognition('');
+      startRecognizing();
+    } else {
+      stopRecognizing();
+    }
+  };
 
-  selectPhotoTapped = () => {
+  const selectPhotoTapped = () => {
     ImagePicker.openPicker({
       cropping: false,
     }).then((image) => {
-      this.setState({ imagePath: image.path });
+      setImagePath(image.path);
     });
   };
 
-  async checkVoiceAvailability() {
-    const voice = await Voice.isAvailable();
-    this.setState({ speechRecognitionAvailable: !!voice });
-  }
-
-  onSpeechStart = () => {
-    this.setState({ started: true });
-  };
-
-  onSpeechEnd = () => {
-    if (Platform.OS === 'ios') {
-      this.setState(({ whatIsWrong, recognitionResult }) => ({
-        started: false,
-        end: true,
-        whatIsWrong: whatIsWrong + recognitionResult,
-      }));
-    } else {
-      this.setState({
-        started: false,
-        end: true,
-      });
-    }
-  };
-
-  onSpeechError = () => {
-    this.setState({ error: true, end: true, started: false });
-  };
-
-  onSpeechResults = (e) => {
-    if (e.value.length > 0) {
-      if (Platform.OS == 'ios') {
-        this.setState({ recognitionResult: e.value[0] });
-      } else {
-        this.setState(({ whatIsWrong }) => ({
-          whatIsWrong: whatIsWrong + e.value[0],
-        }));
-      }
-    }
-  };
-
-  startRecognizing = async () => {
-    this.setState({
-      error: false,
-      started: false,
-      recognitionResult: '',
-      end: false,
-    });
-
-    try {
-      await Voice.start('pl-PL');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  stopRecognizing = async () => {
-    try {
-      await Voice.stop();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  toggleRecognizing = () => {
-    const { started, end } = this.state;
-    if ((end && !started) || (!end && !started)) {
-      this.startRecognizing();
-    } else {
-      this.stopRecognizing();
-    }
-  };
-
-  renderProperImageView = () => {
-    const { imagePath } = this.state;
+  const renderProperImageView = () => {
     if (!imagePath) {
       return (
         <TouchableOpacityDebounce
           style={{ ...styles.button, backgroundColor: EMPRESS }}
-          onPress={() => this.selectPhotoTapped()}
+          onPress={selectPhotoTapped}
         >
           <Text style={styles.buttonLabel}>
             {strings.report.imageButtonLabel}
@@ -148,7 +82,7 @@ class ReportScreen extends Component {
 
     return (
       <TouchableOpacityDebounce
-        onPress={() => this.selectPhotoTapped()}
+        onPress={selectPhotoTapped}
         style={styles.imageContainer}
       >
         <Image style={styles.image} source={{ uri: imagePath || '' }} />
@@ -156,116 +90,88 @@ class ReportScreen extends Component {
     );
   };
 
-  renderSpeechRecognitionButtonIfNeeded = () => {
-    const { speechRecognitionAvailable, started } = this.state;
+  return (
+    <SafeAreaView style={styles.bg}>
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        keyboardShouldPersistTaps="never"
+        keyboardDismissMode="interactive"
+      >
+        <Container>
+          <Title title={strings.report.title} />
 
-    const image = () => {
-      if (started) {
-        return <Record width={40} height={25} fill={CINNABAR} />;
-      }
-      return <Mic width={40} height={25} fill={DARK_GRAY} />;
-    };
+          <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
+          <TextInput style={styles.input} autoCorrect={false} />
 
-    if (speechRecognitionAvailable) {
-      return (
-        <View
-          style={{
-            width: 40,
-            justifyContent: 'center',
-          }}
-        >
-          <TouchableOpacityDebounce onPress={this.toggleRecognizing}>
-            {image()}
-          </TouchableOpacityDebounce>
-        </View>
-      );
-    }
-  };
-
-  render() {
-    const { end, recognitionResult, whatIsWrong } = this.state;
-
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
-        <KeyboardAwareScrollView
-          enableOnAndroid
-          keyboardShouldPersistTaps="never"
-          keyboardDismissMode={'interactive'}
-        >
-          <Container>
-            <Title title={strings.report.title} />
-
-            <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
-            <TextInput style={styles.inputLabel} autoCorrect={false} />
-
-            <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
-            <View style={styles.labelWithButtonContainer}>
-              <TextInput
-                style={styles.inputLabelWithButton}
-                value={end ? whatIsWrong : whatIsWrong + recognitionResult}
-                multiline={true}
-                onChangeText={(text) => this.setState({ whatIsWrong: text })}
-              />
-              {this.renderSpeechRecognitionButtonIfNeeded()}
-            </View>
-
-            {this.renderProperImageView()}
-
-            <Text style={styles.label}>{strings.report.emailLabel}</Text>
+          <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
+          <View style={styles.inputWithButtonContainer}>
             <TextInput
-              style={styles.inputLabel}
-              keyboardType={'email-address'}
+              style={styles.inputWithButton}
+              value={isStarted ? whatIsWrong + partialRecognition : whatIsWrong}
+              multiline={true}
+              onChangeText={(text) => !isStarted && setWhatIsWrong(text)}
             />
+            {isAvailable && (
+              <TouchableOpacityDebounce onPress={toggleRecognizing}>
+                {isStarted && <Record width={40} height={25} fill={CINNABAR} />}
+                {!isStarted && <Mic width={40} height={25} fill={DARK_GRAY} />}
+              </TouchableOpacityDebounce>
+            )}
+          </View>
 
-            <TouchableOpacityDebounce
-              style={{ ...styles.button, backgroundColor: CINNABAR }}
-              onPress={() => DropDownAlert.showError()}
-            >
-              <Text style={styles.buttonLabel}>
-                {strings.report.sendButton}
-              </Text>
-            </TouchableOpacityDebounce>
-          </Container>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
-    );
-  }
-}
+          {renderProperImageView()}
+
+          <Text style={styles.label}>{strings.report.emailLabel}</Text>
+          <TextInput style={styles.input} keyboardType="email-address" />
+
+          <TouchableOpacityDebounce
+            style={{ ...styles.button, backgroundColor: CINNABAR }}
+            onPress={() => DropDownAlert.showError()}
+          >
+            <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
+          </TouchableOpacityDebounce>
+        </Container>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
+  );
+};
+
+const inputContainerStyles = {
+  minHeight: 40,
+  borderWidth: 1,
+  borderRadius: 5,
+  borderColor: GAINSBORO,
+  marginTop: 8,
+  flexDirection: 'row',
+  alignItems: 'center',
+};
+
+const inputStyles = {
+  flex: 1,
+  fontSize: FONT_SIZE,
+  padding: 2,
+  paddingHorizontal: 8,
+};
 
 const styles = StyleSheet.create({
-  title: {
-    color: 'black',
-    fontSize: Platform.OS === 'ios' ? 30 : 24,
+  bg: {
+    flex: 1,
+    backgroundColor: WHITE,
   },
   label: {
-    color: 'black',
+    color: BLACK,
     fontSize: 14,
     marginTop: 24,
   },
-  inputLabel: {
-    minHeight: 40,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: GAINSBORO,
-    marginTop: 8,
-    padding: 2,
-    flexDirection: 'row',
-    fontSize: FONT_SIZE,
+  input: {
+    ...inputContainerStyles,
+    ...inputStyles,
   },
-  labelWithButtonContainer: {
-    flexDirection: 'row',
-    marginTop: 8,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: GAINSBORO,
-    alignItems: 'center',
-    minHeight: 40,
+  inputWithButtonContainer: {
+    ...inputContainerStyles,
   },
-  inputLabelWithButton: {
-    flex: 1,
-    padding: 2,
-    textAlignVertical: 'center',
-    fontSize: FONT_SIZE,
+  inputWithButton: {
+    ...inputStyles,
   },
   button: {
     height: 40,

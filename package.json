@@ -11,6 +11,7 @@
     "lint:fix": "eslint --fix -c .eslintrc src/**/*.js"
   },
   "dependencies": {
+    "@react-hook/throttle": "^2.2.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/voice": "^1.1.5",
     "@react-navigation/bottom-tabs": "^5.6.0",
