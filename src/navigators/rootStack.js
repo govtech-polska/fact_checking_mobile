@@ -6,6 +6,7 @@ import {
 
 import { tabStack } from './tabStacks';
 import { ReportScreen } from '../screens';
+import { routes } from '../constants/routes';
 
 const RootStack = createStackNavigator();
 
@@ -27,7 +28,7 @@ export const rootStack = () => {
         component={tabStack}
         options={{ headerShown: false }}
       />
-      <RootStack.Screen name="ReportModal" component={ReportScreen} />
+      <RootStack.Screen name={routes.reportModal} component={ReportScreen} />
     </RootStack.Navigator>
   );
 };

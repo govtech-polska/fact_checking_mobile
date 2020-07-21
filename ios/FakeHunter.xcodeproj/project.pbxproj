@@ -1140,6 +1140,11 @@
 					"-ObjC",
 					"-lc++",
 				);
+				"OTHER_LDFLAGS[arch=*]" = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
 				PRODUCT_NAME = FakeHunter;
 				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter AdHoc";

@@ -10,6 +10,7 @@ import {
   NativeModules,
   Platform,
   AppState,
+  DeviceEventEmitter,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -34,7 +35,7 @@ import {
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
 
-const { SharedModule } = NativeModules;
+const { SharedModule, UrlShareModule } = NativeModules;
 
 class VerifiedScreen extends Component {
   componentDidMount() {
@@ -42,6 +43,9 @@ class VerifiedScreen extends Component {
     this.props.fetchVerifiedRequest();
     if (Platform.OS === 'ios') {
       this.checkShareUrl();
+    } else {
+      this.observeAndroidUrlToShare();
+      UrlShareModule.getShareUrl();
     }
   }
 
@@ -65,8 +69,22 @@ class VerifiedScreen extends Component {
     SharedModule.getShareUrl((error, url) => {
       SharedModule.clearShareUrl();
       console.log('ShareUrl: ', url);
+      this.props.navigation.navigate(routes.reportModal);
     });
   }
+
+  observeAndroidUrlToShare() {
+    this.urlEvent = DeviceEventEmitter.addListener(
+      'shareUrl',
+      this.onExternalUrlShareAndroid
+    );
+  }
+
+  onExternalUrlShareAndroid = ({ url }) => {
+    UrlShareModule.clearActionUrl();
+    console.log('ShareUrl: ', url);
+    this.props.navigation.navigate(routes.reportModal);
+  };
 
   drawCell = ({ item }) => {
     return (
