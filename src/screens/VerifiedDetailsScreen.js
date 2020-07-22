@@ -9,6 +9,7 @@ import {
   Modal,
   Share,
   Platform,
+  SafeAreaView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Moment from 'moment';
@@ -21,12 +22,13 @@ import {
   Container,
 } from '../components';
 import { strings } from '../constants/strings';
-import { DARK_GRAY, CINNABAR } from '../constants/colors';
+import { DARK_GRAY, CINNABAR, WHITE } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions';
 import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
+import Close from '../resources/img/close.svg';
 import { openUrl } from '../utils/url';
 
 const shareImage = require('../resources/img/share.png');
@@ -83,6 +85,7 @@ class VerifiedDetailsScreen extends Component {
         visible={imageViewerVisible}
         transparent={true}
         animationType="fade"
+        onRequestClose={() => this.setState({ imageViewerVisible: false })}
       >
         <ImageViewer
           enableSwipeDown
@@ -90,8 +93,22 @@ class VerifiedDetailsScreen extends Component {
           imageUrls={[{ url: details?.screenshot_url || '' }]}
           onRequestClose={this.toggleImageViewerVisibility}
           onCancel={this.toggleImageViewerVisibility}
+          renderHeader={this.renderImageModalHeader}
         />
       </Modal>
+    );
+  };
+
+  renderImageModalHeader = () => {
+    return (
+      <SafeAreaView style={{ position: 'absolute', zIndex: 1 }}>
+        <TouchableOpacityDebounce
+          style={styles.closeButton}
+          onPress={() => this.setState({ imageViewerVisible: false })}
+        >
+          <Close width={40} height={40} fill={WHITE} />
+        </TouchableOpacityDebounce>
+      </SafeAreaView>
     );
   };
 
@@ -120,7 +137,9 @@ class VerifiedDetailsScreen extends Component {
       case 'true':
         return <VerifiedOk width={40} height={40} style={{ color: 'green' }} />;
       case 'false':
-        return <VerifiedBad width={40} height={40} style={{ color: 'red' }} />;
+        return (
+          <VerifiedBad width={40} height={40} style={{ color: CINNABAR }} />
+        );
       default:
         return <VerifiedNot width={40} height={40} style={{ color: 'gray' }} />;
     }
@@ -313,6 +332,12 @@ const styles = StyleSheet.create({
   shareButton: {
     width: 30,
     height: 30,
+  },
+  closeButton: {
+    marginLeft: 16,
+    marginTop: 20,
+    width: 40,
+    height: 40,
   },
 });
 
