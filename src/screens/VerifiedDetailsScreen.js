@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Text,
   Image,
-  Linking,
   ScrollView,
   Modal,
   Share,
@@ -24,10 +23,11 @@ import {
 import { strings } from '../constants/strings';
 import { DARK_GRAY, CINNABAR } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions';
-import { APP_URL } from '../constants/api';
+import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
+import { openUrl } from '../utils/url';
 
 const shareImage = require('../resources/img/share.png');
 
@@ -67,16 +67,6 @@ class VerifiedDetailsScreen extends Component {
 
   fhLink(id) {
     return `${APP_URL}/${id}`;
-  }
-
-  openUrl(url) {
-    Linking.canOpenURL(url).then((supported) => {
-      if (supported) {
-        Linking.openURL(url);
-      } else {
-        DropDownAlert.showError();
-      }
-    });
   }
 
   toggleImageViewerVisibility = () => {
@@ -207,14 +197,14 @@ class VerifiedDetailsScreen extends Component {
             <Text style={styles.detailsTitle}>
               {strings.informationSourceLabel}
             </Text>
-            <Text style={styles.url} onPress={() => this.openUrl(details.url)}>
+            <Text style={styles.url} onPress={() => openUrl(details.url)}>
               {details.url}
             </Text>
 
             <Text style={styles.detailsTitle}>{strings.fhLinkLabel}</Text>
             <Text
               style={styles.url}
-              onPress={() => this.openUrl(this.fhLink(details.id))}
+              onPress={() => openUrl(this.fhLink(details.id))}
             >
               {this.fhLink(details.id)}
             </Text>

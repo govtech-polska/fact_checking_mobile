@@ -1,49 +1,58 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import { Title, Container } from '../components';
+import { Title, Container, TouchableOpacityDebounce } from '../components';
 import { WHITE, WHITE_SMOKE } from '../constants/colors';
 import { strings } from '../constants/strings';
 import { routes } from '../constants/routes';
+import { urls } from '../constants/urls';
+import { openUrl, resolveUrl } from '../utils/url';
 
 const INFO_LINKS = [
   {
-    label: strings.info.links.aboutProject,
+    label: strings.info.aboutProject,
     route: routes.infoAbout,
   },
   {
-    label: strings.info.links.team,
-    route: '#',
+    label: strings.info.team,
+    route: routes.infoTeam,
   },
   {
-    label: strings.info.links.verificationRules,
-    route: '#',
+    label: strings.info.verificationRules,
+    fileName: strings.info.fileNames.verificationRules,
   },
   {
-    label: strings.info.links.verificationPolicy,
-    route: '#',
+    label: strings.info.verificationPolicy,
+    fileName: strings.info.fileNames.verificationPolicy,
   },
   {
-    label: strings.info.links.privacyPolicy,
-    route: '#',
+    label: strings.info.privacyPolicy,
+    fileName: strings.info.fileNames.privacyPolicy,
   },
 ];
 
 const InfoScreen = () => {
   const navigation = useNavigation();
 
+  const handlePress = ({ route, fileName }) => () => {
+    if (route) {
+      navigation.push(route);
+    } else if (fileName) {
+      openUrl(resolveUrl(urls.INFO_ATTACHMENTS, { fileName }));
+    }
+  };
+
   return (
     <Container style={styles.container}>
       <Title title={strings.info.title} />
-      {INFO_LINKS.map(({ label, route }) => (
-        <TouchableHighlight
+      {INFO_LINKS.map(({ label, route, fileName }) => (
+        <TouchableOpacityDebounce
           key={label}
           underlayColor={WHITE_SMOKE}
-          onPress={() => navigation.push(route)}
+          onPress={handlePress({ route, fileName })}
         >
           <Text style={styles.item}>{label}</Text>
-        </TouchableHighlight>
+        </TouchableOpacityDebounce>
       ))}
     </Container>
   );
@@ -52,6 +61,7 @@ const InfoScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: WHITE,
   },
   item: {
     fontSize: 15,
