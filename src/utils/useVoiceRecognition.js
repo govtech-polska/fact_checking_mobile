@@ -2,6 +2,12 @@ import { useState, useEffect } from 'react';
 import { Platform } from 'react-native';
 import Voice from '@react-native-community/voice';
 
+/**
+ * Voice recognition hook.
+ * @param {Object} hookOptions Object which provides options to hook.
+ * @param {function} hookOptions.onSpeechResult Get speech result after recognition end.
+ * @param {function} hookOptions.onSpeechPartialResults Get speech ongoing result until speech recognition ends.
+ */
 const IS_IOS = Platform.OS === 'ios';
 export const useVoiceRecognition = ({
   onSpeechResult,

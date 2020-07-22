@@ -30,15 +30,24 @@ import { reportActions } from '../storages/report/actions';
 import { useVoiceRecognition } from '../utils/useVoiceRecognition';
 import { useField } from '../utils/useField';
 
+const isTruth = (v) => !!v;
 const ReportScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const submission = useSelector(({ report }) => report.submission);
+  const { isFetching } = useSelector(({ report }) => report.submission);
 
   const [partialRecognition, setPartialRecognition] = useThrottle('');
+  const {
+    isAvailable,
+    isStarted,
+    startRecognizing,
+    stopRecognizing,
+  } = useVoiceRecognition({
+    onSpeechResult: (value) => whatIsWrong.setValue((old) => old + value),
+    onSpeechPartialResults: (value) => setPartialRecognition(value),
+  });
 
   const [imagePath, setImagePath] = useState(null);
   const [rawImagePath, setRawImagePath] = useState(null);
-
   const sourceUrl = useField({
     initialValue: '',
     validator: {
@@ -46,7 +55,6 @@ const ReportScreen = ({ navigation, route }) => {
       url: true,
     },
   });
-
   const whatIsWrong = useField({
     initialValue: '',
     validator: {
@@ -60,16 +68,6 @@ const ReportScreen = ({ navigation, route }) => {
         email: true,
       },
     },
-  });
-
-  const {
-    isAvailable,
-    isStarted,
-    startRecognizing,
-    stopRecognizing,
-  } = useVoiceRecognition({
-    onSpeechResult: (value) => whatIsWrong.setValue((old) => old + value),
-    onSpeechPartialResults: (value) => setPartialRecognition(value),
   });
 
   useEffect(() => {
@@ -98,15 +96,13 @@ const ReportScreen = ({ navigation, route }) => {
   };
 
   const handleSubmit = () => {
-    sourceUrl.validate();
-    whatIsWrong.validate();
-    email.validate();
-    if (
-      sourceUrl.isValid &&
-      whatIsWrong.isValid &&
-      email.isValid &&
-      !submission.isFetching
-    ) {
+    const allFieldsValid = [
+      sourceUrl.isValid(),
+      whatIsWrong.isValid(),
+      email.isValid(),
+    ].every(isTruth);
+
+    if (allFieldsValid && !isFetching) {
       const payload = {
         image: {
           uri: imagePath,

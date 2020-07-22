@@ -19,7 +19,5 @@ export const request = (method, url, data, options = { baseUrl: BASE_URL }) => {
     headers: options.headers,
   };
 
-  console.log(requestConfig);
-
   return axios(requestConfig);
 };
