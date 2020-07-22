@@ -80,7 +80,12 @@ const ReportScreen = ({ navigation, route }) => {
   }, [route.params?.imagePath]);
 
   useEffect(() => {
-    DropDownAlert.showError();
+    if (error) {
+      DropDownAlert.showError();
+    }
+    return () => {
+      dispatch(reportActions.clearSubmitReport());
+    };
   }, [error]);
 
   const toggleRecognizing = () => {
