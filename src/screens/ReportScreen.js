@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  View,
-  TextInput,
-  Image,
-  Platform,
-} from 'react-native';
+import { Text, StyleSheet, SafeAreaView, View, Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useThrottle } from '@react-hook/throttle';
 
 import {
-  DropDownAlert,
   TouchableOpacityDebounce,
   Title,
   Container,
+  Field,
 } from '../components';
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
@@ -33,15 +26,41 @@ import {
   WHITE,
 } from '../constants/colors';
 import { routes } from '../constants/routes';
+import { reportActions } from '../storages/report/actions';
 import { useVoiceRecognition } from '../utils/useVoiceRecognition';
+import { useField } from '../utils/useField';
 
-const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
 const ReportScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const submission = useSelector(({ report }) => report.submission);
+
   const [partialRecognition, setPartialRecognition] = useThrottle('');
-  const [whatIsWrong, setWhatIsWrong] = useState('');
 
   const [imagePath, setImagePath] = useState(null);
   const [rawImagePath, setRawImagePath] = useState(null);
+
+  const sourceUrl = useField({
+    initialValue: '',
+    validator: {
+      presence: { allowEmpty: false },
+      url: true,
+    },
+  });
+
+  const whatIsWrong = useField({
+    initialValue: '',
+    validator: {
+      presence: { allowEmpty: false },
+    },
+  });
+  const email = useField({
+    initialValue: '',
+    validator: {
+      optional: {
+        email: true,
+      },
+    },
+  });
 
   const {
     isAvailable,
@@ -49,7 +68,7 @@ const ReportScreen = ({ navigation, route }) => {
     startRecognizing,
     stopRecognizing,
   } = useVoiceRecognition({
-    onSpeechResult: (value) => setWhatIsWrong((old) => old + value),
+    onSpeechResult: (value) => whatIsWrong.setValue((old) => old + value),
     onSpeechPartialResults: (value) => setPartialRecognition(value),
   });
 
@@ -76,6 +95,35 @@ const ReportScreen = ({ navigation, route }) => {
       setImagePath(image.path);
       setRawImagePath(image.path);
     });
+  };
+
+  const handleSubmit = () => {
+    sourceUrl.validate();
+    whatIsWrong.validate();
+    email.validate();
+    if (
+      sourceUrl.isValid &&
+      whatIsWrong.isValid &&
+      email.isValid &&
+      !submission.isFetching
+    ) {
+      const payload = {
+        image: {
+          uri: imagePath,
+          type: 'image/jpeg',
+          name: 'screenshot.jpg',
+        },
+        comment: whatIsWrong.value,
+        email: email.value,
+        url: sourceUrl.value,
+      };
+
+      const formData = new FormData();
+      Object.entries(payload).forEach(([key, value]) =>
+        formData.append(key, value)
+      );
+      dispatch(reportActions.submitReport(formData));
+    }
   };
 
   const renderProperImageView = () => {
@@ -125,33 +173,50 @@ const ReportScreen = ({ navigation, route }) => {
         <Container>
           <Title title={strings.report.title} />
 
-          <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
-          <TextInput style={styles.input} autoCorrect={false} />
+          <Field
+            label={strings.report.addLinkLabel}
+            value={sourceUrl.value}
+            onChangeText={sourceUrl.setValue}
+            error={sourceUrl.errors[0]}
+            autoCorrect={false}
+          />
 
-          <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
-          <View style={styles.inputWithButtonContainer}>
-            <TextInput
-              style={styles.inputWithButton}
-              value={isStarted ? whatIsWrong + partialRecognition : whatIsWrong}
-              multiline={true}
-              onChangeText={(text) => !isStarted && setWhatIsWrong(text)}
-            />
-            {isAvailable && (
-              <TouchableOpacityDebounce onPress={toggleRecognizing}>
-                {isStarted && <Record width={40} height={25} fill={CINNABAR} />}
-                {!isStarted && <Mic width={40} height={25} fill={DARK_GRAY} />}
-              </TouchableOpacityDebounce>
-            )}
-          </View>
+          <Field
+            label={strings.report.whatIsWrong}
+            value={
+              isStarted
+                ? whatIsWrong.value + partialRecognition
+                : whatIsWrong.value
+            }
+            onChangeText={whatIsWrong.setValue}
+            error={whatIsWrong.errors[0]}
+            endAdornment={
+              isAvailable && (
+                <TouchableOpacityDebounce onPress={toggleRecognizing}>
+                  {isStarted && (
+                    <Record width={40} height={25} fill={CINNABAR} />
+                  )}
+                  {!isStarted && (
+                    <Mic width={40} height={25} fill={DARK_GRAY} />
+                  )}
+                </TouchableOpacityDebounce>
+              )
+            }
+          />
 
           {renderProperImageView()}
 
-          <Text style={styles.label}>{strings.report.emailLabel}</Text>
-          <TextInput style={styles.input} keyboardType="email-address" />
+          <Field
+            label={strings.report.emailLabel}
+            value={email.value}
+            onChangeText={email.setValue}
+            error={email.errors[0]}
+            keyboardType="email-address"
+          />
 
           <TouchableOpacityDebounce
             style={{ ...styles.button, backgroundColor: CINNABAR }}
-            onPress={() => DropDownAlert.showError()}
+            onPress={handleSubmit}
           >
             <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
           </TouchableOpacityDebounce>
@@ -172,42 +237,10 @@ ReportScreen.propTypes = {
   }),
 };
 
-const inputContainerStyles = {
-  minHeight: 40,
-  borderWidth: 1,
-  borderRadius: 5,
-  borderColor: GAINSBORO,
-  marginTop: 8,
-  flexDirection: 'row',
-  alignItems: 'center',
-};
-
-const inputStyles = {
-  flex: 1,
-  fontSize: FONT_SIZE,
-  padding: 2,
-  paddingHorizontal: 8,
-};
-
 const styles = StyleSheet.create({
   bg: {
     flex: 1,
     backgroundColor: WHITE,
-  },
-  label: {
-    color: BLACK,
-    fontSize: 14,
-    marginTop: 24,
-  },
-  input: {
-    ...inputContainerStyles,
-    ...inputStyles,
-  },
-  inputWithButtonContainer: {
-    ...inputContainerStyles,
-  },
-  inputWithButton: {
-    ...inputStyles,
   },
   button: {
     height: 40,

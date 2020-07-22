@@ -148,4 +148,9 @@ export const strings = {
       },
     },
   },
+  validation: {
+    presence: 'To pole jest wymagane',
+    email: 'Nieprawidłowy email',
+    url: 'Nieprawidłowy adres URL',
+  },
 };
