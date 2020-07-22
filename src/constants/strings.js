@@ -26,6 +26,9 @@ export const strings = {
     fakeNews: 'Fake news',
     unverifiable: 'Nieweryfikowalny',
     authentic: 'Prawda',
+    submissionSuccess: 'Dziękujemy za zgłoszenie!',
+    submissionSuccessDescription:
+      'Po jego weryfikacji otrzymasz powiadomienie e-mail z linkiem do raportu.',
   },
   reportImageEdit: {
     saveButton: 'Zapisz',

@@ -4,7 +4,7 @@ import { apiUrls, COLLECTOR_URL } from '../../constants/urls';
 export const REPORT_SUBMIT = 'report.REPORT_SUBMIT';
 
 export const reportActions = {
-  submitReport: (payload) =>
+  submitReport: (payload, afterSagaSuccess) =>
     apiAction(REPORT_SUBMIT, apiUrls.REPORT_SUBMIT, {
       method: 'POST',
       payload,
@@ -14,5 +14,6 @@ export const reportActions = {
           'Content-Type': 'multipart/form-data',
         },
       },
+      afterSagaSuccess,
     }),
 };

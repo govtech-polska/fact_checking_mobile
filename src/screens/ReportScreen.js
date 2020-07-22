@@ -11,6 +11,7 @@ import {
   Title,
   Container,
   Field,
+  DropDownAlert,
 } from '../components';
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
@@ -95,6 +96,17 @@ const ReportScreen = ({ navigation, route }) => {
     });
   };
 
+  const afterSuccessSubmission = () => {
+    sourceUrl.setValue('');
+    whatIsWrong.setValue('');
+    email.setValue('');
+    setImagePath('');
+    DropDownAlert.showSuccess(
+      strings.report.submissionSuccess,
+      strings.report.submissionSuccessDescription
+    );
+  };
+
   const handleSubmit = () => {
     const allFieldsValid = [
       sourceUrl.isValid(),
@@ -118,7 +130,7 @@ const ReportScreen = ({ navigation, route }) => {
       Object.entries(payload).forEach(([key, value]) =>
         formData.append(key, value)
       );
-      dispatch(reportActions.submitReport(formData));
+      dispatch(reportActions.submitReport(formData, afterSuccessSubmission));
     }
   };
 
@@ -186,6 +198,7 @@ const ReportScreen = ({ navigation, route }) => {
             }
             onChangeText={whatIsWrong.setValue}
             error={whatIsWrong.errors[0]}
+            multiline={true}
             endAdornment={
               isAvailable && (
                 <TouchableOpacityDebounce onPress={toggleRecognizing}>

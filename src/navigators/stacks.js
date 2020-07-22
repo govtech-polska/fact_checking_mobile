@@ -60,7 +60,7 @@ export const ReportStackScreen = () => {
         component={ReportScreen}
         options={mainScreenOptions}
       />
-      <InfoStack.Screen
+      <ReportStack.Screen
         name={routes.reportImageEdit}
         component={ReportImageEditScreen}
         options={{ title: '' }}
