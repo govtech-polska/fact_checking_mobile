@@ -34,9 +34,9 @@ import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
 
 const shareImage = require('../resources/img/share.png');
-const urlFontSize = 14;
+const URL_FONT_SIZE = 14;
 const LaunchImage = (
-  <Launch width={urlFontSize} height={urlFontSize} fill={CINNABAR} />
+  <Launch width={URL_FONT_SIZE} height={URL_FONT_SIZE} fill={CINNABAR} />
 );
 
 class VerifiedDetailsScreen extends Component {
@@ -177,6 +177,24 @@ class VerifiedDetailsScreen extends Component {
     );
   };
 
+  renderSource = (value) => {
+    return (
+      <Hyperlink
+        key={value}
+        linkDefault={true}
+        linkStyle={styles.url}
+        linkText={(url) => (
+          <Text>
+            {LaunchImage} {url}
+          </Text>
+        )}
+        style={{ flexDirection: 'row', marginTop: 8 }}
+      >
+        <Text style={styles.detailsText}>{value}</Text>
+      </Hyperlink>
+    );
+  };
+
   renderExpertSources = () => {
     const { details } = this.props;
     const sources = details.expert_opinion.confirmation_sources
@@ -190,20 +208,7 @@ class VerifiedDetailsScreen extends Component {
         <Text style={{ ...styles.detailsSubtitle, marginTop: 12 }}>
           {strings.verifiedDetails.sources}
         </Text>
-        {sources.map((source) => {
-          return (
-            <Hyperlink
-              key={source}
-              linkDefault={true}
-              linkStyle={styles.url}
-              style={{ marginTop: 8 }}
-            >
-              <Text style={styles.detailsText}>
-                {LaunchImage} {source}
-              </Text>
-            </Hyperlink>
-          );
-        })}
+        {sources.map(this.renderSource)}
       </>
     );
   };
@@ -223,35 +228,15 @@ class VerifiedDetailsScreen extends Component {
             .filter((source) => !!source);
           return (
             <View style={{ marginBottom: 16 }} key={report.title}>
-              <Text style={styles.detailsSubtitle}>{`${
-                strings.verifiedDetails.communityReportLabel
-              } ${index + 1}`}</Text>
+              <Text style={styles.detailsSubtitle}>
+                {strings.verifiedDetails.communityReportLabel} {index + 1}
+              </Text>
               <Text style={styles.dateLabel}>
-                {`${
-                  strings.verifiedDetails.verifiedDateLabel
-                } ${this.dateFormatted(
-                  details?.expert?.date,
-                  'DD.MM.YYYY HH:mm'
-                )}`}
+                {strings.verifiedDetails.verifiedDateLabel}{' '}
+                {this.dateFormatted(details?.expert?.date, 'DD.MM.YYYY HH:mm')}
               </Text>
-              <Text style={styles.detailsText}>
-                {details?.expert_opinion?.comment}
-              </Text>
-
-              {sources.map((source) => {
-                return (
-                  <Hyperlink
-                    key={source}
-                    linkDefault={true}
-                    linkStyle={styles.url}
-                    style={{ flexDirection: 'row', marginTop: 8 }}
-                  >
-                    <Text style={styles.detailsText}>
-                      {LaunchImage} {source}
-                    </Text>
-                  </Hyperlink>
-                );
-              })}
+              <Text style={styles.detailsText}>{report.comment}</Text>
+              {sources.map(this.renderSource)}
             </View>
           );
         })}
@@ -436,7 +421,7 @@ const styles = StyleSheet.create({
   },
   url: {
     color: CINNABAR,
-    fontSize: urlFontSize,
+    fontSize: URL_FONT_SIZE,
   },
   shareButton: {
     width: 30,
