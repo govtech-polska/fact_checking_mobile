@@ -32,9 +32,10 @@ import { useVoiceRecognition } from '../utils/useVoiceRecognition';
 import { useField } from '../utils/useField';
 
 const isTruth = (v) => !!v;
+
 const ReportScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
-  const { isFetching } = useSelector(({ report }) => report.submission);
+  const { error, isFetching } = useSelector(({ report }) => report.submission);
 
   const [partialRecognition, setPartialRecognition] = useThrottle('');
   const {
@@ -77,6 +78,10 @@ const ReportScreen = ({ navigation, route }) => {
       setImagePath(nextImagePath);
     }
   }, [route.params?.imagePath]);
+
+  useEffect(() => {
+    DropDownAlert.showError();
+  }, [error]);
 
   const toggleRecognizing = () => {
     if (!isStarted) {
