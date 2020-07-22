@@ -69,7 +69,7 @@ class VerifiedScreen extends Component {
     SharedModule.getShareUrl((error, url) => {
       SharedModule.clearShareUrl();
       console.log('ShareUrl: ', url);
-      this.props.navigation.navigate(routes.reportModal);
+      this.showReportModal(url);
     });
   }
 
@@ -83,7 +83,11 @@ class VerifiedScreen extends Component {
   onExternalUrlShareAndroid = ({ url }) => {
     UrlShareModule.clearActionUrl();
     console.log('ShareUrl: ', url);
-    this.props.navigation.navigate(routes.reportModal);
+    this.showReportModal(url);
+  };
+
+  showReportModal = (url) => {
+    this.props.navigation.navigate(routes.reportModal, { url });
   };
 
   drawCell = ({ item }) => {

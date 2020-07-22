@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Text,
   StyleSheet,
@@ -36,6 +37,8 @@ class ReportScreen extends Component {
       end: false,
       started: false,
       recognitionResult: '',
+      url: props.route.params?.url || '',
+      isModal: !!props.route.params?.url,
     };
     Voice.onSpeechStart = this.onSpeechStart;
     Voice.onSpeechEnd = this.onSpeechEnd;
@@ -183,7 +186,7 @@ class ReportScreen extends Component {
   };
 
   render() {
-    const { end, recognitionResult, whatIsWrong } = this.state;
+    const { end, recognitionResult, whatIsWrong, url } = this.state;
 
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -193,10 +196,17 @@ class ReportScreen extends Component {
           keyboardDismissMode={'interactive'}
         >
           <Container>
+            <View styles={{ width: 40, height: 40, backgroundColor: 'red' }} />
             <Title title={strings.report.title} />
 
             <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
-            <TextInput style={styles.inputLabel} autoCorrect={false} />
+            <TextInput
+              style={styles.inputLabel}
+              autoCorrect={false}
+              autoCapitalize={'none'}
+              value={url}
+              onChangeText={(text) => this.setState({ url: text })}
+            />
 
             <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
             <View style={styles.labelWithButtonContainer}>
@@ -231,6 +241,12 @@ class ReportScreen extends Component {
     );
   }
 }
+
+ReportScreen.propTypes = {
+  route: PropTypes.shape({
+    params: PropTypes.any,
+  }),
+};
 
 const styles = StyleSheet.create({
   title: {
