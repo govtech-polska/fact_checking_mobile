@@ -6,14 +6,18 @@ export const strings = {
   verifiedTab: 'Zweryfikowane',
   reportTab: 'Zgłoś',
 
-  //MARK: Verified screen
-  verifiedTitle: 'Zweryfikowane informacje',
-  reportDateLabel: 'Data zgłoszenia: ',
-  informationSourceLabel: 'Źródło informacji:',
-  argumentLabel: 'Teza:',
-  fhLinkLabel: 'Link do materiału:',
-  expertReportLabel: 'Raport eksperta:',
-  verifiedDateLabel: 'Data werdyktu:',
+  verifiedDetails: {
+    verifiedTitle: 'Zweryfikowane informacje',
+    reportDateLabel: 'Data zgłoszenia: ',
+    informationSourceLabel: 'Źródło informacji:',
+    argumentLabel: 'Teza:',
+    fhLinkLabel: 'Link do materiału:',
+    expertReportLabel: 'Raport eksperta:',
+    verifiedDateLabel: 'Data werdyktu:',
+    communityReportsLabel: 'Raporty społeczności:',
+    communityReportLabel: 'Raport',
+    sources: 'Źródła',
+  },
 
   report: {
     title: 'Zgłaszam fake newsa',

@@ -14,6 +14,7 @@ import {
 import { connect } from 'react-redux';
 import Moment from 'moment';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import Hyperlink from 'react-native-hyperlink';
 
 import {
   LoadingOverlay,
@@ -22,16 +23,21 @@ import {
   Container,
 } from '../components';
 import { strings } from '../constants/strings';
-import { DARK_GRAY, CINNABAR, WHITE } from '../constants/colors';
+import { DARK_GRAY, CINNABAR, WHITE, BLACK } from '../constants/colors';
 import { feedActions } from '../storages/verified/actions';
 import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 import Close from '../resources/img/close.svg';
+import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
 
 const shareImage = require('../resources/img/share.png');
+const urlFontSize = 14;
+const LaunchImage = (
+  <Launch width={urlFontSize} height={urlFontSize} fill={CINNABAR} />
+);
 
 class VerifiedDetailsScreen extends Component {
   constructor(props) {
@@ -75,41 +81,6 @@ class VerifiedDetailsScreen extends Component {
     this.setState((prevState) => ({
       imageViewerVisible: !prevState.imageViewerVisible,
     }));
-  };
-
-  renderImageModalIfNeeded = () => {
-    const { imageViewerVisible } = this.state;
-    const { details } = this.props;
-    return (
-      <Modal
-        visible={imageViewerVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => this.setState({ imageViewerVisible: false })}
-      >
-        <ImageViewer
-          enableSwipeDown
-          renderIndicator={() => {}}
-          imageUrls={[{ url: details?.screenshot_url || '' }]}
-          onRequestClose={this.toggleImageViewerVisibility}
-          onCancel={this.toggleImageViewerVisibility}
-          renderHeader={this.renderImageModalHeader}
-        />
-      </Modal>
-    );
-  };
-
-  renderImageModalHeader = () => {
-    return (
-      <SafeAreaView style={{ position: 'absolute', zIndex: 1 }}>
-        <TouchableOpacityDebounce
-          style={styles.closeButton}
-          onPress={() => this.setState({ imageViewerVisible: false })}
-        >
-          <Close width={40} height={40} fill={WHITE} />
-        </TouchableOpacityDebounce>
-      </SafeAreaView>
-    );
   };
 
   onShare = async () => {
@@ -171,19 +142,136 @@ class VerifiedDetailsScreen extends Component {
     }
   };
 
+  renderImageModalIfNeeded = () => {
+    const { imageViewerVisible } = this.state;
+    const { details } = this.props;
+    return (
+      <Modal
+        visible={imageViewerVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => this.setState({ imageViewerVisible: false })}
+      >
+        <ImageViewer
+          enableSwipeDown
+          renderIndicator={() => {}}
+          imageUrls={[{ url: details?.screenshot_url || '' }]}
+          onRequestClose={this.toggleImageViewerVisibility}
+          onCancel={this.toggleImageViewerVisibility}
+          renderHeader={this.renderImageModalHeader}
+        />
+      </Modal>
+    );
+  };
+
+  renderImageModalHeader = () => {
+    return (
+      <SafeAreaView style={{ position: 'absolute', zIndex: 1 }}>
+        <TouchableOpacityDebounce
+          style={styles.closeButton}
+          onPress={() => this.setState({ imageViewerVisible: false })}
+        >
+          <Close width={40} height={40} fill={WHITE} />
+        </TouchableOpacityDebounce>
+      </SafeAreaView>
+    );
+  };
+
+  renderExpertSources = () => {
+    const { details } = this.props;
+    const sources = details.expert_opinion.confirmation_sources
+      .split('\n')
+      .filter((source) => !!source);
+    if (sources.length === 0) {
+      return null;
+    }
+    return (
+      <>
+        <Text style={{ ...styles.detailsSubtitle, marginTop: 12 }}>
+          {strings.verifiedDetails.sources}
+        </Text>
+        {sources.map((source) => {
+          return (
+            <Hyperlink
+              key={source}
+              linkDefault={true}
+              linkStyle={styles.url}
+              style={{ marginTop: 8 }}
+            >
+              <Text style={styles.detailsText}>
+                {LaunchImage} {source}
+              </Text>
+            </Hyperlink>
+          );
+        })}
+      </>
+    );
+  };
+
+  renderFactCheckerOpinions = () => {
+    const { details } = this.props;
+    if (details.fact_checker_opinions.length === 0) return null;
+    return (
+      <>
+        <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
+          {strings.verifiedDetails.communityReportsLabel}
+        </Text>
+
+        {details.fact_checker_opinions.map((report, index) => {
+          const sources = report.confirmation_sources
+            .split('\n')
+            .filter((source) => !!source);
+          return (
+            <View style={{ marginBottom: 16 }} key={report.title}>
+              <Text style={styles.detailsSubtitle}>{`${
+                strings.verifiedDetails.communityReportLabel
+              } ${index + 1}`}</Text>
+              <Text style={styles.dateLabel}>
+                {`${
+                  strings.verifiedDetails.verifiedDateLabel
+                } ${this.dateFormatted(
+                  details?.expert?.date,
+                  'DD.MM.YYYY HH:mm'
+                )}`}
+              </Text>
+              <Text style={styles.detailsText}>
+                {details?.expert_opinion?.comment}
+              </Text>
+
+              {sources.map((source) => {
+                return (
+                  <Hyperlink
+                    key={source}
+                    linkDefault={true}
+                    linkStyle={styles.url}
+                    style={{ flexDirection: 'row', marginTop: 8 }}
+                  >
+                    <Text style={styles.detailsText}>
+                      {LaunchImage} {source}
+                    </Text>
+                  </Hyperlink>
+                );
+              })}
+            </View>
+          );
+        })}
+      </>
+    );
+  };
+
   render() {
     const { details, isFetching } = this.props;
 
     return isFetching || !details ? (
       <LoadingOverlay loading />
     ) : (
-      <ScrollView style={{ backgroundColor: 'white' }}>
+      <ScrollView style={{ backgroundColor: WHITE }}>
         {this.renderImageModalIfNeeded()}
         <View style={styles.container}>
           <Container style={styles.titleContainer}>
             <Text style={styles.title}>{details?.title}</Text>
             <Text style={styles.dateLabel}>{`${
-              strings.reportDateLabel
+              strings.verifiedDetails.reportDateLabel
             } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
           </Container>
 
@@ -214,25 +302,29 @@ class VerifiedDetailsScreen extends Component {
 
           <Container style={styles.detailsContainer}>
             <Text style={styles.detailsTitle}>
-              {strings.informationSourceLabel}
+              {strings.verifiedDetails.informationSourceLabel}
             </Text>
             <Text style={styles.url} onPress={() => openUrl(details.url)}>
-              {details.url}
+              {LaunchImage} {details.url}
             </Text>
 
-            <Text style={styles.detailsTitle}>{strings.fhLinkLabel}</Text>
+            <Text style={styles.detailsTitle}>
+              {strings.verifiedDetails.fhLinkLabel}
+            </Text>
             <Text
               style={styles.url}
               onPress={() => openUrl(this.fhLink(details.id))}
             >
-              {this.fhLink(details.id)}
+              {LaunchImage} {this.fhLink(details.id)}
             </Text>
 
             <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
-              {strings.expertReportLabel}
+              {strings.verifiedDetails.expertReportLabel}
             </Text>
             <Text style={styles.dateLabel}>
-              {`${strings.verifiedDateLabel} ${this.dateFormatted(
+              {`${
+                strings.verifiedDetails.verifiedDateLabel
+              } ${this.dateFormatted(
                 details?.expert?.date,
                 'DD.MM.YYYY HH:mm'
               )}`}
@@ -240,6 +332,9 @@ class VerifiedDetailsScreen extends Component {
             <Text style={styles.detailsText}>
               {details?.expert_opinion?.comment}
             </Text>
+            {this.renderExpertSources()}
+
+            {this.renderFactCheckerOpinions()}
           </Container>
         </View>
       </ScrollView>
@@ -255,6 +350,7 @@ VerifiedDetailsScreen.propTypes = {
     }),
     expert_opinion: PropTypes.shape({
       comment: PropTypes.any,
+      confirmation_sources: PropTypes.string,
     }),
     id: PropTypes.any,
     reported_at: PropTypes.any,
@@ -262,6 +358,14 @@ VerifiedDetailsScreen.propTypes = {
     title: PropTypes.any,
     url: PropTypes.any,
     verdict: PropTypes.any,
+    fact_checker_opinions: PropTypes.arrayOf(
+      PropTypes.shape({
+        comment: PropTypes.string,
+        confirmation_sources: PropTypes.string,
+        date: PropTypes.string,
+        title: PropTypes.string,
+      })
+    ),
   }),
   error: PropTypes.any,
   fetchVerifiedDetailsRequest: PropTypes.func,
@@ -277,14 +381,14 @@ VerifiedDetailsScreen.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: WHITE,
   },
   titleContainer: {
     marginTop: 16,
     marginBottom: 8,
   },
   title: {
-    color: 'black',
+    color: BLACK,
     fontWeight: 'bold',
     fontSize: 24,
     marginBottom: 16,
@@ -306,7 +410,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     aspectRatio: 1.5,
-    backgroundColor: 'black',
+    backgroundColor: BLACK,
     padding: 8,
     marginTop: 8,
   },
@@ -315,19 +419,24 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   detailsTitle: {
-    color: 'black',
+    color: BLACK,
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 16,
     textTransform: 'uppercase',
     marginTop: 32,
   },
+  detailsSubtitle: {
+    color: BLACK,
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
   detailsText: {
-    color: 'black',
+    color: BLACK,
     fontSize: 14,
   },
   url: {
-    color: 'blue',
-    fontSize: 14,
+    color: CINNABAR,
+    fontSize: urlFontSize,
   },
   shareButton: {
     width: 30,
