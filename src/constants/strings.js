@@ -4,7 +4,7 @@ export const strings = {
 
   //MARK: Tab names
   verifiedTab: 'Zweryfikowane',
-  reportTab: 'Raport',
+  reportTab: 'Zgłoś',
 
   //MARK: Verified screen
   verifiedTitle: 'Zweryfikowane informacje',
