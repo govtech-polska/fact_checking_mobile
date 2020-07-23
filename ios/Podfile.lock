@@ -237,7 +237,7 @@ PODS:
     - React
   - react-native-view-shot (3.1.2):
     - React
-  - react-native-voice (1.1.5):
+  - react-native-voice (1.1.6):
     - React
   - React-RCTActionSheet (0.62.2):
     - React-Core/RCTActionSheetHeaders (= 0.62.2)
@@ -494,7 +494,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-safe-area-context: ef6f16c66b0797ecae1bf86c103dfb3dc16fc33d
   react-native-view-shot: 4475fde003fe8a210053d1f98fb9e06c1d834e1c
-  react-native-voice: d531fcae8320dc9dedb858bf2f8179c2798c4e30
+  react-native-voice: e3f9e7434f7ca545245a3019f6baa5190ba12c14
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
   React-RCTBlob: a332773f0ebc413a0ce85942a55b064471587a71
