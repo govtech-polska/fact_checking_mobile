@@ -134,7 +134,7 @@ class VerifiedScreen extends Component {
 
 // TODO: replace any with correct types
 VerifiedScreen.propTypes = {
-  articles: PropTypes.arrayOf(PropTypes.shape({})),
+  articles: PropTypes.array,
   error: PropTypes.any,
   fetchVerifiedRequest: PropTypes.func,
   isFetchingInitial: PropTypes.bool,

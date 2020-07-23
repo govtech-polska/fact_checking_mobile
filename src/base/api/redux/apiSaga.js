@@ -16,7 +16,8 @@ export const apiSaga = (type) => {
         request,
         action.method,
         action.endpoint,
-        action.payload
+        action.payload,
+        action.requestOptions
       );
       data = requestData;
       if (!data) {

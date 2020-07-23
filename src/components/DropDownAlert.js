@@ -8,6 +8,9 @@ class DropDownAlert extends Component {
   static showError() {
     DropDownHolder.dropDown.alertWithType('error', strings.error_general, '');
   }
+  static showSuccess(mainMsg, additionalMsg = '') {
+    DropDownHolder.dropDown.alertWithType('success', mainMsg, additionalMsg);
+  }
 
   render() {
     return <DropdownAlert ref={(ref) => DropDownHolder.setDropDown(ref)} />;
