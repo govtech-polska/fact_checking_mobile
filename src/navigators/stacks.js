@@ -6,11 +6,11 @@ import {
   VerifiedScreen,
   VerifiedDetailsScreen,
   ReportScreen,
+  ReportImageEditScreen,
   InfoScreen,
   InfoAboutScreen,
   InfoTeamScreen,
 } from '../screens';
-import { strings } from '../constants/strings';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
 import { routes } from '../constants/routes';
@@ -39,7 +39,7 @@ export const VerifiedStackScreen = () => {
   return (
     <VerifiedStack.Navigator>
       <VerifiedStack.Screen
-        name={strings.verifiedTab}
+        name={routes.verified}
         component={VerifiedScreen}
         options={mainScreenOptions}
       />
@@ -56,9 +56,14 @@ export const ReportStackScreen = () => {
   return (
     <ReportStack.Navigator>
       <ReportStack.Screen
-        name={strings.reportTab}
+        name={routes.report}
         component={ReportScreen}
         options={mainScreenOptions}
+      />
+      <ReportStack.Screen
+        name={routes.reportImageEdit}
+        component={ReportImageEditScreen}
+        options={{ title: '' }}
       />
     </ReportStack.Navigator>
   );
@@ -68,7 +73,7 @@ export const InfoStackScreen = () => {
   return (
     <InfoStack.Navigator>
       <InfoStack.Screen
-        name={strings.verifiedTab}
+        name={routes.info}
         component={InfoScreen}
         options={mainScreenOptions}
       />

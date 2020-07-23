@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import './base/configureValidatejs';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';

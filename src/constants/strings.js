@@ -26,6 +26,12 @@ export const strings = {
     fakeNews: 'Fake news',
     unverifiable: 'Nieweryfikowalny',
     authentic: 'Prawda',
+    submissionSuccess: 'Dziękujemy za zgłoszenie!',
+    submissionSuccessDescription:
+      'Po jego weryfikacji otrzymasz powiadomienie e-mail z linkiem do raportu.',
+  },
+  reportImageEdit: {
+    saveButton: 'Zapisz',
   },
   info: {
     title: 'O aplikacji',
@@ -144,5 +150,10 @@ export const strings = {
           'Od 20 lat w mediach. Na początku TVP, potem Polskie Radio, „Warsaw Business Journal”, „Głos Ameryki” „Puls Medycyny” „Polska the Times”, „Przekrój”, „Focus”, ”Wprost” i znów Polskie Radio. Specjalizuje się w tematyce międzynarodowej.',
       },
     },
+  },
+  validation: {
+    presence: 'To pole jest wymagane',
+    email: 'Nieprawidłowy email',
+    url: 'Nieprawidłowy adres URL',
   },
 };

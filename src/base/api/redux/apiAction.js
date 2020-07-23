@@ -7,6 +7,7 @@ import { REQUEST } from '../../redux/const';
  * @param {string} method - The type of the HTTP request method (GET, POST, etc.).
  * @param {Object} [options] - Additional things which may extend the action.
  * @param {Object} [options.payload] - The payload data sending to API.
+ * @param {Object} [options.requestOptions] - Additional request options.
  * @param {function} [options.afterSagaSuccess] - The generator function that will be call after success in saga.
  */
 export const apiAction = (type, endpoint, options = {}) => {
@@ -14,8 +15,9 @@ export const apiAction = (type, endpoint, options = {}) => {
     type: type + REQUEST,
     endpoint,
     method: options.method || 'GET',
-    payload: options && options.payload,
-    afterSagaSuccess: options && options.afterSagaSuccess,
-    clearOnRequest: options && options.clearOnRequest,
+    payload: options.payload,
+    requestOptions: options.requestOptions,
+    afterSagaSuccess: options.afterSagaSuccess,
+    clearOnRequest: options.clearOnRequest,
   };
 };
