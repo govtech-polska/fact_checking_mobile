@@ -1,17 +1,21 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  View,
-  TextInput,
-  Image,
-  Platform,
-} from 'react-native';
+import { Text, StyleSheet, SafeAreaView, View, Image } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
-import Voice from '@react-native-community/voice';
+import { useThrottle } from '@react-hook/throttle';
+
+import {
+  TouchableOpacityDebounce,
+  Title,
+  Container,
+  Field,
+  DropDownAlert,
+} from '../components';
+import Mic from '../resources/img/mic.svg';
+import Record from '../resources/img/recording.svg';
+import CropSvg from '../resources/img/crop.svg';
 
 import { strings } from '../constants/strings';
 import {
@@ -23,147 +27,129 @@ import {
   WHITE,
 } from '../constants/colors';
 import { routes } from '../constants/routes';
+import { reportActions } from '../storages/report/actions';
+import { useVoiceRecognition } from '../utils/useVoiceRecognition';
+import { useField } from '../utils/useField';
 
-import {
-  DropDownAlert,
-  TouchableOpacityDebounce,
-  Title,
-  Container,
-} from '../components';
-import Mic from '../resources/img/mic.svg';
-import Record from '../resources/img/recording.svg';
-import CropSvg from '../resources/img/crop.svg';
+const isTruth = (v) => !!v;
 
-const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
+const ReportScreen = ({ navigation, route }) => {
+  const dispatch = useDispatch();
+  const { error, isFetching } = useSelector(({ report }) => report.submission);
 
-class ReportScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      rawImagePath: null,
-      imagePath: null,
-      speechRecognitionAvailable: false,
-      whatIsWrong: '',
-      error: false,
-      end: false,
-      started: false,
-      recognitionResult: '',
-    };
-    Voice.onSpeechStart = this.onSpeechStart;
-    Voice.onSpeechEnd = this.onSpeechEnd;
-    Voice.onSpeechError = this.onSpeechError;
-    Voice.onSpeechResults = this.onSpeechResults;
-  }
+  const [partialRecognition, setPartialRecognition] = useThrottle('');
+  const {
+    isAvailable,
+    isStarted,
+    startRecognizing,
+    stopRecognizing,
+  } = useVoiceRecognition({
+    onSpeechResult: (value) => whatIsWrong.setValue((old) => old + value),
+    onSpeechPartialResults: (value) => setPartialRecognition(value),
+  });
 
-  componentDidMount() {
-    this.checkVoiceAvailability();
-  }
+  const [imagePath, setImagePath] = useState(null);
+  const [rawImagePath, setRawImagePath] = useState(null);
+  const sourceUrl = useField({
+    initialValue: '',
+    validator: {
+      presence: { allowEmpty: false },
+      url: true,
+    },
+  });
+  const whatIsWrong = useField({
+    initialValue: '',
+    validator: {
+      presence: { allowEmpty: false },
+    },
+  });
+  const email = useField({
+    initialValue: '',
+    validator: {
+      optional: {
+        email: true,
+      },
+    },
+  });
 
-  componentWillUnmount() {
-    Voice.destroy().then(Voice.removeAllListeners);
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { rawImagePath } = this.state;
-    const { route } = this.props;
-
-    if (prevState.rawImagePath !== rawImagePath) {
-      this.setState({ imagePath: rawImagePath });
-    }
-
+  useEffect(() => {
     const nextImagePath = route.params?.imagePath;
-    if (prevProps.route.params?.imagePath !== nextImagePath) {
-      this.setState({ imagePath: nextImagePath });
+    if (nextImagePath !== imagePath) {
+      setImagePath(nextImagePath);
     }
-  }
+  }, [route.params?.imagePath]);
 
-  selectPhotoTapped = () => {
+  useEffect(() => {
+    if (error) {
+      DropDownAlert.showError();
+    }
+    return () => {
+      dispatch(reportActions.clearSubmitReport());
+    };
+  }, [error]);
+
+  const toggleRecognizing = () => {
+    if (!isStarted) {
+      setPartialRecognition('');
+      startRecognizing();
+    } else {
+      stopRecognizing();
+    }
+  };
+
+  const selectPhotoTapped = () => {
     ImagePicker.openPicker({
       cropping: false,
     }).then((image) => {
-      this.setState({ rawImagePath: image.path, imagePath: null });
+      setImagePath(image.path);
+      setRawImagePath(image.path);
     });
   };
 
-  async checkVoiceAvailability() {
-    const voice = await Voice.isAvailable();
-    this.setState({ speechRecognitionAvailable: !!voice });
-  }
-
-  onSpeechStart = () => {
-    this.setState({ started: true });
+  const afterSuccessSubmission = () => {
+    sourceUrl.setValue('');
+    whatIsWrong.setValue('');
+    email.setValue('');
+    setImagePath('');
+    DropDownAlert.showSuccess(
+      strings.report.submissionSuccess,
+      strings.report.submissionSuccessDescription
+    );
   };
 
-  onSpeechEnd = () => {
-    if (Platform.OS === 'ios') {
-      this.setState(({ whatIsWrong, recognitionResult }) => ({
-        started: false,
-        end: true,
-        whatIsWrong: whatIsWrong + recognitionResult,
-      }));
-    } else {
-      this.setState({
-        started: false,
-        end: true,
-      });
+  const handleSubmit = () => {
+    const allFieldsValid = [
+      sourceUrl.isValid(),
+      whatIsWrong.isValid(),
+      email.isValid(),
+    ].every(isTruth);
+
+    if (allFieldsValid && !isFetching) {
+      const payload = {
+        image: {
+          uri: imagePath,
+          type: 'image/jpeg',
+          name: 'screenshot.jpg',
+        },
+        comment: whatIsWrong.value,
+        email: email.value,
+        url: sourceUrl.value,
+      };
+
+      const formData = new FormData();
+      Object.entries(payload).forEach(([key, value]) =>
+        formData.append(key, value)
+      );
+      dispatch(reportActions.submitReport(formData, afterSuccessSubmission));
     }
   };
 
-  onSpeechError = () => {
-    this.setState({ error: true, end: true, started: false });
-  };
-
-  onSpeechResults = (e) => {
-    if (e.value.length > 0) {
-      if (Platform.OS == 'ios') {
-        this.setState({ recognitionResult: e.value[0] });
-      } else {
-        this.setState(({ whatIsWrong }) => ({
-          whatIsWrong: whatIsWrong + e.value[0],
-        }));
-      }
-    }
-  };
-
-  startRecognizing = async () => {
-    this.setState({
-      error: false,
-      started: false,
-      recognitionResult: '',
-      end: false,
-    });
-
-    try {
-      await Voice.start('pl-PL');
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  stopRecognizing = async () => {
-    try {
-      await Voice.stop();
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  toggleRecognizing = () => {
-    const { started, end } = this.state;
-    if ((end && !started) || (!end && !started)) {
-      this.startRecognizing();
-    } else {
-      this.stopRecognizing();
-    }
-  };
-
-  renderProperImageView = () => {
-    const { rawImagePath, imagePath } = this.state;
+  const renderProperImageView = () => {
     if (!imagePath) {
       return (
         <TouchableOpacityDebounce
           style={{ ...styles.button, backgroundColor: EMPRESS }}
-          onPress={() => this.selectPhotoTapped()}
+          onPress={selectPhotoTapped}
         >
           <Text style={styles.buttonLabel}>
             {strings.report.imageButtonLabel}
@@ -176,14 +162,14 @@ class ReportScreen extends Component {
       <View style={styles.imageView}>
         <TouchableOpacityDebounce
           style={styles.imageWrapper}
-          onPress={() => this.selectPhotoTapped()}
+          onPress={selectPhotoTapped}
         >
           <Image style={styles.image} source={{ uri: imagePath || '' }} />
         </TouchableOpacityDebounce>
         <View style={styles.editBtn}>
           <TouchableOpacityDebounce
             onPress={() =>
-              this.props.navigation.push(routes.reportImageEdit, {
+              navigation.push(routes.reportImageEdit, {
                 rawImagePath,
               })
             }
@@ -195,81 +181,69 @@ class ReportScreen extends Component {
     );
   };
 
-  renderSpeechRecognitionButtonIfNeeded = () => {
-    const { speechRecognitionAvailable, started } = this.state;
+  return (
+    <SafeAreaView style={styles.bg}>
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        keyboardShouldPersistTaps="never"
+        keyboardDismissMode="interactive"
+      >
+        <Container>
+          <Title title={strings.report.title} />
 
-    const image = () => {
-      if (started) {
-        return <Record width={40} height={25} fill={CINNABAR} />;
-      }
-      return <Mic width={40} height={25} fill={DARK_GRAY} />;
-    };
+          <Field
+            label={strings.report.addLinkLabel}
+            value={sourceUrl.value}
+            onChangeText={sourceUrl.setValue}
+            error={sourceUrl.errors[0]}
+            autoCorrect={false}
+          />
 
-    if (speechRecognitionAvailable) {
-      return (
-        <View
-          style={{
-            width: 40,
-            justifyContent: 'center',
-          }}
-        >
-          <TouchableOpacityDebounce onPress={this.toggleRecognizing}>
-            {image()}
+          <Field
+            label={strings.report.whatIsWrong}
+            value={
+              isStarted
+                ? whatIsWrong.value + partialRecognition
+                : whatIsWrong.value
+            }
+            onChangeText={whatIsWrong.setValue}
+            error={whatIsWrong.errors[0]}
+            multiline={true}
+            endAdornment={
+              isAvailable && (
+                <TouchableOpacityDebounce onPress={toggleRecognizing}>
+                  {isStarted && (
+                    <Record width={40} height={25} fill={CINNABAR} />
+                  )}
+                  {!isStarted && (
+                    <Mic width={40} height={25} fill={DARK_GRAY} />
+                  )}
+                </TouchableOpacityDebounce>
+              )
+            }
+          />
+
+          {renderProperImageView()}
+
+          <Field
+            label={strings.report.emailLabel}
+            value={email.value}
+            onChangeText={email.setValue}
+            error={email.errors[0]}
+            keyboardType="email-address"
+          />
+
+          <TouchableOpacityDebounce
+            style={{ ...styles.button, backgroundColor: CINNABAR }}
+            onPress={handleSubmit}
+          >
+            <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
           </TouchableOpacityDebounce>
-        </View>
-      );
-    }
-  };
-
-  render() {
-    const { end, recognitionResult, whatIsWrong } = this.state;
-
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: WHITE }}>
-        <KeyboardAwareScrollView
-          enableOnAndroid
-          keyboardShouldPersistTaps="never"
-          keyboardDismissMode={'interactive'}
-        >
-          <Container>
-            <Title title={strings.report.title} />
-
-            <Text style={styles.label}>{strings.report.addLinkLabel}</Text>
-            <TextInput style={styles.inputLabel} autoCorrect={false} />
-
-            <Text style={styles.label}>{strings.report.whatIsWrong}</Text>
-            <View style={styles.labelWithButtonContainer}>
-              <TextInput
-                style={styles.inputLabelWithButton}
-                value={end ? whatIsWrong : whatIsWrong + recognitionResult}
-                multiline={true}
-                onChangeText={(text) => this.setState({ whatIsWrong: text })}
-              />
-              {this.renderSpeechRecognitionButtonIfNeeded()}
-            </View>
-
-            {this.renderProperImageView()}
-
-            <Text style={styles.label}>{strings.report.emailLabel}</Text>
-            <TextInput
-              style={styles.inputLabel}
-              keyboardType={'email-address'}
-            />
-
-            <TouchableOpacityDebounce
-              style={{ ...styles.button, backgroundColor: CINNABAR }}
-              onPress={() => DropDownAlert.showError()}
-            >
-              <Text style={styles.buttonLabel}>
-                {strings.report.sendButton}
-              </Text>
-            </TouchableOpacityDebounce>
-          </Container>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
-    );
-  }
-}
+        </Container>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
+  );
+};
 
 ReportScreen.propTypes = {
   navigation: PropTypes.shape({
@@ -283,39 +257,9 @@ ReportScreen.propTypes = {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    color: BLACK,
-    fontSize: Platform.OS === 'ios' ? 30 : 24,
-  },
-  label: {
-    color: BLACK,
-    fontSize: 14,
-    marginTop: 24,
-  },
-  inputLabel: {
-    minHeight: 40,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: GAINSBORO,
-    marginTop: 8,
-    padding: 2,
-    flexDirection: 'row',
-    fontSize: FONT_SIZE,
-  },
-  labelWithButtonContainer: {
-    flexDirection: 'row',
-    marginTop: 8,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: GAINSBORO,
-    alignItems: 'center',
-    minHeight: 40,
-  },
-  inputLabelWithButton: {
+  bg: {
     flex: 1,
-    padding: 2,
-    textAlignVertical: 'center',
-    fontSize: FONT_SIZE,
+    backgroundColor: WHITE,
   },
   button: {
     height: 40,

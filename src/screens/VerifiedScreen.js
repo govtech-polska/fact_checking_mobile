@@ -97,7 +97,7 @@ class VerifiedScreen extends Component {
   renderTitleIfNeeded = () => {
     const { articles } = this.props;
     if (articles.length > 0) {
-      return <Title title={strings.verifiedTitle} />;
+      return <Title title={strings.verifiedDetails.verifiedTitle} />;
     }
   };
 
@@ -134,9 +134,7 @@ class VerifiedScreen extends Component {
 
 // TODO: replace any with correct types
 VerifiedScreen.propTypes = {
-  articles: PropTypes.shape({
-    length: PropTypes.number,
-  }),
+  articles: PropTypes.array,
   error: PropTypes.any,
   fetchVerifiedRequest: PropTypes.func,
   isFetchingInitial: PropTypes.bool,

@@ -4,16 +4,20 @@ export const strings = {
 
   //MARK: Tab names
   verifiedTab: 'Zweryfikowane',
-  reportTab: 'Raport',
+  reportTab: 'Zgłoś',
 
-  //MARK: Verified screen
-  verifiedTitle: 'Zweryfikowane informacje',
-  reportDateLabel: 'Data zgłoszenia: ',
-  informationSourceLabel: 'Źródło informacji:',
-  argumentLabel: 'Teza:',
-  fhLinkLabel: 'Link do materiału:',
-  expertReportLabel: 'Raport eksperta:',
-  verifiedDateLabel: 'Data werdyktu:',
+  verifiedDetails: {
+    verifiedTitle: 'Zweryfikowane informacje',
+    reportDateLabel: 'Data zgłoszenia: ',
+    informationSourceLabel: 'Źródło informacji:',
+    argumentLabel: 'Teza:',
+    fhLinkLabel: 'Link do materiału:',
+    expertReportLabel: 'Raport eksperta:',
+    verifiedDateLabel: 'Data werdyktu:',
+    communityReportsLabel: 'Raporty społeczności:',
+    communityReportLabel: 'Raport',
+    sources: 'Źródła',
+  },
 
   report: {
     title: 'Zgłaszam fake newsa',
@@ -26,6 +30,9 @@ export const strings = {
     fakeNews: 'Fake news',
     unverifiable: 'Nieweryfikowalny',
     authentic: 'Prawda',
+    submissionSuccess: 'Dziękujemy za zgłoszenie!',
+    submissionSuccessDescription:
+      'Po jego weryfikacji otrzymasz powiadomienie e-mail z linkiem do raportu.',
   },
   reportImageEdit: {
     saveButton: 'Zapisz',
@@ -147,5 +154,10 @@ export const strings = {
           'Od 20 lat w mediach. Na początku TVP, potem Polskie Radio, „Warsaw Business Journal”, „Głos Ameryki” „Puls Medycyny” „Polska the Times”, „Przekrój”, „Focus”, ”Wprost” i znów Polskie Radio. Specjalizuje się w tematyce międzynarodowej.',
       },
     },
+  },
+  validation: {
+    presence: 'To pole jest wymagane',
+    email: 'Nieprawidłowy email',
+    url: 'Nieprawidłowy adres URL',
   },
 };
