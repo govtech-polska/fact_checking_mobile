@@ -23,6 +23,7 @@
     "react-native": "0.62.2",
     "react-native-dropdownalert": "^4.2.1",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-hyperlink": "0.0.19",
     "react-native-image-crop-picker": "^0.32.2",
     "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.1",

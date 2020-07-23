@@ -97,7 +97,7 @@ class VerifiedScreen extends Component {
   renderTitleIfNeeded = () => {
     const { articles } = this.props;
     if (articles.length > 0) {
-      return <Title title={strings.verifiedTitle} />;
+      return <Title title={strings.verifiedDetails.verifiedTitle} />;
     }
   };
 
