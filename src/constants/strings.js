@@ -5,6 +5,7 @@ export const strings = {
   //MARK: Tab names
   verifiedTab: 'Zweryfikowane',
   reportTab: 'Zgłoś',
+  draftsTab: 'Szkice',
 
   verifiedDetails: {
     verifiedTitle: 'Zweryfikowane informacje',
@@ -37,6 +38,13 @@ export const strings = {
   reportImageEdit: {
     saveButton: 'Zapisz',
   },
+
+  drafts: {
+    title: 'Dokończ swoje zgłoszenia',
+    commentEmptyState: 'Brak komentarza',
+    urlEmptyState: 'Brak linku źródłowego',
+  },
+
   info: {
     title: 'O aplikacji',
     aboutProject: 'O projekcie',

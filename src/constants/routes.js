@@ -5,6 +5,8 @@ export const routes = {
   report: 'Report',
   reportImageEdit: 'ReportImageEdit',
 
+  drafts: 'Drafts',
+
   info: 'Info',
   infoAbout: 'InfoAboutScreen',
   infoTeam: 'InfoTeamScreen',

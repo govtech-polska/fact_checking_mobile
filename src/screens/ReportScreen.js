@@ -71,7 +71,7 @@ const ReportScreen = ({ navigation, route }) => {
       },
     },
   });
-
+  console.log(imagePath);
   useEffect(() => {
     const nextImagePath = route.params?.imagePath;
     if (nextImagePath !== imagePath) {

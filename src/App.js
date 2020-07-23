@@ -6,7 +6,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import store from './base/redux/configureStore';
-import { verifiedStack, reportStack, infoStack } from './navigators/tabStacks';
+import {
+  verifiedStack,
+  reportStack,
+  infoStack,
+  draftsStack,
+} from './navigators/tabStacks';
 import { CINNABAR } from './constants/colors';
 import { DropDownAlert } from './components';
 
@@ -23,6 +28,7 @@ export default function App() {
         >
           {verifiedStack()}
           {reportStack()}
+          {draftsStack()}
           {infoStack()}
         </Tab.Navigator>
       </NavigationContainer>
