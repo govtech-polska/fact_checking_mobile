@@ -78,6 +78,16 @@ export const DraftsStackScreen = () => {
         component={DraftsScreen}
         options={mainScreenOptions}
       />
+      <ReportStack.Screen
+        name={routes.report}
+        component={ReportScreen}
+        options={{ title: '' }}
+      />
+      <ReportStack.Screen
+        name={routes.reportImageEdit}
+        component={ReportImageEditScreen}
+        options={{ title: '' }}
+      />
     </ReportStack.Navigator>
   );
 };
