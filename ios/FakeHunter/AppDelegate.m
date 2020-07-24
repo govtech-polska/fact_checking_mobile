@@ -39,13 +39,6 @@ static void InitializeFlipper(UIApplication *application) {
   
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
   
-  NSDictionary *aux = [launchOptions objectForKey:UIApplicationLaunchOptionsUserActivityDictionaryKey];
-//  if (aux) {
-//    NSUserActivity *activity = [aux objectForKey:@"UIApplicationLaunchOptionsUserActivityKey"];
-//    NSString *urlString = activity.webpageURL.absoluteString;
-//    [self saveUrl:urlString];
-//  }
-  
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;

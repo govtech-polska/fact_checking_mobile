@@ -188,7 +188,7 @@ const ReportScreen = ({ navigation, route }) => {
         </View>
       </View>
     );
-  };
+  }
 
   return (
     <SafeAreaView style={styles.bg}>

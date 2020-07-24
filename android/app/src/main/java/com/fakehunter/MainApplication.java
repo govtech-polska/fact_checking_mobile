@@ -15,8 +15,8 @@ import javax.annotation.Nullable;
 
 public class MainApplication extends Application implements ReactApplication {
 
-    @Nullable
-    private String shareUrl = null;
+  @Nullable
+  private String shareUrl = null;
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {

@@ -15,8 +15,6 @@ import androidx.annotation.Nullable;
 
 public class MainActivity extends ReactActivity {
 
-  public static String TAG = "FH_LOG";
-
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -34,13 +32,8 @@ public class MainActivity extends ReactActivity {
     try {
       if (intent == null) return;
       String action = intent.getAction();
-      Log.d(TAG, "handleIncomingIntent: ");
-      Log.d(TAG, action);
-      Log.d(TAG, intent.getExtras().toString());
       if (action.equalsIgnoreCase(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
         String s = intent.getStringExtra(Intent.EXTRA_TEXT);
-        Log.d(TAG, "handleIncomingIntent: ");
-        Log.d(TAG, s);
         try {
           WritableMap map = Arguments.createMap();
           map.putString("url", s);
@@ -52,9 +45,7 @@ public class MainActivity extends ReactActivity {
           ((MainApplication) getApplication()).setShareUrl(s);
         }
       }
-    } catch (Exception e) {
-      Log.d(TAG, e.getMessage());
-    }
+    } catch (Exception e) {}
   }
 
   /**

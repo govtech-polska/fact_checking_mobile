@@ -57,6 +57,9 @@ class VerifiedScreen extends Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
+    if (Platform.OS === 'android' && this.urlEvent) {
+      this.urlEvent.remove();
+    }
   }
 
   handleAppStateChange = (nextState) => {
@@ -68,7 +71,6 @@ class VerifiedScreen extends Component {
   checkShareUrl() {
     SharedModule.getShareUrl((error, url) => {
       SharedModule.clearShareUrl();
-      console.log('ShareUrl: ', url);
       this.showReportModal(url);
     });
   }
@@ -82,7 +84,6 @@ class VerifiedScreen extends Component {
 
   onExternalUrlShareAndroid = ({ url }) => {
     UrlShareModule.clearActionUrl();
-    console.log('ShareUrl: ', url);
     this.showReportModal(url);
   };
 
