@@ -119,7 +119,6 @@ class VerifiedScreen extends Component {
   };
 
   onExternalUrlOpen = (url) => {
-    console.log('onExternalUrlOpen: ', url);
     const id = this.getDetailsIdFromUrl(url);
     if (Platform.OS === 'ios') {
       SharedModule.clearOpenUrl();
