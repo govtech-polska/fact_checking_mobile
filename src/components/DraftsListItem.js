@@ -10,8 +10,8 @@ import { strings } from '../constants/strings';
 
 const DraftsListItem = ({ item, onPress }) => {
   return (
-    <>
-      <TouchableOpacityDebounce onPress={onPress} key={item.id}>
+    <View style={styles.row}>
+      <TouchableOpacityDebounce onPress={onPress}>
         <View style={styles.wrapper}>
           <Image
             style={styles.image}
@@ -31,8 +31,7 @@ const DraftsListItem = ({ item, onPress }) => {
           </View>
         </View>
       </TouchableOpacityDebounce>
-      <View style={styles.separator} />
-    </>
+    </View>
   );
 };
 
@@ -48,12 +47,17 @@ DraftsListItem.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  row: {
+    backgroundColor: WHITE,
+  },
   wrapper: {
     width: '100%',
     flexDirection: 'row',
     padding: 8,
     paddingHorizontal: 16,
     backgroundColor: WHITE,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderColor: WHITE_SMOKE,
   },
   image: {
     flex: 1,

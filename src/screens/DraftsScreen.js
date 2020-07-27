@@ -1,10 +1,17 @@
-import React from 'react';
-import { SafeAreaView, FlatList, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SwipeListView } from 'react-native-swipe-list-view';
 
-import { Title, Container, DraftsListItem } from '../components';
+import {
+  Title,
+  Container,
+  DraftsListItem,
+  TouchableOpacityDebounce,
+} from '../components';
 
-import { WHITE } from '../constants/colors';
+import RemoveIcon from '../resources/img/remove.svg';
+import { WHITE, ERROR } from '../constants/colors';
 import { strings } from '../constants/strings';
 import { routes } from '../constants/routes';
 
@@ -44,9 +51,14 @@ const MOCKED_DATA = [
 
 const DraftsScreen = () => {
   const navigation = useNavigation();
+  const [data, setData] = useState(MOCKED_DATA);
 
   const handleItemPress = (draftId) => () => {
     navigation.navigate(routes.report, { draftId });
+  };
+
+  const handleItemDelete = (draftId) => () => {
+    setData(data.filter((item) => item.id !== draftId));
   };
 
   return (
@@ -54,10 +66,29 @@ const DraftsScreen = () => {
       <Container>
         <Title title={strings.drafts.title} />
       </Container>
-      <FlatList
-        data={MOCKED_DATA}
+      <SwipeListView
+        data={data}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <DraftsListItem item={item} onPress={handleItemPress(item.id)} />
+        )}
+        renderHiddenItem={({ item }) => (
+          <View style={styles.action}>
+            <TouchableOpacityDebounce
+              style={styles.deleteBtn}
+              onPress={handleItemDelete(item.id)}
+            >
+              <RemoveIcon style={styles.icon} />
+            </TouchableOpacityDebounce>
+          </View>
+        )}
+        rightOpenValue={-100}
+        disableRightSwipe
+        previewRowKey={data[0] && data[0].id}
+        ListEmptyComponent={() => (
+          <Container>
+            <Text>Nie posiadasz żadnego zgłoszenia w wersji roboczej.</Text>
+          </Container>
         )}
       />
     </SafeAreaView>
@@ -68,6 +99,22 @@ const styles = StyleSheet.create({
   bg: {
     flex: 1,
     backgroundColor: WHITE,
+  },
+  action: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: ERROR,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+  },
+  deleteBtn: {
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    height: 24,
+    width: 24,
+    color: WHITE,
   },
 });
 

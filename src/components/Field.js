@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Text, StyleSheet, View, TextInput, Platform } from 'react-native';
-import { GAINSBORO, BLACK, CINNABAR, WHITE } from '../constants/colors';
+import { GAINSBORO, BLACK, WHITE, ERROR } from '../constants/colors';
 
 const IS_ANDROID = Platform.OS === 'android';
 const FONT_SIZE = Platform.OS === 'ios' ? 20 : 14;
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   error: {
     marginTop: 2,
     fontSize: 13,
-    color: CINNABAR,
+    color: ERROR,
   },
 });
 
