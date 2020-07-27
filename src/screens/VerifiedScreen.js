@@ -7,6 +7,10 @@ import {
   ActivityIndicator,
   RefreshControl,
   Text,
+  NativeModules,
+  Platform,
+  AppState,
+  DeviceEventEmitter,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -31,9 +35,18 @@ import {
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
 
+const { SharedModule, UrlShareModule } = NativeModules;
+
 class VerifiedScreen extends Component {
   componentDidMount() {
+    AppState.addEventListener('change', this.handleAppStateChange);
     this.props.fetchVerifiedRequest();
+    if (Platform.OS === 'ios') {
+      this.checkShareUrl();
+    } else {
+      this.observeAndroidUrlToShare();
+      UrlShareModule.getShareUrl();
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -41,6 +54,42 @@ class VerifiedScreen extends Component {
       DropDownAlert.showError();
     }
   }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange);
+    if (Platform.OS === 'android' && this.urlEvent) {
+      this.urlEvent.remove();
+    }
+  }
+
+  handleAppStateChange = (nextState) => {
+    if (nextState === 'active' && Platform.OS === 'ios') {
+      this.checkShareUrl();
+    }
+  };
+
+  checkShareUrl() {
+    SharedModule.getShareUrl((error, url) => {
+      SharedModule.clearShareUrl();
+      this.showReportModal(url);
+    });
+  }
+
+  observeAndroidUrlToShare() {
+    this.urlEvent = DeviceEventEmitter.addListener(
+      'shareUrl',
+      this.onExternalUrlShareAndroid
+    );
+  }
+
+  onExternalUrlShareAndroid = ({ url }) => {
+    UrlShareModule.clearActionUrl();
+    this.showReportModal(url);
+  };
+
+  showReportModal = (url) => {
+    this.props.navigation.navigate(routes.reportModal, { url });
+  };
 
   drawCell = ({ item }) => {
     return (

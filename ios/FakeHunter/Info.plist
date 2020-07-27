@@ -59,7 +59,18 @@
 	<string>Dodanie zrzutu ekranu</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Dyktowanie zamiast pisania</string>
-		<key>NSMicrophoneUsageDescription</key>
+	<key>NSMicrophoneUsageDescription</key>
 	<string>Dyktowanie zamiast pisania</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ShareWithFH</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
