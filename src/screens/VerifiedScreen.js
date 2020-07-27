@@ -48,7 +48,9 @@ class VerifiedScreen extends Component {
       this.checkOpenUrl();
     } else {
       this.observeAndroidUrlToShare();
+      this.observeAndroidUrlToOpen();
       UrlShareModule.getShareUrl();
+      UrlShareModule.getOpenUrl();
     }
   }
 
@@ -100,15 +102,30 @@ class VerifiedScreen extends Component {
     );
   }
 
+  observeAndroidUrlToOpen() {
+    this.urlEvent = DeviceEventEmitter.addListener(
+      'openUrl',
+      this.onExternalUrlOpenAndroid
+    );
+  }
+
   onExternalUrlShareAndroid = ({ url }) => {
     UrlShareModule.clearActionUrl();
     this.showReportModal(url);
   };
 
+  onExternalUrlOpenAndroid = ({ url }) => {
+    this.onExternalUrlOpen(url);
+  };
+
   onExternalUrlOpen = (url) => {
     console.log('onExternalUrlOpen: ', url);
     const id = this.getDetailsIdFromUrl(url);
-    SharedModule.clearOpenUrl();
+    if (Platform.OS === 'ios') {
+      SharedModule.clearOpenUrl();
+    } else {
+      UrlShareModule.clearOpenUrl();
+    }
     this.goToVerifiedDetails(id);
   };
 

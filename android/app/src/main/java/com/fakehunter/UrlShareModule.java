@@ -12,6 +12,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 public class UrlShareModule extends ReactContextBaseJavaModule {
 
     private static final String URL_ACTION_ID = "shareUrl";
+    private static final String OPEN_ACTION_ID = "openUrl";
     private static final String NAME = "UrlShareModule";
 
     private ReactContext mReactContext;
@@ -42,6 +43,25 @@ public class UrlShareModule extends ReactContextBaseJavaModule {
     private void clearActionUrl() {
         if (mReactContext.getApplicationContext() instanceof MainApplication) {
             ((MainApplication) mReactContext.getApplicationContext()).setShareUrl(null);
+        }
+    }
+
+    @ReactMethod
+    public void getOpenUrl() {
+        if (mReactContext.getApplicationContext() instanceof MainApplication) {
+            String url = ((MainApplication) mReactContext.getApplicationContext()).getOpenUrl();
+            if (url != null) {
+                WritableMap map = Arguments.createMap();
+                map.putString("url", url);
+                sendEvent(mReactContext, OPEN_ACTION_ID, map);
+            }
+        }
+    }
+
+    @ReactMethod
+    private void clearOpenUrl() {
+        if (mReactContext.getApplicationContext() instanceof MainApplication) {
+            ((MainApplication) mReactContext.getApplicationContext()).setOpenUrl(null);
         }
     }
 
