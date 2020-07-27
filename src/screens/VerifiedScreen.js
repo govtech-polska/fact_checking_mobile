@@ -11,6 +11,7 @@ import {
   Platform,
   AppState,
   DeviceEventEmitter,
+  Linking,
 } from 'react-native';
 import { connect } from 'react-redux';
 
@@ -42,7 +43,9 @@ class VerifiedScreen extends Component {
     AppState.addEventListener('change', this.handleAppStateChange);
     this.props.fetchVerifiedRequest();
     if (Platform.OS === 'ios') {
+      Linking.addEventListener('url', this.urlHandler);
       this.checkShareUrl();
+      this.checkOpenUrl();
     } else {
       this.observeAndroidUrlToShare();
       UrlShareModule.getShareUrl();
@@ -57,8 +60,9 @@ class VerifiedScreen extends Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
-    if (Platform.OS === 'android' && this.urlEvent) {
-      this.urlEvent.remove();
+    this.urlEvent?.remove();
+    if (Platform.OS === 'ios') {
+      Linking.removeEventListener('url', this.urlHandler);
     }
   }
 
@@ -75,6 +79,20 @@ class VerifiedScreen extends Component {
     });
   }
 
+  checkOpenUrl() {
+    SharedModule.getOpenUrl((error, url) => {
+      const id = this.getDetailsIdFromUrl(url);
+      SharedModule.clearOpenUrl();
+      this.goToVerifiedDetails(id);
+    });
+  }
+
+  getDetailsIdFromUrl(url) {
+    const urlParts = url.split('/');
+    const id = urlParts.pop() || urlParts.pop(); // handle potential trailing slash
+    return id;
+  }
+
   observeAndroidUrlToShare() {
     this.urlEvent = DeviceEventEmitter.addListener(
       'shareUrl',
@@ -87,19 +105,26 @@ class VerifiedScreen extends Component {
     this.showReportModal(url);
   };
 
-  showReportModal = (url) => {
-    this.props.navigation.navigate(routes.reportModal, { url });
+  onExternalUrlOpen = (url) => {
+    console.log('onExternalUrlOpen: ', url);
+    const id = this.getDetailsIdFromUrl(url);
+    SharedModule.clearOpenUrl();
+    this.goToVerifiedDetails(id);
   };
+
+  urlHandler = ({ url }) => this.onExternalUrlOpen(url);
+
+  showReportModal = (url) =>
+    this.props.navigation.navigate(routes.reportModal, { url });
+
+  goToVerifiedDetails = (id) =>
+    this.props.navigation.navigate(routes.verifiedDetails, { id });
 
   drawCell = ({ item }) => {
     return (
       <VerifiedCell
         item={item}
-        onCellTapped={() =>
-          this.props.navigation.navigate(routes.verifiedDetails, {
-            id: item.id,
-          })
-        }
+        onCellTapped={() => this.goToVerifiedDetails(item.id)}
       />
     );
   };

@@ -10,6 +10,7 @@ import Foundation
   
   let groupId = "group.fakehunter.share"
   let shareKey = "shareUrl"
+  let openKey = "openUrl"
   
   @objc func getShareUrl(_ callback: RCTResponseSenderBlock) {
     if let sharedDefaults = UserDefaults(suiteName: groupId) {
@@ -25,6 +26,20 @@ import Foundation
       sharedDefaults.set(nil, forKey: shareKey)
       sharedDefaults.synchronize()
     }
+  }
+  
+  @objc func getOpenUrl(_ callback: RCTResponseSenderBlock) {
+    let sharedDefaults = UserDefaults.standard
+    let url = sharedDefaults.string(forKey: openKey)
+    if (url != nil) {
+      return callback([NSNull(), url])
+    }
+  }
+  
+  @objc func clearOpenUrl() {
+    let sharedDefaults = UserDefaults.standard
+    sharedDefaults.set(nil, forKey: openKey)
+    sharedDefaults.synchronize()
   }
   
 }
