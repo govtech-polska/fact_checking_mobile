@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import { apiReducer } from '../../base/api/redux';
-import { NEWS, DETAILS } from './actions';
+import { NEWS, DETAILS, NEWS_CATEGORIES } from './actions';
 
 export const articles = combineReducers({
   verified: apiReducer(NEWS, (nextState, action) => {
@@ -27,4 +27,5 @@ export const articles = combineReducers({
   }),
 
   details: apiReducer(DETAILS),
+  categories: apiReducer(NEWS_CATEGORIES),
 });

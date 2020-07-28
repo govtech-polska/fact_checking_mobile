@@ -7,6 +7,8 @@ export const strings = {
   reportTab: 'Zgłoś',
 
   verifiedDetails: {
+    categoriesAll: 'Wszystkie',
+    categoriesMore: 'Pokaż więcej',
     verifiedTitle: 'Zweryfikowane informacje',
     reportDateLabel: 'Data zgłoszenia: ',
     informationSourceLabel: 'Źródło informacji:',

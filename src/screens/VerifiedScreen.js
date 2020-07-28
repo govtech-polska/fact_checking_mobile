@@ -32,6 +32,7 @@ import {
   getVerifiedNextPage,
   getIsFetchingNextPage,
   getIsFetchingInitial,
+  getCategories,
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
@@ -42,6 +43,7 @@ class VerifiedScreen extends Component {
   componentDidMount() {
     AppState.addEventListener('change', this.handleAppStateChange);
     this.props.fetchVerifiedRequest();
+    this.props.fetchCategories();
     if (Platform.OS === 'ios') {
       Linking.addEventListener('url', this.urlHandler);
       this.checkShareUrl();
@@ -58,6 +60,7 @@ class VerifiedScreen extends Component {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError();
     }
+    console.log('Categories: ', this.props.categories);
   }
 
   componentWillUnmount() {
@@ -145,6 +148,21 @@ class VerifiedScreen extends Component {
     );
   };
 
+  drawCategoryCell = ({ item }) => {
+    console.log('drawCategoryCell item: ', item);
+    return (
+      <View
+        style={{
+          margin: 5,
+          height: 40,
+          backgroundColor: 'red',
+        }}
+      >
+        <Text>{item.name}</Text>
+      </View>
+    );
+  };
+
   keyExtractor = (_item, index) => index.toString();
 
   loadNextPage = () => {
@@ -191,12 +209,34 @@ class VerifiedScreen extends Component {
     }
   };
 
+  renderCategoriesIfNeeded = () => {
+    const { categories } = this.props;
+    if (categories.length > 0) {
+      return (
+        <FlatList
+          style={{ height: 40, width: '100%' }}
+          data={categories}
+          horizontal
+          renderItem={this.drawCategoryCell}
+        />
+      );
+    }
+  };
+
   render() {
-    const { isFetchingInitial, isFetchingNextPage, articles } = this.props;
+    const {
+      isFetchingInitial,
+      isFetchingNextPage,
+      articles,
+      categories,
+    } = this.props;
 
     return (
       <View style={styles.container}>
-        <Container>{this.renderTitleIfNeeded()}</Container>
+        <Container>
+          {this.renderTitleIfNeeded()}
+          {this.renderCategoriesIfNeeded()}
+        </Container>
         <FlatList
           data={articles}
           contentContainerStyle={{ flexGrow: 1 }}
@@ -234,6 +274,8 @@ VerifiedScreen.propTypes = {
   }),
   nextPage: PropTypes.any,
   shouldLoadNextPage: PropTypes.bool,
+  categories: PropTypes.any,
+  fetchCategories: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -274,12 +316,15 @@ const mapStateToProps = (state) => {
     isFetchingInitial: getIsFetchingInitial(state.articles),
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
     error: state.articles.verified.error,
+    categories: getCategories(state.articles),
+    categoriesError: state.articles.categories.error,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
+    fetchCategories: () => dispatch(feedActions.categories()),
   };
 };
 
