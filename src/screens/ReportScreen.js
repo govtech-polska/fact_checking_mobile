@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Text, StyleSheet, SafeAreaView, View, Image } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -23,17 +23,16 @@ import { strings } from '../constants/strings';
 import {
   GAINSBORO,
   CINNABAR,
-  EMPRESS,
   DARK_GRAY,
   BLACK,
   WHITE,
-  WHITE_SMOKE,
 } from '../constants/colors';
 import { routes } from '../constants/routes';
 import { reportActions } from '../storages/report/actions';
 import { useVoiceRecognition } from '../utils/useVoiceRecognition';
 import { useDrafts } from '../utils/useDrafts';
 import { validate } from '../utils/validation';
+import Button from '../components/Button';
 
 const ReportScreen = ({ navigation, route: { params } }) => {
   const dispatch = useDispatch();
@@ -159,11 +158,13 @@ const ReportScreen = ({ navigation, route: { params } }) => {
   const renderProperImageView = () => {
     if (!imagePath) {
       return (
-        <TouchableOpacityDebounce onPress={selectPhotoTapped}>
-          <Text style={styles.addImageBtn}>
-            {strings.report.imageButtonLabel}
-          </Text>
-        </TouchableOpacityDebounce>
+        <Button
+          onPress={selectPhotoTapped}
+          color="secondary"
+          style={{ marginTop: 24 }}
+        >
+          {strings.report.imageButtonLabel}
+        </Button>
       );
     }
 
@@ -283,17 +284,17 @@ const ReportScreen = ({ navigation, route: { params } }) => {
             defaultValue=""
           />
 
-          <TouchableOpacityDebounce
+          <Button
             onPress={handleSubmit(onSubmit)}
-            disabled={isFetching}
+            loading={isFetching}
+            color="primary"
+            style={{ marginTop: 24 }}
           >
-            <Text style={styles.submitBtn}>{strings.report.sendButton}</Text>
-          </TouchableOpacityDebounce>
-          <TouchableOpacityDebounce onPress={handleDraftSave}>
-            <Text style={styles.saveDraftBtn}>
-              {strings.report.saveDraftButton}
-            </Text>
-          </TouchableOpacityDebounce>
+            {strings.report.sendButton}
+          </Button>
+          <Button onPress={handleDraftSave} style={{ marginTop: 8 }}>
+            {strings.report.saveDraftButton}
+          </Button>
         </Container>
       </KeyboardAwareScrollView>
     </SafeAreaView>
@@ -315,35 +316,10 @@ ReportScreen.propTypes = {
   }),
 };
 
-const buttonStyles = {
-  height: 40,
-  textAlign: 'center',
-  textAlignVertical: 'center',
-  textTransform: 'uppercase',
-  color: WHITE,
-  backgroundColor: CINNABAR,
-  fontSize: 14,
-};
-
 const styles = StyleSheet.create({
   bg: {
     flex: 1,
     backgroundColor: WHITE,
-  },
-  addImageBtn: {
-    ...buttonStyles,
-    backgroundColor: EMPRESS,
-    marginTop: 24,
-  },
-  submitBtn: {
-    ...buttonStyles,
-    marginTop: 24,
-  },
-  saveDraftBtn: {
-    ...buttonStyles,
-    color: EMPRESS,
-    backgroundColor: WHITE_SMOKE,
-    marginTop: 8,
   },
   imageView: {
     marginTop: 24,
