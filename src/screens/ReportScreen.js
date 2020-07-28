@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Text, StyleSheet, SafeAreaView, View, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useForm, Controller } from 'react-hook-form';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useThrottle } from '@react-hook/throttle';
@@ -30,64 +31,59 @@ import {
 import { routes } from '../constants/routes';
 import { reportActions } from '../storages/report/actions';
 import { useVoiceRecognition } from '../utils/useVoiceRecognition';
-import { useField } from '../utils/useField';
+import { useDrafts } from '../utils/useDrafts';
+import { validate } from '../utils/validation';
 
-const isTruth = (v) => !!v;
-
-const ReportScreen = ({ navigation, route }) => {
+const ReportScreen = ({ navigation, route: { params } }) => {
   const dispatch = useDispatch();
   const { error, isFetching } = useSelector(({ report }) => report.submission);
-
+  const { addDraft, getDraft } = useDrafts();
   const [partialRecognition, setPartialRecognition] = useThrottle('');
+  const [imagePath, setImagePath] = useState(null);
+  const [rawImagePath, setRawImagePath] = useState(null);
+  const {
+    reset,
+    setValue,
+    getValues,
+    control,
+    handleSubmit,
+    errors,
+  } = useForm();
   const {
     isAvailable,
     isStarted,
     startRecognizing,
     stopRecognizing,
   } = useVoiceRecognition({
-    onSpeechResult: (value) => whatIsWrong.setValue((old) => old + value),
+    onSpeechResult: (value) =>
+      setValue('comment', getValues('comment') + value),
     onSpeechPartialResults: (value) => setPartialRecognition(value),
   });
 
-  const [imagePath, setImagePath] = useState(null);
-  const [rawImagePath, setRawImagePath] = useState(null);
-  const sourceUrl = useField({
-    initialValue: '',
-    validator: {
-      presence: { allowEmpty: false },
-      url: true,
-    },
-  });
-  const whatIsWrong = useField({
-    initialValue: '',
-    validator: {
-      presence: { allowEmpty: false },
-    },
-  });
-  const email = useField({
-    initialValue: '',
-    validator: {
-      optional: {
-        email: true,
-      },
-    },
-  });
-  console.log(imagePath);
   useEffect(() => {
-    const nextImagePath = route.params?.imagePath;
+    const nextImagePath = params?.imagePath;
     if (nextImagePath !== imagePath) {
       setImagePath(nextImagePath);
     }
-  }, [route.params?.imagePath]);
+  }, [params?.imagePath]);
 
   useEffect(() => {
-    if (error) {
-      DropDownAlert.showError();
-    }
+    error && DropDownAlert.showError();
     return () => {
       dispatch(reportActions.clearSubmitReport());
     };
   }, [error]);
+
+  useEffect(() => {
+    const draftId = params?.draftId;
+    if (draftId) {
+      getDraft(draftId).then((draft) => {
+        setRawImagePath(draft.rawImage);
+        setImagePath(draft.image);
+        reset(draft);
+      });
+    }
+  }, [params?.draftId]);
 
   const toggleRecognizing = () => {
     if (!isStarted) {
@@ -107,52 +103,54 @@ const ReportScreen = ({ navigation, route }) => {
     });
   };
 
-  const afterSuccessSubmission = () => {
-    sourceUrl.setValue('');
-    whatIsWrong.setValue('');
-    email.setValue('');
+  const resetForm = () => {
     setImagePath('');
-    DropDownAlert.showSuccess(
-      strings.report.submissionSuccess,
-      strings.report.submissionSuccessDescription
+    setRawImagePath('');
+    reset({
+      url: '',
+      comment: '',
+      email: '',
+    });
+  };
+
+  const onSubmit = (values) => {
+    const formData = new FormData();
+    Object.entries(values).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+    if (imagePath) {
+      formData.append('image', {
+        uri: imagePath,
+        type: 'image/jpeg',
+        name: 'screenshot.jpg',
+      });
+    }
+    dispatch(
+      reportActions.submitReport(formData, () => {
+        resetForm();
+        DropDownAlert.showSuccess(
+          strings.report.submissionSuccess,
+          strings.report.submissionSuccessDescription
+        );
+      })
     );
   };
 
-  const handleSubmit = () => {
-    const allFieldsValid = [
-      sourceUrl.isValid(),
-      whatIsWrong.isValid(),
-      email.isValid(),
-    ].every(isTruth);
-
-    if (allFieldsValid && !isFetching) {
-      const payload = {
-        image: {
-          uri: imagePath,
-          type: 'image/jpeg',
-          name: 'screenshot.jpg',
-        },
-        comment: whatIsWrong.value,
-        email: email.value,
-        url: sourceUrl.value,
-      };
-
-      const formData = new FormData();
-      Object.entries(payload).forEach(([key, value]) =>
-        formData.append(key, value)
-      );
-      dispatch(reportActions.submitReport(formData, afterSuccessSubmission));
-    }
+  const handleDraftSave = async () => {
+    await addDraft({
+      ...getValues(),
+      image: imagePath,
+      rawImage: rawImagePath,
+    });
+    resetForm();
+    navigation.navigate(routes.drafts);
   };
 
   const renderProperImageView = () => {
     if (!imagePath) {
       return (
-        <TouchableOpacityDebounce
-          style={{ ...styles.button, backgroundColor: EMPRESS }}
-          onPress={selectPhotoTapped}
-        >
-          <Text style={styles.buttonLabel}>
+        <TouchableOpacityDebounce onPress={selectPhotoTapped}>
+          <Text style={styles.addImageBtn}>
             {strings.report.imageButtonLabel}
           </Text>
         </TouchableOpacityDebounce>
@@ -167,20 +165,27 @@ const ReportScreen = ({ navigation, route }) => {
         >
           <Image style={styles.image} source={{ uri: imagePath || '' }} />
         </TouchableOpacityDebounce>
-        <View style={styles.editBtn}>
-          <TouchableOpacityDebounce
-            onPress={() =>
-              navigation.push(routes.reportImageEdit, {
-                rawImagePath,
-              })
-            }
-          >
-            <CropSvg width={24} height={24} fill={WHITE} />
-          </TouchableOpacityDebounce>
-        </View>
+        <TouchableOpacityDebounce
+          style={styles.editBtn}
+          onPress={() =>
+            navigation.push(routes.reportImageEdit, {
+              rawImagePath,
+            })
+          }
+        >
+          <CropSvg width={24} height={24} fill={WHITE} />
+        </TouchableOpacityDebounce>
       </View>
     );
   };
+
+  const renderVoiceRecognitionIcon = () =>
+    isAvailable && (
+      <TouchableOpacityDebounce onPress={toggleRecognizing}>
+        {isStarted && <Record width={40} height={25} fill={CINNABAR} />}
+        {!isStarted && <Mic width={40} height={25} fill={DARK_GRAY} />}
+      </TouchableOpacityDebounce>
+    );
 
   return (
     <SafeAreaView style={styles.bg}>
@@ -192,55 +197,79 @@ const ReportScreen = ({ navigation, route }) => {
         <Container>
           <Title title={strings.report.title} />
 
-          <Field
-            label={strings.report.addLinkLabel}
-            value={sourceUrl.value}
-            onChangeText={sourceUrl.setValue}
-            error={sourceUrl.errors[0]}
-            autoCorrect={false}
+          <Controller
+            control={control}
+            name="url"
+            defaultValue=""
+            rules={{
+              validate: validate({
+                presence: { allowEmpty: false },
+                url: true,
+              }),
+            }}
+            render={({ onChange, ...rest }) => (
+              <Field
+                {...rest}
+                label={strings.report.addLinkLabel}
+                autoCorrect={false}
+                onChangeText={onChange}
+                error={errors.url?.message}
+              />
+            )}
           />
 
-          <Field
-            label={strings.report.whatIsWrong}
-            value={
-              isStarted
-                ? whatIsWrong.value + partialRecognition
-                : whatIsWrong.value
-            }
-            onChangeText={whatIsWrong.setValue}
-            error={whatIsWrong.errors[0]}
-            multiline={true}
-            endAdornment={
-              isAvailable && (
-                <TouchableOpacityDebounce onPress={toggleRecognizing}>
-                  {isStarted && (
-                    <Record width={40} height={25} fill={CINNABAR} />
-                  )}
-                  {!isStarted && (
-                    <Mic width={40} height={25} fill={DARK_GRAY} />
-                  )}
-                </TouchableOpacityDebounce>
-              )
-            }
+          <Controller
+            control={control}
+            name="comment"
+            defaultValue=""
+            rules={{
+              validate: validate({
+                presence: { allowEmpty: false },
+              }),
+            }}
+            render={({ onChange, value, onBlur }) => (
+              <Field
+                label={strings.report.whatIsWrong}
+                multiline={true}
+                endAdornment={renderVoiceRecognitionIcon()}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={isStarted ? value + partialRecognition : value}
+                error={errors.comment?.message}
+              />
+            )}
           />
 
           {renderProperImageView()}
 
-          <Field
-            label={strings.report.emailLabel}
-            value={email.value}
-            onChangeText={email.setValue}
-            error={email.errors[0]}
-            keyboardType="email-address"
+          <Controller
+            control={control}
+            name="email"
+            rules={{
+              validate: validate({
+                presence: { allowEmpty: false },
+                email: true,
+              }),
+            }}
+            render={({ onChange, ...rest }) => (
+              <Field
+                {...rest}
+                label={strings.report.emailLabel}
+                keyboardType="email-address"
+                onChangeText={onChange}
+                error={errors.email?.message}
+              />
+            )}
+            defaultValue=""
           />
 
           <TouchableOpacityDebounce
-            style={{ ...styles.button, backgroundColor: CINNABAR }}
-            onPress={handleSubmit}
+            onPress={handleSubmit(onSubmit)}
+            disabled={isFetching}
           >
-            <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
+            <Text style={styles.submitBtn}>{strings.report.sendButton}</Text>
           </TouchableOpacityDebounce>
-          <TouchableOpacityDebounce onPress={() => {}}>
+          <TouchableOpacityDebounce onPress={handleDraftSave}>
             <Text style={styles.saveDraftBtn}>
               {strings.report.saveDraftButton}
             </Text>
@@ -254,12 +283,24 @@ const ReportScreen = ({ navigation, route }) => {
 ReportScreen.propTypes = {
   navigation: PropTypes.shape({
     push: PropTypes.func,
+    navigate: PropTypes.func,
   }),
   route: PropTypes.shape({
     params: PropTypes.shape({
       imagePath: PropTypes.string,
+      draftId: PropTypes.string,
     }),
   }),
+};
+
+const buttonStyles = {
+  height: 40,
+  textAlign: 'center',
+  textAlignVertical: 'center',
+  textTransform: 'uppercase',
+  color: WHITE,
+  backgroundColor: CINNABAR,
+  fontSize: 14,
 };
 
 const styles = StyleSheet.create({
@@ -267,18 +308,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WHITE,
   },
-  button: {
-    height: 40,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: CINNABAR,
+  addImageBtn: {
+    ...buttonStyles,
+    backgroundColor: EMPRESS,
     marginTop: 24,
   },
-  buttonLabel: {
-    color: WHITE,
-    fontSize: 14,
-    textTransform: 'uppercase',
+  submitBtn: {
+    ...buttonStyles,
+    marginTop: 24,
+  },
+  saveDraftBtn: {
+    ...buttonStyles,
+    color: EMPRESS,
+    backgroundColor: WHITE_SMOKE,
+    marginTop: 8,
   },
   imageView: {
     marginTop: 24,
@@ -306,15 +349,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 4,
     zIndex: 9,
-  },
-  saveDraftBtn: {
-    height: 40,
-    marginTop: 8,
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    textTransform: 'uppercase',
-    color: EMPRESS,
-    backgroundColor: WHITE_SMOKE,
   },
 });
 

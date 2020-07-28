@@ -44,6 +44,7 @@ export const strings = {
     title: 'Dokończ swoje zgłoszenia',
     commentEmptyState: 'Brak komentarza',
     urlEmptyState: 'Brak linku źródłowego',
+    listEmptyState: 'Nie posiadasz żadnego zgłoszenia w wersji roboczej.',
   },
 
   info: {
