@@ -16,6 +16,7 @@ import {
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
 import CropSvg from '../resources/img/crop.svg';
+import Close from '../resources/img/close.svg';
 
 import { strings } from '../constants/strings';
 import {
@@ -50,6 +51,7 @@ const ReportScreen = ({ navigation, route }) => {
 
   const [imagePath, setImagePath] = useState(null);
   const [rawImagePath, setRawImagePath] = useState(null);
+  const [isModal, setIsModal] = useState(false);
   const sourceUrl = useField({
     initialValue: '',
     validator: {
@@ -87,6 +89,13 @@ const ReportScreen = ({ navigation, route }) => {
       dispatch(reportActions.clearSubmitReport());
     };
   }, [error]);
+  useEffect(() => {
+    const url = route.params?.url;
+    if (url && url !== sourceUrl.value) {
+      sourceUrl.setValue(url);
+      setIsModal(true);
+    }
+  }, []);
 
   const toggleRecognizing = () => {
     if (!isStarted) {
@@ -179,18 +188,28 @@ const ReportScreen = ({ navigation, route }) => {
         </View>
       </View>
     );
-  };
+  }
 
   return (
     <SafeAreaView style={styles.bg}>
+      <Container style={{ flexDirection: 'row' }}>
+        {isModal && (
+          <TouchableOpacityDebounce
+            style={styles.closeButton}
+            onPress={navigation.goBack}
+          >
+            <Close width={30} height={30} fill={BLACK} />
+          </TouchableOpacityDebounce>
+        )}
+
+        <Title title={strings.report.title} />
+      </Container>
       <KeyboardAwareScrollView
         enableOnAndroid
         keyboardShouldPersistTaps="never"
         keyboardDismissMode="interactive"
       >
         <Container>
-          <Title title={strings.report.title} />
-
           <Field
             label={strings.report.addLinkLabel}
             value={sourceUrl.value}
@@ -248,6 +267,7 @@ const ReportScreen = ({ navigation, route }) => {
 ReportScreen.propTypes = {
   navigation: PropTypes.shape({
     push: PropTypes.func,
+    goBack: PropTypes.func,
   }),
   route: PropTypes.shape({
     params: PropTypes.shape({
@@ -300,6 +320,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 4,
     zIndex: 9,
+  },
+  closeButton: {
+    marginTop: 16,
+    marginBottom: 8,
+    marginRight: 16,
+    width: 24,
+    height: 24,
   },
 });
 
