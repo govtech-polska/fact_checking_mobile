@@ -9,6 +9,7 @@ import {
   DraftsStackScreen,
 } from './stacks';
 import { strings } from '../constants/strings';
+import { CINNABAR } from '../constants/colors';
 import VerifiedTabIcon from '../resources/img/tabBar/verifiedTabIcon.svg';
 import ReportTabIcon from '../resources/img/tabBar/reportTabIcon.svg';
 import InfoTabIcon from '../resources/img/tabBar/infoTabIcon.svg';
@@ -16,7 +17,7 @@ import DraftsTabIcon from '../resources/img/tabBar/draftsTabIcon.svg';
 
 const Tab = createBottomTabNavigator();
 
-export const verifiedStack = () => {
+const verifiedStack = () => {
   return (
     <Tab.Screen
       name="Verified"
@@ -31,7 +32,7 @@ export const verifiedStack = () => {
   );
 };
 
-export const reportStack = () => {
+const reportStack = () => {
   return (
     <Tab.Screen
       name="Report"
@@ -46,7 +47,7 @@ export const reportStack = () => {
   );
 };
 
-export const draftsStack = () => {
+const draftsStack = () => {
   return (
     <Tab.Screen
       name="Drafts"
@@ -61,7 +62,7 @@ export const draftsStack = () => {
   );
 };
 
-export const infoStack = () => {
+const infoStack = () => {
   return (
     <Tab.Screen
       name="Info"
@@ -73,5 +74,20 @@ export const infoStack = () => {
         ),
       }}
     />
+  );
+};
+
+export const tabStack = () => {
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: CINNABAR,
+      }}
+    >
+      {verifiedStack()}
+      {reportStack()}
+      {draftsStack()}
+      {infoStack()}
+    </Tab.Navigator>
   );
 };

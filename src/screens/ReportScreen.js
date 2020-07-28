@@ -17,6 +17,7 @@ import {
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
 import CropSvg from '../resources/img/crop.svg';
+import Close from '../resources/img/close.svg';
 
 import { strings } from '../constants/strings';
 import {
@@ -41,6 +42,7 @@ const ReportScreen = ({ navigation, route: { params } }) => {
   const [partialRecognition, setPartialRecognition] = useThrottle('');
   const [imagePath, setImagePath] = useState(null);
   const [rawImagePath, setRawImagePath] = useState(null);
+  const [isModal, setIsModal] = useState(false);
   const {
     reset,
     setValue,
@@ -61,18 +63,19 @@ const ReportScreen = ({ navigation, route: { params } }) => {
   });
 
   useEffect(() => {
+    const url = params?.url;
+    if (url && url !== getValues('url')) {
+      setValue('url', url);
+      setIsModal(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const nextImagePath = params?.imagePath;
     if (nextImagePath !== imagePath) {
       setImagePath(nextImagePath);
     }
   }, [params?.imagePath]);
-
-  useEffect(() => {
-    error && DropDownAlert.showError();
-    return () => {
-      dispatch(reportActions.clearSubmitReport());
-    };
-  }, [error]);
 
   useEffect(() => {
     const draftId = params?.draftId;
@@ -84,6 +87,13 @@ const ReportScreen = ({ navigation, route: { params } }) => {
       });
     }
   }, [params?.draftId]);
+
+  useEffect(() => {
+    error && DropDownAlert.showError();
+    return () => {
+      dispatch(reportActions.clearSubmitReport());
+    };
+  }, [error]);
 
   const toggleRecognizing = () => {
     if (!isStarted) {
@@ -189,14 +199,24 @@ const ReportScreen = ({ navigation, route: { params } }) => {
 
   return (
     <SafeAreaView style={styles.bg}>
+      <Container style={{ flexDirection: 'row' }}>
+        {isModal && (
+          <TouchableOpacityDebounce
+            style={styles.closeButton}
+            onPress={navigation.goBack}
+          >
+            <Close width={30} height={30} fill={BLACK} />
+          </TouchableOpacityDebounce>
+        )}
+
+        <Title title={strings.report.title} />
+      </Container>
       <KeyboardAwareScrollView
         enableOnAndroid
         keyboardShouldPersistTaps="never"
         keyboardDismissMode="interactive"
       >
         <Container>
-          <Title title={strings.report.title} />
-
           <Controller
             control={control}
             name="url"
@@ -282,11 +302,13 @@ const ReportScreen = ({ navigation, route: { params } }) => {
 
 ReportScreen.propTypes = {
   navigation: PropTypes.shape({
-    push: PropTypes.func,
+    goBack: PropTypes.func,
     navigate: PropTypes.func,
+    push: PropTypes.func,
   }),
   route: PropTypes.shape({
     params: PropTypes.shape({
+      url: PropTypes.string,
       imagePath: PropTypes.string,
       draftId: PropTypes.string,
     }),
@@ -349,6 +371,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 4,
     zIndex: 9,
+  },
+  closeButton: {
+    marginTop: 16,
+    marginBottom: 8,
+    marginRight: 16,
+    width: 24,
+    height: 24,
   },
 });
 
