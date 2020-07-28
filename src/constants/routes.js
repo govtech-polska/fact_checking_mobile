@@ -10,4 +10,5 @@ export const routes = {
   info: 'Info',
   infoAbout: 'InfoAboutScreen',
   infoTeam: 'InfoTeamScreen',
+  reportModal: 'ReportModal',
 };
