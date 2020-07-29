@@ -14,6 +14,7 @@ import {
   Linking,
 } from 'react-native';
 import { connect } from 'react-redux';
+import isUUID from 'validator/lib/isUUID';
 
 import {
   VerifiedCell,
@@ -88,7 +89,8 @@ class VerifiedScreen extends Component {
     SharedModule.getOpenUrl((error, url) => {
       const { id } = matchUrl(url, APP_URL + '/:id');
       SharedModule.clearOpenUrl();
-      if (id) this.goToVerifiedDetails(id);
+      console.log('isUUID', isUUID(id));
+      if (id && isUUID(id)) this.goToVerifiedDetails(id);
     });
   }
 
@@ -111,13 +113,13 @@ class VerifiedScreen extends Component {
   };
 
   onExternalUrlOpen = (url) => {
-    const id = this.getDetailsIdFromUrl(url);
+    const { id } = matchUrl(url, APP_URL + '/:id');
     if (Platform.OS === 'ios') {
       SharedModule.clearOpenUrl();
     } else {
       UrlShareModule.clearOpenUrl();
     }
-    this.goToVerifiedDetails(id);
+    if (id && isUUID(id)) this.goToVerifiedDetails(id);
   };
 
   urlHandler = ({ url }) => this.onExternalUrlOpen(url);
