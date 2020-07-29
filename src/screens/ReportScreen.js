@@ -13,6 +13,7 @@ import {
   Container,
   Field,
   DropDownAlert,
+  Button,
 } from '../components';
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
@@ -32,12 +33,13 @@ import { reportActions } from '../storages/report/actions';
 import { useVoiceRecognition } from '../utils/useVoiceRecognition';
 import { useDrafts } from '../utils/useDrafts';
 import { validate } from '../utils/validation';
-import Button from '../components/Button';
+import { saveTmpImagesToDevice, removeImagesFromDevice } from '../utils/files';
 
 const ReportScreen = ({ navigation, route: { params } }) => {
+  const draft = params?.draft ?? {};
   const dispatch = useDispatch();
   const { error, isFetching } = useSelector(({ report }) => report.submission);
-  const { addDraft, getDraft } = useDrafts();
+  const { addDraft, updateDraft, removeDraft, isSaving } = useDrafts();
   const [partialRecognition, setPartialRecognition] = useThrottle('');
   const [imagePath, setImagePath] = useState(null);
   const [rawImagePath, setRawImagePath] = useState(null);
@@ -77,15 +79,12 @@ const ReportScreen = ({ navigation, route: { params } }) => {
   }, [params?.imagePath]);
 
   useEffect(() => {
-    const draftId = params?.draftId;
-    if (draftId) {
-      getDraft(draftId).then((draft) => {
-        setRawImagePath(draft.rawImage);
-        setImagePath(draft.image);
-        reset(draft);
-      });
+    if (draft.id) {
+      setRawImagePath(draft.rawImage);
+      setImagePath(draft.image);
+      reset(draft);
     }
-  }, [params?.draftId]);
+  }, [draft.id]);
 
   useEffect(() => {
     error && DropDownAlert.showError();
@@ -134,22 +133,39 @@ const ReportScreen = ({ navigation, route: { params } }) => {
         name: 'screenshot.jpg',
       });
     }
-    dispatch(
-      reportActions.submitReport(formData, () => {
-        resetForm();
-        DropDownAlert.showSuccess(
-          strings.report.submissionSuccess,
-          strings.report.submissionSuccessDescription
-        );
-      })
-    );
+    const afterSubmitSuccess = () => {
+      resetForm();
+      DropDownAlert.showSuccess(
+        strings.report.submissionSuccess,
+        strings.report.submissionSuccessDescription
+      );
+      if (draft.id) {
+        removeImagesFromDevice(draft.image, draft.rawImage);
+        removeDraft(draft.id);
+      }
+    };
+
+    dispatch(reportActions.submitReport(formData, afterSubmitSuccess));
   };
 
   const handleDraftSave = async () => {
+    const newPaths = await saveTmpImagesToDevice(imagePath, rawImagePath);
     await addDraft({
       ...getValues(),
-      image: imagePath,
-      rawImage: rawImagePath,
+      image: newPaths[0],
+      rawImage: newPaths[1],
+    });
+    resetForm();
+    DropDownAlert.showSuccess(strings.report.draftSaveSuccess);
+  };
+
+  const handleDraftUpdate = async () => {
+    const newPaths = await saveTmpImagesToDevice(imagePath, rawImagePath);
+    removeImagesFromDevice(draft.image, draft.rawImage);
+    await updateDraft(draft.id, {
+      ...getValues(),
+      image: newPaths[0],
+      rawImage: newPaths[1],
     });
     resetForm();
     navigation.navigate(routes.drafts);
@@ -292,8 +308,14 @@ const ReportScreen = ({ navigation, route: { params } }) => {
           >
             {strings.report.sendButton}
           </Button>
-          <Button onPress={handleDraftSave} style={{ marginTop: 8 }}>
-            {strings.report.saveDraftButton}
+          <Button
+            onPress={draft.id ? handleDraftUpdate : handleDraftSave}
+            loading={isSaving}
+            style={{ marginTop: 8 }}
+          >
+            {draft.id
+              ? strings.report.updateDraftButton
+              : strings.report.saveDraftButton}
           </Button>
         </Container>
       </KeyboardAwareScrollView>
@@ -311,7 +333,7 @@ ReportScreen.propTypes = {
     params: PropTypes.shape({
       url: PropTypes.string,
       imagePath: PropTypes.string,
-      draftId: PropTypes.string,
+      draft: PropTypes.object,
     }),
   }),
 };

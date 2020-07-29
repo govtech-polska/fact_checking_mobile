@@ -28,6 +28,7 @@ export const strings = {
     emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
     sendButton: 'Wyślij',
     saveDraftButton: 'Zapisz kopię roboczą',
+    updateDraftButton: 'Aktualizuj kopię roboczą',
     verdict: 'Werdykt:',
     fakeNews: 'Fake news',
     unverifiable: 'Nieweryfikowalny',
@@ -35,6 +36,7 @@ export const strings = {
     submissionSuccess: 'Dziękujemy za zgłoszenie!',
     submissionSuccessDescription:
       'Po jego weryfikacji otrzymasz powiadomienie e-mail z linkiem do raportu.',
+    draftSaveSuccess: 'Zapisano kopię roboczą!',
   },
   reportImageEdit: {
     saveButton: 'Zapisz',

@@ -33,8 +33,8 @@ const DraftsScreen = () => {
     }, [])
   );
 
-  const handleItemPress = (draftId) => () => {
-    navigation.navigate(routes.report, { draftId });
+  const handleItemPress = (draft) => () => {
+    navigation.navigate(routes.report, { draft });
   };
 
   const handleItemDelete = (draftId) => () => {
@@ -50,7 +50,7 @@ const DraftsScreen = () => {
         data={drafts}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <DraftsListItem item={item} onPress={handleItemPress(item.id)} />
+          <DraftsListItem item={item} onPress={handleItemPress(item)} />
         )}
         renderHiddenItem={({ item }) => (
           <View style={styles.action}>
