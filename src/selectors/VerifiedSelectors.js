@@ -17,20 +17,25 @@ export const getVerifiedDetails = (state, id) => {
   return state.articlesDetails.items[index];
 };
 
+export const getIsFetching = (state) => state.verified.isFetching;
+
 export const getIsFetchingInitial = (state) =>
-  state.verified.isFetching && state.verified.data?.results === undefined;
+  state.verified.isFetching &&
+  state.verified.data?.current_page === undefined &&
+  state.verified.data?.results === undefined;
+
 export const getIsFetchingNextPage = (state) =>
   state.verified.data?.results !== undefined && state.verified.isFetching;
 
 export const getCategories = (state) => {
   const allCategory = {
     created_at: Date(),
-    id: 0,
+    id: '0',
     name: strings.verifiedDetails.categoriesAll,
   };
   const moreCategory = {
     created_at: Date(),
-    id: 1,
+    id: '1',
     name: strings.verifiedDetails.categoriesMore,
   };
   let categories = [];

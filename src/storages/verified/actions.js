@@ -8,10 +8,16 @@ export const DETAILS = 'feed.NEWS_DETAILS';
 
 export const feedActions = {
   categories: () =>
-    apiAction(NEWS_CATEGORIES, resolveUrl(apiUrls.NEWS_CATEGORIES)),
-  list: (page) =>
-    apiAction(NEWS, resolveUrl(apiUrls.NEWS, { page: page || 1 }), {
-      clearOnRequest: page === 1 ? true : false,
-    }),
+    apiAction(
+      NEWS_CATEGORIES,
+      resolveUrl(apiUrls.NEWS_CATEGORIES, {}, { page_size: 200 })
+    ),
+  list: (page, domain) => {
+    const query = { page: page || 1 };
+    if (domain) {
+      query.domains = [domain];
+    }
+    return apiAction(NEWS, resolveUrl(apiUrls.NEWS, {}, query));
+  },
   details: (id) => apiAction(DETAILS, resolveUrl(apiUrls.NEWS_DETAILS, { id })),
 };
