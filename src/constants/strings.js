@@ -6,6 +6,10 @@ export const strings = {
   verifiedTab: 'Zweryfikowane',
   reportTab: 'Zgłoś',
 
+  categories: {
+    title: 'Wybierz kategorię',
+  },
+
   verifiedDetails: {
     categoriesAll: 'Wszystkie',
     categoriesMore: 'Pokaż więcej',

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import {
-  VerifiedStackScreen,
+  VerifiedModalStackScreen,
   ReportStackScreen,
   InfoStackScreen,
 } from './stacks';
@@ -19,7 +19,7 @@ const verifiedStack = () => {
   return (
     <Tab.Screen
       name="Verified"
-      component={VerifiedStackScreen}
+      component={VerifiedModalStackScreen}
       options={{
         tabBarLabel: strings.verifiedTab,
         tabBarIcon: ({ color, size }) => (

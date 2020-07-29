@@ -24,7 +24,7 @@ import {
   Container,
 } from '../components';
 
-import { CINNABAR, BLACK } from '../constants/colors';
+import { CINNABAR, BLACK, GAINSBORO } from '../constants/colors';
 import { strings } from '../constants/strings';
 import {
   getVerifiedList,
@@ -44,8 +44,6 @@ class VerifiedScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedCategory: null,
-      selectedCategoryId: '0',
       isRefreshing: false,
     };
   }
@@ -70,8 +68,23 @@ class VerifiedScreen extends Component {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError();
     }
-    if (prevState.selectedCategory !== this.state.selectedCategory) {
+    if (prevProps.categories.length === 0 && this.props.categories.length > 0) {
+      this.props.setSelectedCategory(this.props.categories[0]);
+    }
+    if (
+      prevProps.selectedCategory?.id &&
+      this.props.selectedCategory?.id !== prevProps.selectedCategory?.id &&
+      !this.props.isFetching
+    ) {
       this.onRefreshTriggered();
+      const selectedIndex = this.props.categories.findIndex(
+        (category) => category.id === this.props.selectedCategory.id
+      );
+      if (selectedIndex !== -1)
+        this.flatListRef.scrollToIndex({
+          animated: true,
+          index: selectedIndex,
+        });
     }
     if (
       prevState.isRefreshing &&
@@ -158,6 +171,11 @@ class VerifiedScreen extends Component {
   goToVerifiedDetails = (id) =>
     this.props.navigation.navigate(routes.verifiedDetails, { id });
 
+  selectedCategoryProperName = () => {
+    const { selectedCategory } = this.props;
+    return selectedCategory.id === '0' ? null : selectedCategory.name;
+  };
+
   drawCell = ({ item }) => {
     return (
       <VerifiedCell
@@ -168,32 +186,32 @@ class VerifiedScreen extends Component {
   };
 
   drawCategoryCell = ({ item }) => {
-    const { selectedCategoryId } = this.state;
+    const { selectedCategory } = this.props;
     return (
       <TouchableOpacityDebounce
         style={{
           ...styles.categoryCell,
           backgroundColor:
-            selectedCategoryId === item.id ? CINNABAR : 'transparent',
+            selectedCategory && selectedCategory.id === item.id
+              ? CINNABAR
+              : 'transparent',
         }}
         onPress={() => {
-          if (item.id === '0') {
-            this.setState({
-              selectedCategoryId: item.id,
-              selectedCategory: null,
-            });
+          if (item.id !== '1') {
+            this.props.setSelectedCategory(item);
           } else if (item.id === '1') {
-            //TODO: show modal
-            console.log('ShowModal');
-          } else {
-            this.setState({
-              selectedCategoryId: item.id,
-              selectedCategory: item.name,
-            });
+            this.props.navigation.navigate(routes.categories);
           }
         }}
       >
-        <Text style={{ textTransform: 'capitalize' }}>{item.name}</Text>
+        <Text
+          style={{
+            textTransform: 'capitalize',
+            color: item.id === '1' ? CINNABAR : BLACK,
+          }}
+        >
+          {item.name}
+        </Text>
       </TouchableOpacityDebounce>
     );
   };
@@ -207,18 +225,16 @@ class VerifiedScreen extends Component {
       isFetchingNextPage,
       fetchVerifiedRequest,
     } = this.props;
-    const { selectedCategory } = this.state;
 
     if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
-      fetchVerifiedRequest(nextPage, selectedCategory);
+      fetchVerifiedRequest(nextPage, this.selectedCategoryProperName());
     }
   };
 
   onRefreshTriggered = () => {
     const { fetchVerifiedRequest } = this.props;
-    const { selectedCategory } = this.state;
     this.setState({ isRefreshing: true });
-    fetchVerifiedRequest(1, selectedCategory);
+    fetchVerifiedRequest(1, this.selectedCategoryProperName());
   };
 
   renderListFooterComponent = () => (
@@ -246,6 +262,9 @@ class VerifiedScreen extends Component {
       return (
         <FlatList
           style={{ maxHeight: 50 }}
+          ref={(ref) => {
+            this.flatListRef = ref;
+          }}
           data={categories}
           keyExtractor={(item) => item.id.toString()}
           horizontal
@@ -310,6 +329,11 @@ VerifiedScreen.propTypes = {
   shouldLoadNextPage: PropTypes.bool,
   categories: PropTypes.any,
   fetchCategories: PropTypes.func,
+  setSelectedCategory: PropTypes.func,
+  selectedCategory: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }),
 };
 
 const styles = StyleSheet.create({
@@ -345,8 +369,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     height: 40,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: BLACK,
     justifyContent: 'center',
     alignItems: 'center',
     minWidth: 50,
@@ -365,6 +387,7 @@ const mapStateToProps = (state) => {
     error: state.articles.verified.error,
     categories: getCategories(state.articles),
     categoriesError: state.articles.categories.error,
+    selectedCategory: state.articles.selectedCategory.data,
   };
 };
 
@@ -372,6 +395,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
     fetchCategories: () => dispatch(feedActions.categories()),
+    setSelectedCategory: (...args) =>
+      dispatch(feedActions.setSelectedCategory(...args)),
   };
 };
 

@@ -41,10 +41,31 @@ export const getCategories = (state) => {
   let categories = [];
   if (state.categories.data?.results) {
     categories = [allCategory, ...state.categories.data?.results.slice(0, 5)];
-    if (state.categories.data?.results.length > 5) {
+    const selectedCategory = state.selectedCategory.data;
+    if (
+      selectedCategory &&
+      categories.findIndex(
+        (category) => category.id === selectedCategory?.id
+      ) === -1
+    ) {
+      categories = [...categories, selectedCategory];
+    }
+    if (state.categories.data?.results.length > categories.length - 1) {
       categories = [...categories, moreCategory];
     }
     return categories;
+  }
+  return [];
+};
+
+export const getAllCategories = (state) => {
+  const allCategory = {
+    created_at: Date(),
+    id: '0',
+    name: strings.verifiedDetails.categoriesAll,
+  };
+  if (state.categories.data?.results) {
+    return [allCategory, ...state.categories.data?.results];
   }
   return [];
 };
