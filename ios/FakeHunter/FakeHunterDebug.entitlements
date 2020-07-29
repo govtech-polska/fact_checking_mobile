@@ -5,6 +5,9 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:qa.app.fakehunter.pap.pl</string>
+		<string>applinks:app.fakehunter.pap.pl</string>
+		<string>applinks:fakehunter.pap.pl</string>
+		<string>applinks:qa.fakehunter.pap.pl</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
