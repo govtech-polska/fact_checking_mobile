@@ -32,6 +32,19 @@ public class MainActivity extends ReactActivity {
     try {
       if (intent == null) return;
       String action = intent.getAction();
+      if (action.equalsIgnoreCase(Intent.ACTION_VIEW)) {
+        Uri data = intent.getData();
+        try {
+          WritableMap map = Arguments.createMap();
+          map.putString("url", data.toString());
+          ((ReactApplication) getApplication()).getReactNativeHost().getReactInstanceManager().getCurrentReactContext()
+            .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+            .emit("openUrl", map);
+          ((MainApplication) getApplication()).setOpenUrl(data.toString());
+        } catch (Exception e) {
+          ((MainApplication) getApplication()).setOpenUrl(data.toString());
+        }
+            }
       if (action.equalsIgnoreCase(Intent.ACTION_SEND) && intent.hasExtra(Intent.EXTRA_TEXT)) {
         String s = intent.getStringExtra(Intent.EXTRA_TEXT);
         try {

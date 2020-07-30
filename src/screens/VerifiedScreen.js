@@ -11,8 +11,10 @@ import {
   Platform,
   AppState,
   DeviceEventEmitter,
+  Linking,
 } from 'react-native';
 import { connect } from 'react-redux';
+import isUUID from 'validator/lib/isUUID';
 
 import {
   VerifiedCell,
@@ -34,6 +36,8 @@ import {
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
+import { matchUrl } from '../utils/url';
+import { APP_URL } from '../constants/urls';
 
 const { SharedModule, UrlShareModule } = NativeModules;
 
@@ -42,10 +46,14 @@ class VerifiedScreen extends Component {
     AppState.addEventListener('change', this.handleAppStateChange);
     this.props.fetchVerifiedRequest();
     if (Platform.OS === 'ios') {
+      Linking.addEventListener('url', this.urlHandler);
       this.checkShareUrl();
+      this.checkOpenUrl();
     } else {
       this.observeAndroidUrlToShare();
+      this.observeAndroidUrlToOpen();
       UrlShareModule.getShareUrl();
+      UrlShareModule.getOpenUrl();
     }
   }
 
@@ -57,8 +65,10 @@ class VerifiedScreen extends Component {
 
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
-    if (Platform.OS === 'android' && this.urlEvent) {
-      this.urlEvent.remove();
+    this.urlEvent?.remove();
+    this.shareEvent?.remove();
+    if (Platform.OS === 'ios') {
+      Linking.removeEventListener('url', this.urlHandler);
     }
   }
 
@@ -75,10 +85,25 @@ class VerifiedScreen extends Component {
     });
   }
 
+  checkOpenUrl() {
+    SharedModule.getOpenUrl((error, url) => {
+      const { id } = matchUrl(url, APP_URL + '/:id');
+      SharedModule.clearOpenUrl();
+      console.log('isUUID', isUUID(id));
+      if (id && isUUID(id)) this.goToVerifiedDetails(id);
+    });
+  }
+
   observeAndroidUrlToShare() {
-    this.urlEvent = DeviceEventEmitter.addListener(
+    this.shareEvent = DeviceEventEmitter.addListener(
       'shareUrl',
       this.onExternalUrlShareAndroid
+    );
+  }
+
+  observeAndroidUrlToOpen() {
+    this.urlEvent = DeviceEventEmitter.addListener('openUrl', ({ url }) =>
+      this.onExternalUrlOpen(url)
     );
   }
 
@@ -87,19 +112,29 @@ class VerifiedScreen extends Component {
     this.showReportModal(url);
   };
 
-  showReportModal = (url) => {
-    this.props.navigation.navigate(routes.reportModal, { url });
+  onExternalUrlOpen = (url) => {
+    const { id } = matchUrl(url, APP_URL + '/:id');
+    if (Platform.OS === 'ios') {
+      SharedModule.clearOpenUrl();
+    } else {
+      UrlShareModule.clearOpenUrl();
+    }
+    if (id && isUUID(id)) this.goToVerifiedDetails(id);
   };
+
+  urlHandler = ({ url }) => this.onExternalUrlOpen(url);
+
+  showReportModal = (url) =>
+    this.props.navigation.navigate(routes.reportModal, { url });
+
+  goToVerifiedDetails = (id) =>
+    this.props.navigation.navigate(routes.verifiedDetails, { id });
 
   drawCell = ({ item }) => {
     return (
       <VerifiedCell
         item={item}
-        onCellTapped={() =>
-          this.props.navigation.navigate(routes.verifiedDetails, {
-            id: item.id,
-          })
-        }
+        onCellTapped={() => this.goToVerifiedDetails(item.id)}
       />
     );
   };

@@ -18,6 +18,9 @@ public class MainApplication extends Application implements ReactApplication {
   @Nullable
   private String shareUrl = null;
 
+  @Nullable
+  private String openUrl = null;
+
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
         @Override
@@ -53,12 +56,21 @@ public class MainApplication extends Application implements ReactApplication {
   }
 
     public void setShareUrl(@Nullable String shareUrl) {
-        this.shareUrl = shareUrl;
+      this.shareUrl = shareUrl;
     }
 
     @Nullable
     public String getShareUrl() {
-        return this.shareUrl;
+      return this.shareUrl;
+    }
+
+    @Nullable
+    public String getOpenUrl() {
+      return openUrl;
+    }
+
+    public void setOpenUrl(@Nullable String openUrl) {
+      this.openUrl = openUrl;
     }
 
   /**

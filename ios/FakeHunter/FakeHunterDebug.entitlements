@@ -2,6 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>applinks:qa.app.fakehunter.pap.pl</string>
+		<string>applinks:app.fakehunter.pap.pl</string>
+		<string>applinks:fakehunter.pap.pl</string>
+		<string>applinks:qa.fakehunter.pap.pl</string>
+	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
 		<string>group.fakehunter.share</string>
