@@ -6,3 +6,4 @@ export const EMPRESS = 'rgb(117, 117, 117)';
 export const WHITE = 'rgb(255, 255, 255)';
 export const BLACK = 'rgb(0, 0, 0)';
 export const CINNABAR_OPACITY = 'rgba(230, 60, 40, 0.3)';
+export const ERROR = '#B72615';

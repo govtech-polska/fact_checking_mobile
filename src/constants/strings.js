@@ -5,6 +5,7 @@ export const strings = {
   //MARK: Tab names
   verifiedTab: 'Zweryfikowane',
   reportTab: 'Zgłoś',
+  draftsTab: 'Szkice',
 
   verifiedDetails: {
     verifiedTitle: 'Zweryfikowane informacje',
@@ -26,6 +27,7 @@ export const strings = {
     imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU',
     emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
     sendButton: 'Wyślij',
+    saveDraftButton: 'Zapisz kopię roboczą',
     verdict: 'Werdykt:',
     fakeNews: 'Fake news',
     unverifiable: 'Nieweryfikowalny',
@@ -37,6 +39,13 @@ export const strings = {
   reportImageEdit: {
     saveButton: 'Zapisz',
   },
+
+  drafts: {
+    title: 'Dokończ swoje zgłoszenia',
+    commentEmptyState: 'Brak komentarza',
+    urlEmptyState: 'Brak linku źródłowego',
+  },
+
   info: {
     title: 'O aplikacji',
     aboutProject: 'O projekcie',

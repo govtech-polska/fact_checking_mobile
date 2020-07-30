@@ -26,6 +26,7 @@ import {
   DARK_GRAY,
   BLACK,
   WHITE,
+  WHITE_SMOKE,
 } from '../constants/colors';
 import { routes } from '../constants/routes';
 import { reportActions } from '../storages/report/actions';
@@ -73,7 +74,7 @@ const ReportScreen = ({ navigation, route }) => {
       },
     },
   });
-
+  console.log(imagePath);
   useEffect(() => {
     const nextImagePath = route.params?.imagePath;
     if (nextImagePath !== imagePath) {
@@ -188,7 +189,7 @@ const ReportScreen = ({ navigation, route }) => {
         </View>
       </View>
     );
-  }
+  };
 
   return (
     <SafeAreaView style={styles.bg}>
@@ -258,6 +259,11 @@ const ReportScreen = ({ navigation, route }) => {
           >
             <Text style={styles.buttonLabel}>{strings.report.sendButton}</Text>
           </TouchableOpacityDebounce>
+          <TouchableOpacityDebounce onPress={() => {}}>
+            <Text style={styles.saveDraftBtn}>
+              {strings.report.saveDraftButton}
+            </Text>
+          </TouchableOpacityDebounce>
         </Container>
       </KeyboardAwareScrollView>
     </SafeAreaView>
@@ -320,6 +326,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 4,
     zIndex: 9,
+  },
+  saveDraftBtn: {
+    height: 40,
+    marginTop: 8,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    textTransform: 'uppercase',
+    color: EMPRESS,
+    backgroundColor: WHITE_SMOKE,
   },
   closeButton: {
     marginTop: 16,
