@@ -69,8 +69,10 @@ const ReportScreen = ({ navigation, route: { params } }) => {
     if (url && url !== getValues('url')) {
       setValue('url', urlFromString(url));
       setIsModal(true);
+      reset({ comment: '' });
+      setImagePath(null);
     }
-  }, []);
+  }, [params?.url]);
 
   useEffect(() => {
     const nextImagePath = params?.imagePath;
