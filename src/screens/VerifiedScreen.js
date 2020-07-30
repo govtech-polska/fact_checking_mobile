@@ -14,6 +14,7 @@ import {
   Linking,
 } from 'react-native';
 import { connect } from 'react-redux';
+import isUUID from 'validator/lib/isUUID';
 
 import {
   VerifiedCell,
@@ -37,6 +38,8 @@ import {
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
+import { matchUrl } from '../utils/url';
+import { APP_URL } from '../constants/urls';
 
 const { SharedModule, UrlShareModule } = NativeModules;
 
@@ -98,6 +101,7 @@ class VerifiedScreen extends Component {
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange);
     this.urlEvent?.remove();
+    this.shareEvent?.remove();
     if (Platform.OS === 'ios') {
       Linking.removeEventListener('url', this.urlHandler);
     }
@@ -118,29 +122,23 @@ class VerifiedScreen extends Component {
 
   checkOpenUrl() {
     SharedModule.getOpenUrl((error, url) => {
-      const id = this.getDetailsIdFromUrl(url);
+      const { id } = matchUrl(url, APP_URL + '/:id');
       SharedModule.clearOpenUrl();
-      this.goToVerifiedDetails(id);
+      console.log('isUUID', isUUID(id));
+      if (id && isUUID(id)) this.goToVerifiedDetails(id);
     });
   }
 
-  getDetailsIdFromUrl(url) {
-    const urlParts = url.split('/');
-    const id = urlParts.pop() || urlParts.pop(); // handle potential trailing slash
-    return id;
-  }
-
   observeAndroidUrlToShare() {
-    this.urlEvent = DeviceEventEmitter.addListener(
+    this.shareEvent = DeviceEventEmitter.addListener(
       'shareUrl',
       this.onExternalUrlShareAndroid
     );
   }
 
   observeAndroidUrlToOpen() {
-    this.urlEvent = DeviceEventEmitter.addListener(
-      'openUrl',
-      this.onExternalUrlOpenAndroid
+    this.urlEvent = DeviceEventEmitter.addListener('openUrl', ({ url }) =>
+      this.onExternalUrlOpen(url)
     );
   }
 
@@ -149,18 +147,14 @@ class VerifiedScreen extends Component {
     this.showReportModal(url);
   };
 
-  onExternalUrlOpenAndroid = ({ url }) => {
-    this.onExternalUrlOpen(url);
-  };
-
   onExternalUrlOpen = (url) => {
-    const id = this.getDetailsIdFromUrl(url);
+    const { id } = matchUrl(url, APP_URL + '/:id');
     if (Platform.OS === 'ios') {
       SharedModule.clearOpenUrl();
     } else {
       UrlShareModule.clearOpenUrl();
     }
-    this.goToVerifiedDetails(id);
+    if (id && isUUID(id)) this.goToVerifiedDetails(id);
   };
 
   urlHandler = ({ url }) => this.onExternalUrlOpen(url);

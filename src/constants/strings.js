@@ -5,6 +5,7 @@ export const strings = {
   //MARK: Tab names
   verifiedTab: 'Zweryfikowane',
   reportTab: 'Zgłoś',
+  draftsTab: 'Szkice',
 
   categories: {
     title: 'Wybierz kategorię',
@@ -32,6 +33,8 @@ export const strings = {
     imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU',
     emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
     sendButton: 'Wyślij',
+    saveDraftButton: 'Zapisz kopię roboczą',
+    updateDraftButton: 'Aktualizuj kopię roboczą',
     verdict: 'Werdykt:',
     fakeNews: 'Fake news',
     unverifiable: 'Nieweryfikowalny',
@@ -39,10 +42,19 @@ export const strings = {
     submissionSuccess: 'Dziękujemy za zgłoszenie!',
     submissionSuccessDescription:
       'Po jego weryfikacji otrzymasz powiadomienie e-mail z linkiem do raportu.',
+    draftSaveSuccess: 'Zapisano kopię roboczą!',
   },
   reportImageEdit: {
     saveButton: 'Zapisz',
   },
+
+  drafts: {
+    title: 'Dokończ swoje zgłoszenia',
+    commentEmptyState: 'Brak komentarza',
+    urlEmptyState: 'Brak linku źródłowego',
+    listEmptyState: 'Nie posiadasz żadnego zgłoszenia w wersji roboczej.',
+  },
+
   info: {
     title: 'O aplikacji',
     aboutProject: 'O projekcie',

@@ -28,4 +28,4 @@ TouchableOpacityDebounce.propTypes = {
   onPress: PropTypes.func,
 };
 
-export { TouchableOpacityDebounce };
+export default TouchableOpacityDebounce;

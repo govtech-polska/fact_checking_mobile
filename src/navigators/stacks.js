@@ -14,6 +14,7 @@ import {
   InfoAboutScreen,
   InfoTeamScreen,
   CategoriesScreen,
+  DraftsScreen,
 } from '../screens';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
@@ -92,6 +93,28 @@ export const ReportStackScreen = () => {
         name={routes.report}
         component={ReportScreen}
         options={mainScreenOptions}
+      />
+      <ReportStack.Screen
+        name={routes.reportImageEdit}
+        component={ReportImageEditScreen}
+        options={{ title: '' }}
+      />
+    </ReportStack.Navigator>
+  );
+};
+
+export const DraftsStackScreen = () => {
+  return (
+    <ReportStack.Navigator>
+      <ReportStack.Screen
+        name={routes.drafts}
+        component={DraftsScreen}
+        options={mainScreenOptions}
+      />
+      <ReportStack.Screen
+        name={routes.report}
+        component={ReportScreen}
+        options={{ title: '' }}
       />
       <ReportStack.Screen
         name={routes.reportImageEdit}
