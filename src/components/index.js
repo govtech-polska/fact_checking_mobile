@@ -6,3 +6,4 @@ export { default as TouchableOpacityDebounce } from './TouchableOpacityDebounce'
 export { default as Container } from './Container';
 export { default as Field } from './Field';
 export { default as DraftsListItem } from './DraftsListItem';
+export { default as Button } from './Button';

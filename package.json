@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@react-hook/throttle": "^2.2.0",
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/voice": "^1.1.5",
     "@react-navigation/bottom-tabs": "^5.6.0",
@@ -20,8 +21,10 @@
     "axios": "^0.19.2",
     "moment": "^2.27.0",
     "react": "16.11.0",
+    "react-hook-form": "^6.1.0",
     "react-native": "0.62.2",
     "react-native-dropdownalert": "^4.2.1",
+    "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-hyperlink": "0.0.19",
     "react-native-image-crop-picker": "^0.32.2",
