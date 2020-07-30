@@ -23,9 +23,10 @@ import {
   TouchableOpacityDebounce,
   Title,
   Container,
+  CategoryCell,
 } from '../components';
 
-import { CINNABAR, BLACK, GAINSBORO } from '../constants/colors';
+import { CINNABAR, BLACK } from '../constants/colors';
 import { strings } from '../constants/strings';
 import {
   getVerifiedList,
@@ -181,32 +182,19 @@ class VerifiedScreen extends Component {
 
   drawCategoryCell = ({ item }) => {
     const { selectedCategory } = this.props;
+    const isSelected = selectedCategory && selectedCategory.id === item.id;
     return (
-      <TouchableOpacityDebounce
-        style={{
-          ...styles.categoryCell,
-          backgroundColor:
-            selectedCategory && selectedCategory.id === item.id
-              ? CINNABAR
-              : 'transparent',
-        }}
-        onPress={() => {
+      <CategoryCell
+        item={item}
+        isSelected={isSelected}
+        onCellTapped={() => {
           if (item.id !== '1') {
             this.props.setSelectedCategory(item);
           } else if (item.id === '1') {
             this.props.navigation.navigate(routes.categories);
           }
         }}
-      >
-        <Text
-          style={{
-            textTransform: 'capitalize',
-            color: item.id === '1' ? CINNABAR : BLACK,
-          }}
-        >
-          {item.name}
-        </Text>
-      </TouchableOpacityDebounce>
+      />
     );
   };
 

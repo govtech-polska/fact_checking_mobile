@@ -1,11 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Text, StyleSheet, SafeAreaView, FlatList, View } from 'react-native';
+import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
 
-import { WHITE, CINNABAR, BLACK } from '../constants/colors';
+import { WHITE, BLACK } from '../constants/colors';
 import { strings } from '../constants/strings';
-import { TouchableOpacityDebounce, Container, Title } from '../components';
+import {
+  TouchableOpacityDebounce,
+  Container,
+  Title,
+  CategoryCell,
+} from '../components';
 import { getAllCategories } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 import Close from '../resources/img/close.svg';
@@ -19,30 +24,19 @@ const CategoriesScreen = ({ navigation }) => {
   );
 
   const drawCategoryCell = ({ item }) => {
+    const isSelected = selectedCategory && selectedCategory.id === item.id;
     return (
-      <TouchableOpacityDebounce
-        style={styles.categoryCell}
-        onPress={() => {
-          dispatch(feedActions.setSelectedCategory(item));
-        }}
-      >
-        <View
-          style={{
-            ...styles.textContainer,
-            backgroundColor:
-              selectedCategory.id === item.id ? CINNABAR : 'transparent',
-          }}
-        >
-          <Text style={{ textTransform: 'capitalize' }}>{item.name}</Text>
-        </View>
-        <View style={{ flex: 1 }} />
-      </TouchableOpacityDebounce>
+      <CategoryCell
+        item={item}
+        isSelected={isSelected}
+        onCellTapped={() => dispatch(feedActions.setSelectedCategory(item))}
+      />
     );
   };
 
   return (
     <SafeAreaView style={styles.bg}>
-      <Container style={{ flexDirection: 'row' }}>
+      <Container style={styles.container}>
         <TouchableOpacityDebounce
           style={styles.closeButton}
           onPress={navigation.goBack}
@@ -87,20 +81,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WHITE,
   },
-  categoryCell: {
+  container: {
     flexDirection: 'row',
-    marginHorizontal: 2,
-    marginVertical: 5,
-    height: 40,
-    minWidth: 50,
-    paddingHorizontal: 5,
-  },
-  textContainer: {
-    backgroundColor: CINNABAR,
-    borderRadius: 20,
-    justifyContent: 'center',
-    minWidth: 50,
-    paddingHorizontal: 5,
   },
   closeButton: {
     marginTop: 16,
