@@ -1,6 +1,7 @@
 export const routes = {
   verified: 'Verified',
   verifiedDetails: 'VerifiedDetailsScreen',
+  categories: 'CategoriesScreen',
 
   report: 'Report',
   reportImageEdit: 'ReportImageEdit',

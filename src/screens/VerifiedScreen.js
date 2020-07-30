@@ -23,9 +23,10 @@ import {
   TouchableOpacityDebounce,
   Title,
   Container,
+  CategoryCell,
 } from '../components';
 
-import { CINNABAR } from '../constants/colors';
+import { CINNABAR, BLACK } from '../constants/colors';
 import { strings } from '../constants/strings';
 import {
   getVerifiedList,
@@ -33,6 +34,9 @@ import {
   getVerifiedNextPage,
   getIsFetchingNextPage,
   getIsFetchingInitial,
+  getCategories,
+  getIsFetching,
+  getAllCategories,
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
@@ -42,9 +46,17 @@ import { APP_URL } from '../constants/urls';
 const { SharedModule, UrlShareModule } = NativeModules;
 
 class VerifiedScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isRefreshing: false,
+    };
+  }
+
   componentDidMount() {
     AppState.addEventListener('change', this.handleAppStateChange);
     this.props.fetchVerifiedRequest();
+    this.props.fetchCategories();
     if (Platform.OS === 'ios') {
       Linking.addEventListener('url', this.urlHandler);
       this.checkShareUrl();
@@ -57,9 +69,33 @@ class VerifiedScreen extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError();
+    }
+    if (
+      this.props.selectedCategory?.id !== prevProps.selectedCategory?.id &&
+      !this.props.isFetching
+    ) {
+      this.onRefreshTriggered();
+      const selectedIndex = this.props.categories.findIndex(
+        (category) => category.id === this.props.selectedCategory?.id
+      );
+      if (selectedIndex !== -1) {
+        this.flatListRef.scrollToIndex({
+          animated: true,
+          index: selectedIndex,
+        });
+      } else {
+        this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
+      }
+    }
+    if (
+      prevState.isRefreshing &&
+      prevProps.isFetching &&
+      !this.props.isFetching
+    ) {
+      this.setState({ isRefreshing: false });
     }
   }
 
@@ -139,6 +175,20 @@ class VerifiedScreen extends Component {
     );
   };
 
+  drawCategoryCell = ({ item }) => {
+    const { selectedCategory } = this.props;
+    const isSelected = selectedCategory && selectedCategory.id === item.id;
+    return (
+      <CategoryCell
+        item={item}
+        isSelected={isSelected}
+        onCellTapped={() => {
+          this.props.setSelectedCategory(item);
+        }}
+      />
+    );
+  };
+
   keyExtractor = (_item, index) => index.toString();
 
   loadNextPage = () => {
@@ -147,16 +197,18 @@ class VerifiedScreen extends Component {
       nextPage,
       isFetchingNextPage,
       fetchVerifiedRequest,
+      selectedCategory,
     } = this.props;
 
     if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
-      fetchVerifiedRequest(nextPage);
+      fetchVerifiedRequest(nextPage, selectedCategory?.name);
     }
   };
 
   onRefreshTriggered = () => {
-    const { fetchVerifiedRequest } = this.props;
-    fetchVerifiedRequest();
+    const { fetchVerifiedRequest, selectedCategory } = this.props;
+    this.setState({ isRefreshing: true });
+    fetchVerifiedRequest(1, selectedCategory?.name);
   };
 
   renderListFooterComponent = () => (
@@ -178,39 +230,81 @@ class VerifiedScreen extends Component {
     );
   };
 
-  renderTitleIfNeeded = () => {
-    const { articles } = this.props;
-    if (articles.length > 0) {
-      return <Title title={strings.verifiedDetails.verifiedTitle} />;
+  renderCategoriesFooterIfNeeded = () => {
+    const { allCategoriesLength, categories } = this.props;
+    if (allCategoriesLength <= categories.length) return null;
+    return (
+      <CategoryCell
+        item={{ name: strings.verifiedDetails.categoriesMore }}
+        onCellTapped={() => this.props.navigation.navigate(routes.categories)}
+        textColor={CINNABAR}
+      />
+    );
+  };
+
+  renderCategoriesIfNeeded = () => {
+    const { categories, selectedCategory } = this.props;
+    if (categories.length > 0) {
+      return (
+        <FlatList
+          style={{ maxHeight: 50 }}
+          ref={(ref) => {
+            this.flatListRef = ref;
+          }}
+          data={categories}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          renderItem={this.drawCategoryCell}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingHorizontal: 16 }}
+          ListHeaderComponent={() => {
+            return (
+              <CategoryCell
+                item={{ name: strings.verifiedDetails.categoriesAll }}
+                isSelected={!selectedCategory}
+                onCellTapped={() => this.props.setSelectedCategory(null)}
+              />
+            );
+          }}
+          ListFooterComponent={this.renderCategoriesFooterIfNeeded}
+        />
+      );
     }
   };
 
   render() {
     const { isFetchingInitial, isFetchingNextPage, articles } = this.props;
+    const { isRefreshing } = this.state;
 
     return (
       <View style={styles.container}>
-        <Container>{this.renderTitleIfNeeded()}</Container>
+        <Container>
+          <Title title={strings.verifiedDetails.verifiedTitle} />
+        </Container>
+        {this.renderCategoriesIfNeeded()}
         <FlatList
           data={articles}
           contentContainerStyle={{ flexGrow: 1 }}
+          style={{ flex: 1 }}
           renderItem={this.drawCell}
           keyExtractor={this.keyExtractor}
           onEndReached={this.loadNextPage}
           onEndReachedThreshold={0.2}
           refreshControl={
             <RefreshControl
-              refreshing={isFetchingInitial}
+              refreshing={isRefreshing}
               onRefresh={this.onRefreshTriggered}
               tintColor={CINNABAR}
             />
           }
           ListFooterComponent={
-            isFetchingNextPage ? this.renderListFooterComponent : null
+            isFetchingNextPage && !isRefreshing
+              ? this.renderListFooterComponent
+              : null
           }
           ListEmptyComponent={this.renderEmptyComponent}
         />
-        <LoadingOverlay visible={isFetchingInitial} />
+        <LoadingOverlay visible={isFetchingInitial && !isRefreshing} />
       </View>
     );
   }
@@ -221,6 +315,7 @@ VerifiedScreen.propTypes = {
   articles: PropTypes.array,
   error: PropTypes.any,
   fetchVerifiedRequest: PropTypes.func,
+  isFetching: PropTypes.bool,
   isFetchingInitial: PropTypes.bool,
   isFetchingNextPage: PropTypes.bool,
   navigation: PropTypes.shape({
@@ -228,6 +323,14 @@ VerifiedScreen.propTypes = {
   }),
   nextPage: PropTypes.any,
   shouldLoadNextPage: PropTypes.bool,
+  categories: PropTypes.any,
+  fetchCategories: PropTypes.func,
+  setSelectedCategory: PropTypes.func,
+  selectedCategory: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+  }),
+  allCategoriesLength: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -258,6 +361,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
+  categoryCell: {
+    marginHorizontal: 2,
+    marginVertical: 5,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 50,
+    paddingHorizontal: 5,
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -265,15 +378,23 @@ const mapStateToProps = (state) => {
     articles: getVerifiedList(state.articles),
     shouldLoadNextPage: getShouldLoadVerifiedNextPage(state.articles),
     nextPage: getVerifiedNextPage(state.articles),
+    isFetching: getIsFetching(state.articles),
     isFetchingInitial: getIsFetchingInitial(state.articles),
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
     error: state.articles.verified.error,
+    categories: getCategories(state.articles),
+    allCategoriesLength: getAllCategories(state.articles).length,
+    categoriesError: state.articles.categories.error,
+    selectedCategory: state.articles.selectedCategory.data,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
+    fetchCategories: () => dispatch(feedActions.categories()),
+    setSelectedCategory: (...args) =>
+      dispatch(feedActions.setSelectedCategory(...args)),
   };
 };
 

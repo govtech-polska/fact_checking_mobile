@@ -5,4 +5,5 @@ export { default as VerifiedDetailsScreen } from './VerifiedDetailsScreen';
 export { default as InfoScreen } from './InfoScreen';
 export { default as InfoAboutScreen } from './InfoAboutScreen';
 export { default as InfoTeamScreen } from './InfoTeamScreen';
+export { default as CategoriesScreen } from './CategoriesScreen';
 export { default as DraftsScreen } from './DraftsScreen';
