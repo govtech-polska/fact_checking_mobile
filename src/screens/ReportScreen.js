@@ -15,6 +15,7 @@ import {
   DropDownAlert,
   Button,
 } from '../components';
+import { urlFromString } from '../utils/url';
 import Mic from '../resources/img/mic.svg';
 import Record from '../resources/img/recording.svg';
 import CropSvg from '../resources/img/crop.svg';
@@ -66,7 +67,7 @@ const ReportScreen = ({ navigation, route: { params } }) => {
   useEffect(() => {
     const url = params?.url;
     if (url && url !== getValues('url')) {
-      setValue('url', url);
+      setValue('url', urlFromString(url));
       setIsModal(true);
     }
   }, []);
