@@ -81,7 +81,6 @@ class VerifiedScreen extends Component {
       const selectedIndex = this.props.categories.findIndex(
         (category) => category.id === this.props.selectedCategory?.id
       );
-      console.log(selectedIndex);
       if (selectedIndex !== -1) {
         this.flatListRef.scrollToIndex({
           animated: true,
