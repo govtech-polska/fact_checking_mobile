@@ -36,6 +36,7 @@ import {
   getIsFetchingInitial,
   getCategories,
   getIsFetching,
+  getAllCategories,
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
@@ -72,23 +73,23 @@ class VerifiedScreen extends Component {
     if (this.props.error && prevProps.error !== this.props.error) {
       DropDownAlert.showError();
     }
-    if (prevProps.categories.length === 0 && this.props.categories.length > 0) {
-      this.props.setSelectedCategory(this.props.categories[0]);
-    }
     if (
-      prevProps.selectedCategory?.id &&
       this.props.selectedCategory?.id !== prevProps.selectedCategory?.id &&
       !this.props.isFetching
     ) {
       this.onRefreshTriggered();
       const selectedIndex = this.props.categories.findIndex(
-        (category) => category.id === this.props.selectedCategory.id
+        (category) => category.id === this.props.selectedCategory?.id
       );
-      if (selectedIndex !== -1)
+      console.log(selectedIndex);
+      if (selectedIndex !== -1) {
         this.flatListRef.scrollToIndex({
           animated: true,
           index: selectedIndex,
         });
+      } else {
+        this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
+      }
     }
     if (
       prevState.isRefreshing &&
@@ -166,11 +167,6 @@ class VerifiedScreen extends Component {
   goToVerifiedDetails = (id) =>
     this.props.navigation.navigate(routes.verifiedDetails, { id });
 
-  selectedCategoryProperName = () => {
-    const { selectedCategory } = this.props;
-    return selectedCategory.id === '0' ? null : selectedCategory.name;
-  };
-
   drawCell = ({ item }) => {
     return (
       <VerifiedCell
@@ -188,11 +184,7 @@ class VerifiedScreen extends Component {
         item={item}
         isSelected={isSelected}
         onCellTapped={() => {
-          if (item.id !== '1') {
-            this.props.setSelectedCategory(item);
-          } else if (item.id === '1') {
-            this.props.navigation.navigate(routes.categories);
-          }
+          this.props.setSelectedCategory(item);
         }}
       />
     );
@@ -206,17 +198,18 @@ class VerifiedScreen extends Component {
       nextPage,
       isFetchingNextPage,
       fetchVerifiedRequest,
+      selectedCategory,
     } = this.props;
 
     if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
-      fetchVerifiedRequest(nextPage, this.selectedCategoryProperName());
+      fetchVerifiedRequest(nextPage, selectedCategory?.name);
     }
   };
 
   onRefreshTriggered = () => {
-    const { fetchVerifiedRequest } = this.props;
+    const { fetchVerifiedRequest, selectedCategory } = this.props;
     this.setState({ isRefreshing: true });
-    fetchVerifiedRequest(1, this.selectedCategoryProperName());
+    fetchVerifiedRequest(1, selectedCategory?.name);
   };
 
   renderListFooterComponent = () => (
@@ -238,8 +231,20 @@ class VerifiedScreen extends Component {
     );
   };
 
+  renderCategoriesFooterIfNeeded = () => {
+    const { allCategoriesLength, categories } = this.props;
+    if (allCategoriesLength <= categories.length) return null;
+    return (
+      <CategoryCell
+        item={{ name: strings.verifiedDetails.categoriesMore }}
+        onCellTapped={() => this.props.navigation.navigate(routes.categories)}
+        textColor={CINNABAR}
+      />
+    );
+  };
+
   renderCategoriesIfNeeded = () => {
-    const { categories } = this.props;
+    const { categories, selectedCategory } = this.props;
     if (categories.length > 0) {
       return (
         <FlatList
@@ -253,6 +258,16 @@ class VerifiedScreen extends Component {
           horizontal
           renderItem={this.drawCategoryCell}
           showsHorizontalScrollIndicator={false}
+          ListHeaderComponent={() => {
+            return (
+              <CategoryCell
+                item={{ name: strings.verifiedDetails.categoriesAll }}
+                isSelected={!selectedCategory}
+                onCellTapped={() => this.props.setSelectedCategory(null)}
+              />
+            );
+          }}
+          ListFooterComponent={this.renderCategoriesFooterIfNeeded}
         />
       );
     }
@@ -316,6 +331,7 @@ VerifiedScreen.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
   }),
+  allCategoriesLength: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -367,6 +383,7 @@ const mapStateToProps = (state) => {
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
     error: state.articles.verified.error,
     categories: getCategories(state.articles),
+    allCategoriesLength: getAllCategories(state.articles).length,
     categoriesError: state.articles.categories.error,
     selectedCategory: state.articles.selectedCategory.data,
   };

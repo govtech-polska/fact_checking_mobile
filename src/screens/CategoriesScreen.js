@@ -51,6 +51,17 @@ const CategoriesScreen = ({ navigation }) => {
         keyExtractor={(category) => category.id.toString()}
         renderItem={drawCategoryCell}
         contentContainerStyle={{ paddingHorizontal: 16 }}
+        ListHeaderComponent={() => {
+          return (
+            <CategoryCell
+              item={{ name: strings.verifiedDetails.categoriesAll }}
+              isSelected={!selectedCategory}
+              onCellTapped={() =>
+                dispatch(feedActions.setSelectedCategory(null))
+              }
+            />
+          );
+        }}
       />
     </SafeAreaView>
   );

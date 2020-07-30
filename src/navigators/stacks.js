@@ -75,12 +75,10 @@ export const VerifiedModalStackScreen = () => {
       <VerifiedModalStack.Screen
         name={routes.verified}
         component={VerifiedStackScreen}
-        // options={mainScreenOptions}
       />
       <VerifiedModalStack.Screen
         name={routes.categories}
         component={CategoriesScreen}
-        // options={{ title: '' }}
       />
     </VerifiedModalStack.Navigator>
   );

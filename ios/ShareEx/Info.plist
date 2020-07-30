@@ -20,22 +20,24 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-  <key>NSExtension</key>
-  <dict>
-    <key>NSExtensionAttributes</key>
-    <dict>
-      <key>NSExtensionActivationRule</key>
-      <dict>
-        <key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
-        <integer>1</integer>
-        <key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-        <integer>1</integer>
-      </dict>
-    </dict>
-    <key>NSExtensionPointIdentifier</key>
-    <string>com.apple.share-services</string>
-    <key>NSExtensionPrincipalClass</key>
-    <string>CustomShareNavigationController</string>
-  </dict>
+	<key>NSExtension</key>
+	<dict>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>NSExtensionActivationRule</key>
+			<dict>
+				<key>NSExtensionActivationSupportsText</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsWebPageWithMaxCount</key>
+				<integer>1</integer>
+				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
+				<integer>1</integer>
+			</dict>
+		</dict>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.share-services</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>CustomShareNavigationController</string>
+	</dict>
 </dict>
 </plist>

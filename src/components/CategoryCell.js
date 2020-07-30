@@ -5,7 +5,7 @@ import { Text, StyleSheet } from 'react-native';
 import TouchableOpacityDebounce from './TouchableOpacityDebounce';
 import { CINNABAR, BLACK, WHITE } from '../constants/colors';
 
-const CategoryCell = ({ item, isSelected, onCellTapped }) => {
+const CategoryCell = ({ item, isSelected, onCellTapped, textColor }) => {
   const containerStyles = [
     styles.container,
     isSelected && styles.containerSelected,
@@ -13,8 +13,7 @@ const CategoryCell = ({ item, isSelected, onCellTapped }) => {
   const textStyles = [
     styles.text,
     isSelected && styles.textSelected,
-    // TODO: tmp solution to be fixed in dev/Categories PR
-    item.id === '1' && { color: CINNABAR },
+    textColor && { color: textColor },
   ];
 
   return (
@@ -26,11 +25,11 @@ const CategoryCell = ({ item, isSelected, onCellTapped }) => {
 
 CategoryCell.propTypes = {
   item: PropTypes.shape({
-    id: PropTypes.string,
     name: PropTypes.string,
   }),
   isSelected: PropTypes.bool,
   onCellTapped: PropTypes.func,
+  textColor: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
