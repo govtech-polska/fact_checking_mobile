@@ -5,7 +5,7 @@ import { Text, StyleSheet } from 'react-native';
 import TouchableOpacityDebounce from './TouchableOpacityDebounce';
 import { CINNABAR, BLACK } from '../constants/colors';
 
-const CategoryCell = ({ item, isSelected, onCellTapped }) => {
+const CategoryCell = ({ item, isSelected, onCellTapped, textColor }) => {
   return (
     <TouchableOpacityDebounce
       style={{
@@ -17,7 +17,7 @@ const CategoryCell = ({ item, isSelected, onCellTapped }) => {
       <Text
         style={{
           textTransform: 'capitalize',
-          color: item.id === '1' ? CINNABAR : BLACK,
+          color: textColor || BLACK,
         }}
       >
         {item.name}
@@ -33,6 +33,7 @@ CategoryCell.propTypes = {
   }),
   isSelected: PropTypes.bool,
   onCellTapped: PropTypes.func,
+  textColor: PropTypes.string,
 };
 
 const styles = StyleSheet.create({

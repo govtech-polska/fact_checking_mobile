@@ -36,6 +36,7 @@ import {
   getIsFetchingInitial,
   getCategories,
   getIsFetching,
+  getAllCategories,
 } from '../selectors';
 import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
@@ -80,11 +81,14 @@ class VerifiedScreen extends Component {
       const selectedIndex = this.props.categories.findIndex(
         (category) => category.id === this.props.selectedCategory?.id
       );
-      if (selectedIndex !== -1)
+      if (selectedIndex !== -1) {
         this.flatListRef.scrollToIndex({
           animated: true,
           index: selectedIndex,
         });
+      } else {
+        this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
+      }
     }
     if (
       prevState.isRefreshing &&
@@ -226,6 +230,18 @@ class VerifiedScreen extends Component {
     );
   };
 
+  renderCategoriesFooterIfNeeded = () => {
+    const { categoriesLength, categories } = this.props;
+    if (categoriesLength <= categories.length) return null;
+    return (
+      <CategoryCell
+        item={{ name: strings.verifiedDetails.categoriesMore }}
+        onCellTapped={() => this.props.navigation.navigate(routes.categories)}
+        textColor={CINNABAR}
+      />
+    );
+  };
+
   renderCategoriesIfNeeded = () => {
     const { categories, selectedCategory } = this.props;
     if (categories.length > 0) {
@@ -242,16 +258,15 @@ class VerifiedScreen extends Component {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 16 }}
           ListHeaderComponent={() => {
-            //         const { selectedCategory } = this.props;
-            // const isSelected = selectedCategory && selectedCategory.id === item.id;
             return (
               <CategoryCell
-                item={{ id: '0', name: strings.verifiedDetails.categoriesAll }}
+                item={{ name: strings.verifiedDetails.categoriesAll }}
                 isSelected={!selectedCategory}
                 onCellTapped={() => this.props.setSelectedCategory(null)}
               />
             );
           }}
+          ListFooterComponent={this.renderCategoriesFooterIfNeeded}
         />
       );
     }
@@ -315,6 +330,7 @@ VerifiedScreen.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
   }),
+  categoriesLength: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -367,6 +383,7 @@ const mapStateToProps = (state) => {
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
     error: state.articles.verified.error,
     categories: getCategories(state.articles),
+    categoriesLength: getAllCategories(state.articles).length,
     categoriesError: state.articles.categories.error,
     selectedCategory: state.articles.selectedCategory.data,
   };
