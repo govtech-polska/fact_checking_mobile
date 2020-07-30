@@ -28,11 +28,6 @@ export const getIsFetchingNextPage = (state) =>
   state.verified.data?.results !== undefined && state.verified.isFetching;
 
 export const getCategories = (state) => {
-  const allCategory = {
-    created_at: Date(),
-    id: '0',
-    name: strings.verifiedDetails.categoriesAll,
-  };
   const moreCategory = {
     created_at: Date(),
     id: '1',
@@ -40,7 +35,7 @@ export const getCategories = (state) => {
   };
   let categories = [];
   if (state.categories.data?.results) {
-    categories = [allCategory, ...state.categories.data?.results.slice(0, 5)];
+    categories = state.categories.data?.results.slice(0, 5);
     const selectedCategory = state.selectedCategory.data;
     if (
       selectedCategory &&
@@ -50,9 +45,9 @@ export const getCategories = (state) => {
     ) {
       categories = [...categories, selectedCategory];
     }
-    if (state.categories.data?.results.length > categories.length - 1) {
-      categories = [...categories, moreCategory];
-    }
+    // if (state.categories.data?.results.length > categories.length - 1) {
+    //   categories = [...categories, moreCategory];
+    // }
     return categories;
   }
   return [];
