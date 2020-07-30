@@ -231,8 +231,8 @@ class VerifiedScreen extends Component {
   };
 
   renderCategoriesFooterIfNeeded = () => {
-    const { categoriesLength, categories } = this.props;
-    if (categoriesLength <= categories.length) return null;
+    const { allCategoriesLength, categories } = this.props;
+    if (allCategoriesLength <= categories.length) return null;
     return (
       <CategoryCell
         item={{ name: strings.verifiedDetails.categoriesMore }}
@@ -330,7 +330,7 @@ VerifiedScreen.propTypes = {
     id: PropTypes.string,
     name: PropTypes.string,
   }),
-  categoriesLength: PropTypes.any,
+  allCategoriesLength: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -383,7 +383,7 @@ const mapStateToProps = (state) => {
     isFetchingNextPage: getIsFetchingNextPage(state.articles),
     error: state.articles.verified.error,
     categories: getCategories(state.articles),
-    categoriesLength: getAllCategories(state.articles).length,
+    allCategoriesLength: getAllCategories(state.articles).length,
     categoriesError: state.articles.categories.error,
     selectedCategory: state.articles.selectedCategory.data,
   };
