@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import * as React from 'react';
+import React from 'react';
+import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import {
@@ -17,6 +18,10 @@ import DraftsTabIcon from '../resources/img/tabBar/draftsTabIcon.svg';
 
 const Tab = createBottomTabNavigator();
 
+const createTabBarIcon = (Component) => ({ color, size }) => (
+  <Component width={size} height={size} fill={color} color={color} />
+);
+
 const verifiedStack = () => {
   return (
     <Tab.Screen
@@ -24,9 +29,7 @@ const verifiedStack = () => {
       component={VerifiedModalStackScreen}
       options={{
         tabBarLabel: strings.verifiedTab,
-        tabBarIcon: ({ color, size }) => (
-          <VerifiedTabIcon width={size} height={size} fill={color} />
-        ),
+        tabBarIcon: createTabBarIcon(VerifiedTabIcon),
       }}
     />
   );
@@ -39,9 +42,7 @@ const reportStack = () => {
       component={ReportStackScreen}
       options={{
         tabBarLabel: strings.reportTab,
-        tabBarIcon: ({ color, size }) => (
-          <ReportTabIcon width={size} height={size} fill={color} />
-        ),
+        tabBarIcon: createTabBarIcon(ReportTabIcon),
       }}
     />
   );
@@ -54,9 +55,7 @@ const draftsStack = () => {
       component={DraftsStackScreen}
       options={{
         tabBarLabel: strings.draftsTab,
-        tabBarIcon: ({ color, size }) => (
-          <DraftsTabIcon width={size} height={size} color={color} />
-        ),
+        tabBarIcon: createTabBarIcon(DraftsTabIcon),
       }}
     />
   );
@@ -69,9 +68,7 @@ const infoStack = () => {
       component={InfoStackScreen}
       options={{
         tabBarLabel: strings.info.title,
-        tabBarIcon: ({ color, size }) => (
-          <InfoTabIcon width={size} height={size} fill={color} />
-        ),
+        tabBarIcon: createTabBarIcon(InfoTabIcon),
       }}
     />
   );
@@ -82,6 +79,13 @@ export const tabStack = () => {
     <Tab.Navigator
       tabBarOptions={{
         activeTintColor: CINNABAR,
+        style: {
+          ...Platform.select({
+            android: {
+              paddingBottom: 4,
+            },
+          }),
+        },
       }}
     >
       {verifiedStack()}
