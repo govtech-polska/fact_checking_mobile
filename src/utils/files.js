@@ -11,9 +11,13 @@ export const saveTmpImagesToDevice = async (...paths) => {
     `${filePrefix}${base}/fakehunter-image-${index}-${timestamp}.jpg`;
 
   const fileCopyingToResolve = paths.map((sourcePath, i) => {
+    if (!sourcePath) {
+      return Promise.resolve(null);
+    }
     const destPath = getDestPath(i);
     return RNFS.copyFile(sourcePath, destPath).then(() => destPath);
   });
+
   return Promise.all(fileCopyingToResolve);
 };
 

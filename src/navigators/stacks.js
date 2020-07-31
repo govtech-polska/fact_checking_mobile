@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import {
   createStackNavigator,
   TransitionPresets,
 } from '@react-navigation/stack';
-import { View } from 'react-native';
 
 import {
   VerifiedScreen,
@@ -16,22 +15,14 @@ import {
   CategoriesScreen,
   DraftsScreen,
 } from '../screens';
+import { LogoTitle } from '../components';
 import { CINNABAR } from '../constants/colors';
-import LogoHeader from '../resources/img/logo_fh.svg';
 import { routes } from '../constants/routes';
 
 const VerifiedModalStack = createStackNavigator();
 const VerifiedStack = createStackNavigator();
 const ReportStack = createStackNavigator();
 const InfoStack = createStackNavigator();
-
-function LogoTitle() {
-  return (
-    <View style={{ alignItems: 'center' }}>
-      <LogoHeader width={240} height={40} />
-    </View>
-  );
-}
 
 const mainScreenOptions = {
   title: ' ',
@@ -40,6 +31,10 @@ const mainScreenOptions = {
     backgroundColor: CINNABAR,
   },
   headerTitle: LogoTitle,
+  headerTitleContainerStyle: {
+    height: '100%',
+    flex: 1,
+  },
 };
 
 const VerifiedStackScreen = () => {

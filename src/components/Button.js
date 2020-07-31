@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontSize: 14,
     flexDirection: 'row',
+    borderRadius: 2,
   },
   label: {
     fontSize: 14,
