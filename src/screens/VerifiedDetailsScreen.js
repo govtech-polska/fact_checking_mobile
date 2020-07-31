@@ -29,11 +29,11 @@ import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
+import ShareImg from '../resources/img/share.svg';
 import Close from '../resources/img/close.svg';
 import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
 
-const shareImage = require('../resources/img/share.png');
 const URL_FONT_SIZE = 14;
 const LaunchImage = (
   <Launch width={URL_FONT_SIZE} height={URL_FONT_SIZE} fill={CINNABAR} />
@@ -52,7 +52,7 @@ class VerifiedDetailsScreen extends Component {
           style={styles.shareButton}
           onPress={this.onShare}
         >
-          <Image style={{ flex: 1 }} resizeMode="contain" source={shareImage} />
+          <ShareImg fill={CINNABAR} />
         </TouchableOpacityDebounce>
       ),
     });
@@ -426,6 +426,7 @@ const styles = StyleSheet.create({
   shareButton: {
     width: 30,
     height: 30,
+    marginRight: 8,
   },
   closeButton: {
     marginLeft: 16,

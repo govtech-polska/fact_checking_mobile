@@ -26,7 +26,7 @@ import {
   CategoryCell,
 } from '../components';
 
-import { CINNABAR, BLACK } from '../constants/colors';
+import { CINNABAR } from '../constants/colors';
 import { strings } from '../constants/strings';
 import {
   getVerifiedList,
