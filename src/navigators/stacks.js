@@ -1,5 +1,8 @@
 import * as React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import { View } from 'react-native';
 
 import {
@@ -10,11 +13,14 @@ import {
   InfoScreen,
   InfoAboutScreen,
   InfoTeamScreen,
+  CategoriesScreen,
+  DraftsScreen,
 } from '../screens';
 import { CINNABAR } from '../constants/colors';
 import LogoHeader from '../resources/img/logo_fh.svg';
 import { routes } from '../constants/routes';
 
+const VerifiedModalStack = createStackNavigator();
 const VerifiedStack = createStackNavigator();
 const ReportStack = createStackNavigator();
 const InfoStack = createStackNavigator();
@@ -29,13 +35,14 @@ function LogoTitle() {
 
 const mainScreenOptions = {
   title: ' ',
+  headerShown: true,
   headerStyle: {
     backgroundColor: CINNABAR,
   },
   headerTitle: LogoTitle,
 };
 
-export const VerifiedStackScreen = () => {
+const VerifiedStackScreen = () => {
   return (
     <VerifiedStack.Navigator>
       <VerifiedStack.Screen
@@ -52,6 +59,31 @@ export const VerifiedStackScreen = () => {
   );
 };
 
+export const VerifiedModalStackScreen = () => {
+  return (
+    <VerifiedModalStack.Navigator
+      mode="modal"
+      screenOptions={() => {
+        return {
+          headerShown: false,
+          gestureEnabled: true,
+          cardOverlayEnabled: true,
+          ...TransitionPresets.ModalPresentationIOS,
+        };
+      }}
+    >
+      <VerifiedModalStack.Screen
+        name={routes.verified}
+        component={VerifiedStackScreen}
+      />
+      <VerifiedModalStack.Screen
+        name={routes.categories}
+        component={CategoriesScreen}
+      />
+    </VerifiedModalStack.Navigator>
+  );
+};
+
 export const ReportStackScreen = () => {
   return (
     <ReportStack.Navigator>
@@ -59,6 +91,28 @@ export const ReportStackScreen = () => {
         name={routes.report}
         component={ReportScreen}
         options={mainScreenOptions}
+      />
+      <ReportStack.Screen
+        name={routes.reportImageEdit}
+        component={ReportImageEditScreen}
+        options={{ title: '' }}
+      />
+    </ReportStack.Navigator>
+  );
+};
+
+export const DraftsStackScreen = () => {
+  return (
+    <ReportStack.Navigator>
+      <ReportStack.Screen
+        name={routes.drafts}
+        component={DraftsScreen}
+        options={mainScreenOptions}
+      />
+      <ReportStack.Screen
+        name={routes.report}
+        component={ReportScreen}
+        options={{ title: '' }}
       />
       <ReportStack.Screen
         name={routes.reportImageEdit}

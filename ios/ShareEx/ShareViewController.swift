@@ -45,10 +45,17 @@ class ShareViewController: UIViewController {
               }
             })
           } else if attachment.hasItemConformingToTypeIdentifier("public.plain-text") {
-            attachment.loadItem(forTypeIdentifier: "public.plain-text", options: nil, completionHandler: { [unowned self] url, error in
-              let userDefaults = UserDefaults(suiteName: "group.fakehunter.share")
-              userDefaults?.set(url, forKey: "shareUrl")
-              userDefaults?.synchronize()
+            attachment.loadItem(forTypeIdentifier: "public.plain-text", options: nil, completionHandler: { [unowned self] text, error in
+              if let text = text as? String, let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue) {
+                let matches = detector.matches(in: text, options: [], range: NSRange(location: 0, length: text.utf16.count))
+                for match in matches {
+                  guard let range = Range(match.range, in: text) else { continue }
+                  let url = text[range]
+                  let userDefaults = UserDefaults(suiteName: "group.fakehunter.share")
+                  userDefaults?.set(url, forKey: "shareUrl")
+                  userDefaults?.synchronize()
+                }
+              }
               self.redirectToHostApp()
             })
           }

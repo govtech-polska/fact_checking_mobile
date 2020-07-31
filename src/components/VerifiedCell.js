@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Moment from 'moment';
 
-import { TouchableOpacityDebounce } from './TouchableOpacityDebounce';
+import TouchableOpacityDebounce from './TouchableOpacityDebounce';
 import { WHITE_SMOKE, DARK_GRAY, CINNABAR } from '../constants/colors';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
