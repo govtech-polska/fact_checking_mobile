@@ -36,6 +36,9 @@ import { useDrafts } from '../utils/useDrafts';
 import { validate } from '../utils/validation';
 import { saveTmpImagesToDevice, removeImagesFromDevice } from '../utils/files';
 
+const anyObjectValueExists = (obj) =>
+  Object.values(obj).some((value) => !!value);
+
 const ReportScreen = ({ navigation, route: { params } }) => {
   const draft = params?.draft ?? {};
   const dispatch = useDispatch();
@@ -52,6 +55,7 @@ const ReportScreen = ({ navigation, route: { params } }) => {
     control,
     handleSubmit,
     errors,
+    watch,
   } = useForm();
   const {
     isAvailable,
@@ -62,6 +66,11 @@ const ReportScreen = ({ navigation, route: { params } }) => {
     onSpeechResult: (value) =>
       setValue('comment', getValues('comment') + value),
     onSpeechPartialResults: (value) => setPartialRecognition(value),
+  });
+  const anyFieldValueExists = anyObjectValueExists({
+    ...watch(),
+    imagePath,
+    rawImagePath,
   });
 
   useEffect(() => {
@@ -314,6 +323,7 @@ const ReportScreen = ({ navigation, route: { params } }) => {
           <Button
             onPress={draft.id ? handleDraftUpdate : handleDraftSave}
             loading={isSaving}
+            disabled={!anyFieldValueExists}
             style={{ marginTop: 8 }}
           >
             {draft.id
