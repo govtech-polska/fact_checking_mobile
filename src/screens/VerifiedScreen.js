@@ -26,7 +26,7 @@ import {
   CategoryCell,
 } from '../components';
 
-import { CINNABAR, BLACK } from '../constants/colors';
+import { CINNABAR } from '../constants/colors';
 import { strings } from '../constants/strings';
 import {
   getVerifiedList,
@@ -247,7 +247,8 @@ class VerifiedScreen extends Component {
     if (categories.length > 0) {
       return (
         <FlatList
-          style={{ maxHeight: 50 }}
+          style={styles.categoriesList}
+          contentContainerStyle={styles.categoriesContent}
           ref={(ref) => {
             this.flatListRef = ref;
           }}
@@ -256,7 +257,6 @@ class VerifiedScreen extends Component {
           horizontal
           renderItem={this.drawCategoryCell}
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16 }}
           ListHeaderComponent={() => {
             return (
               <CategoryCell
@@ -284,7 +284,7 @@ class VerifiedScreen extends Component {
         {this.renderCategoriesIfNeeded()}
         <FlatList
           data={articles}
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={{ flexGrow: 1, paddingVertical: 16 }}
           style={{ flex: 1 }}
           renderItem={this.drawCell}
           keyExtractor={this.keyExtractor}
@@ -361,15 +361,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
-  categoryCell: {
-    marginHorizontal: 2,
-    marginVertical: 5,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-    minWidth: 50,
-    paddingHorizontal: 5,
+  categoriesList: {
+    flexGrow: 0,
+    backgroundColor: 'rgb(247, 240, 242)',
+    padding: 12,
+    paddingHorizontal: 16,
+  },
+  categoriesContent: {
+    paddingRight: 32,
   },
 });
 

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import { useAsyncStorage } from '@react-native-community/async-storage';
 
 import {
   Title,
@@ -23,9 +24,36 @@ import { strings } from '../constants/strings';
 import { routes } from '../constants/routes';
 import { useDrafts } from '../utils/useDrafts';
 
+const SWIPE_OPEN_WIDTH = -100;
+const WAS_PREVIEW_FIRED_KEY = 'fakehunter.drafts.preview';
+const useSwipePreview = (drafts) => {
+  const shouldBeChecked = drafts.length > 0;
+  const { getItem, setItem } = useAsyncStorage(WAS_PREVIEW_FIRED_KEY);
+  const [showPreview, setShowPreview] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const wasPreviewFired = await getItem();
+      setShowPreview(!wasPreviewFired);
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (showPreview && shouldBeChecked) {
+      setTimeout(() => {
+        setShowPreview(false);
+        setItem(Date.now().toString());
+      }, 500);
+    }
+  }, [showPreview, shouldBeChecked]);
+
+  return { previewRowKey: showPreview && shouldBeChecked ? drafts[0].id : '' };
+};
+
 const DraftsScreen = () => {
   const navigation = useNavigation();
   const { isLoading, drafts, removeDraft, refreshDrafts } = useDrafts();
+  const { previewRowKey } = useSwipePreview(drafts);
 
   useFocusEffect(
     useCallback(() => {
@@ -62,9 +90,11 @@ const DraftsScreen = () => {
             </TouchableOpacityDebounce>
           </View>
         )}
-        rightOpenValue={-100}
+        rightOpenValue={SWIPE_OPEN_WIDTH}
         disableRightSwipe
-        previewRowKey={drafts[0] && drafts[0].id}
+        previewRowKey={previewRowKey}
+        previewDuration={350}
+        previewOpenValue={SWIPE_OPEN_WIDTH}
         ListEmptyComponent={() => (
           <Container>
             <Text>{strings.drafts.listEmptyState}</Text>

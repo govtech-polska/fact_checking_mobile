@@ -1,5 +1,3 @@
-import { strings } from '../constants/strings';
-
 export const getVerifiedList = (state) => state.verified.data?.results || [];
 export const getShouldLoadVerifiedNextPage = (state) => {
   const currentPage = state.verified.data?.current_page;
@@ -38,7 +36,7 @@ export const getCategories = (state) => {
         (category) => category.id === selectedCategory?.id
       ) === -1
     ) {
-      categories = [...categories, selectedCategory];
+      categories = [...categories.slice(0, 4), selectedCategory];
     }
     return categories;
   }
