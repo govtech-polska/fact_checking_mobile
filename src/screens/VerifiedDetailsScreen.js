@@ -52,7 +52,7 @@ class VerifiedDetailsScreen extends Component {
           style={styles.shareButton}
           onPress={this.onShare}
         >
-          <ShareImg fill={CINNABAR} />
+          <ShareImg fill={Platform.OS === 'ios' ? CINNABAR : BLACK} />
         </TouchableOpacityDebounce>
       ),
     });
