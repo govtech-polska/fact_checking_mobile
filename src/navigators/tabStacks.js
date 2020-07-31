@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { Platform } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import {
@@ -14,7 +15,6 @@ import VerifiedTabIcon from '../resources/img/tabBar/verifiedTabIcon.svg';
 import ReportTabIcon from '../resources/img/tabBar/reportTabIcon.svg';
 import InfoTabIcon from '../resources/img/tabBar/infoTabIcon.svg';
 import DraftsTabIcon from '../resources/img/tabBar/draftsTabIcon.svg';
-import { Platform } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
