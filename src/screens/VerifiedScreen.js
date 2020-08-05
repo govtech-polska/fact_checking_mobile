@@ -12,6 +12,7 @@ import {
   AppState,
   DeviceEventEmitter,
   Linking,
+  Animated,
 } from 'react-native';
 import { connect } from 'react-redux';
 import isUUID from 'validator/lib/isUUID';
@@ -26,7 +27,7 @@ import {
   CategoryCell,
 } from '../components';
 
-import { CINNABAR } from '../constants/colors';
+import { CINNABAR, BLACK } from '../constants/colors';
 import { strings } from '../constants/strings';
 import {
   getVerifiedList,
@@ -42,8 +43,14 @@ import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
 import { matchUrl } from '../utils/url';
 import { APP_URL } from '../constants/urls';
+// import Animated, { interpolate, Extrapolate } from 'react-native-reanimated';
+import { compose } from 'redux';
+import { withHeaderHeight } from '../utils/withHeaderHeight';
+import { TITLE_HEIGHT } from '../components/Title';
 
 const { SharedModule, UrlShareModule } = NativeModules;
+
+const CATEGORIES_HEIGHT = 60;
 
 class VerifiedScreen extends Component {
   constructor(props) {
@@ -51,6 +58,9 @@ class VerifiedScreen extends Component {
     this.state = {
       isRefreshing: false,
     };
+    this.scrollY = new Animated.Value(0);
+    this.verifiedListRef = React.createRef();
+    this.categoriesListRef = React.createRef();
   }
 
   componentDidMount() {
@@ -82,12 +92,15 @@ class VerifiedScreen extends Component {
         (category) => category.id === this.props.selectedCategory?.id
       );
       if (selectedIndex !== -1) {
-        this.flatListRef.scrollToIndex({
+        this.categoriesListRef.current?.scrollToIndex({
           animated: true,
           index: selectedIndex,
         });
       } else {
-        this.flatListRef.scrollToOffset({ animated: true, offset: 0 });
+        this.categoriesListRef.current?.scrollToOffset({
+          animated: true,
+          offset: 0,
+        });
       }
     }
     if (
@@ -125,7 +138,6 @@ class VerifiedScreen extends Component {
     SharedModule.getOpenUrl((error, url) => {
       const { id } = matchUrl(url, APP_URL + '/:id');
       SharedModule.clearOpenUrl();
-      console.log('isUUID', isUUID(id));
       if (id && isUUID(id)) this.goToVerifiedDetails(id);
     });
   }
@@ -183,7 +195,13 @@ class VerifiedScreen extends Component {
         item={item}
         isSelected={isSelected}
         onCellTapped={() => {
-          this.props.setSelectedCategory(item);
+          this.verifiedListRef.current?.scrollToOffset({
+            animated: true,
+            offset: 0,
+          });
+          setTimeout(() => {
+            this.props.setSelectedCategory(item);
+          }, 500);
         }}
       />
     );
@@ -249,9 +267,7 @@ class VerifiedScreen extends Component {
         <FlatList
           style={styles.categoriesList}
           contentContainerStyle={styles.categoriesContent}
-          ref={(ref) => {
-            this.flatListRef = ref;
-          }}
+          ref={this.categoriesListRef}
           data={categories}
           keyExtractor={(item) => item.id.toString()}
           horizontal
@@ -262,7 +278,13 @@ class VerifiedScreen extends Component {
               <CategoryCell
                 item={{ name: strings.verifiedDetails.categoriesAll }}
                 isSelected={!selectedCategory}
-                onCellTapped={() => this.props.setSelectedCategory(null)}
+                onCellTapped={() => {
+                  this.verifiedListRef.current?.scrollToOffset({
+                    animated: true,
+                    offset: 0,
+                  });
+                  this.props.setSelectedCategory(null);
+                }}
               />
             );
           }}
@@ -276,16 +298,81 @@ class VerifiedScreen extends Component {
     const { isFetchingInitial, isFetchingNextPage, articles } = this.props;
     const { isRefreshing } = this.state;
 
+    const translateY = this.scrollY.interpolate({
+      inputRange: [0, 150],
+      outputRange: [0, -TITLE_HEIGHT],
+      extrapolate: 'clamp',
+    });
+    const elevation = this.scrollY.interpolate({
+      inputRange: [0, 150],
+      outputRange: [0, 4],
+      extrapolate: 'clamp',
+    });
+    const shadowOpacity = this.scrollY.interpolate({
+      inputRange: [0, 150],
+      outputRange: [0, 0.18],
+      extrapolate: 'clamp',
+    });
+
     return (
       <View style={styles.container}>
-        <Container>
-          <Title title={strings.verifiedDetails.verifiedTitle} />
-        </Container>
-        {this.renderCategoriesIfNeeded()}
+        <Animated.View
+          style={{
+            position: 'absolute',
+            backgroundColor: 'white',
+            top: 0,
+            zIndex: 9,
+            transform: [{ translateY }],
+
+            elevation,
+            shadowColor: BLACK,
+            shadowOffset: {
+              width: 0,
+              height: 1,
+            },
+            shadowOpacity,
+            shadowRadius: 2,
+          }}
+        >
+          <Container>
+            <Title
+              title={strings.verifiedDetails.verifiedTitle}
+              scrollY={this.scrollY}
+            />
+          </Container>
+          {this.renderCategoriesIfNeeded()}
+        </Animated.View>
         <FlatList
+          ref={this.verifiedListRef}
+          renderScrollComponent={(props) => (
+            <Animated.ScrollView
+              {...props}
+              // scrollEventThrottle={16}
+              // contentInset={{ top: 500 }}
+              onScroll={Animated.event(
+                [
+                  {
+                    nativeEvent: {
+                      contentOffset: { y: this.scrollY },
+                    },
+                  },
+                ],
+                {
+                  useNativeDriver: true,
+                  listener: (event) => props.onScroll(event),
+                }
+              )}
+            />
+          )}
           data={articles}
-          contentContainerStyle={{ flexGrow: 1, paddingVertical: 16 }}
-          style={{ flex: 1 }}
+          contentContainerStyle={{
+            flexGrow: 1,
+            paddingVertical: 16,
+            paddingTop: CATEGORIES_HEIGHT + TITLE_HEIGHT + 8,
+          }}
+          style={{
+            flex: 1,
+          }}
           renderItem={this.drawCell}
           keyExtractor={this.keyExtractor}
           onEndReached={this.loadNextPage}
@@ -366,6 +453,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(247, 240, 242)',
     padding: 12,
     paddingHorizontal: 16,
+    height: CATEGORIES_HEIGHT,
   },
   categoriesContent: {
     paddingRight: 32,
@@ -397,4 +485,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VerifiedScreen);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withHeaderHeight
+)(VerifiedScreen);

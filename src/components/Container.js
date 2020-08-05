@@ -14,7 +14,6 @@ Container.propTypes = {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingBottom: 8,
   },
 });
 
