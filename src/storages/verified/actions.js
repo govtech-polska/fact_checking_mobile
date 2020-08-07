@@ -20,12 +20,14 @@ export const feedActions = {
       data: category,
     };
   },
-  list: (page, domain) => {
+  list: (page, domain, afterSagaSuccess) => {
     const query = { page: page || 1 };
     if (domain) {
       query.domains = [domain];
     }
-    return apiAction(NEWS, resolveUrl(apiUrls.NEWS, {}, query));
+    return apiAction(NEWS, resolveUrl(apiUrls.NEWS, {}, query), {
+      afterSagaSuccess,
+    });
   },
   details: (id) => apiAction(DETAILS, resolveUrl(apiUrls.NEWS_DETAILS, { id })),
 };

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -7,20 +7,15 @@ import {
   ActivityIndicator,
   RefreshControl,
   Text,
-  NativeModules,
-  Platform,
-  AppState,
-  DeviceEventEmitter,
-  Linking,
   Animated,
 } from 'react-native';
 import { connect } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 import isUUID from 'validator/lib/isUUID';
 
 import {
   VerifiedCell,
   LoadingOverlay,
-  DropDownAlert,
   TouchableOpacityDebounce,
   Title,
   Container,
@@ -43,235 +38,153 @@ import { feedActions } from '../storages/verified/actions';
 import { routes } from '../constants/routes';
 import { matchUrl } from '../utils/url';
 import { APP_URL } from '../constants/urls';
-// import Animated, { interpolate, Extrapolate } from 'react-native-reanimated';
-import { compose } from 'redux';
-import { withHeaderHeight } from '../utils/withHeaderHeight';
 import { TITLE_HEIGHT } from '../components/Title';
-
-const { SharedModule, UrlShareModule } = NativeModules;
+import { useShareEvent } from '../utils/useShareEvent';
+import { useLinkEvent } from '../utils/useLinkEvent';
 
 const CATEGORIES_HEIGHT = 60;
 
-class VerifiedScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isRefreshing: false,
-    };
-    this.scrollY = new Animated.Value(0);
-    this.verifiedListRef = React.createRef();
-    this.categoriesListRef = React.createRef();
-  }
+/** TODO:
+ *  - rename shouldLoadNextPage to canLoadNextPage or nextPageExists
+ *  - error handling
+ */
 
-  componentDidMount() {
-    AppState.addEventListener('change', this.handleAppStateChange);
-    this.props.fetchVerifiedRequest();
-    this.props.fetchCategories();
-    if (Platform.OS === 'ios') {
-      Linking.addEventListener('url', this.urlHandler);
-      this.checkShareUrl();
-      this.checkOpenUrl();
-    } else {
-      this.observeAndroidUrlToShare();
-      this.observeAndroidUrlToOpen();
-      UrlShareModule.getShareUrl();
-      UrlShareModule.getOpenUrl();
-    }
-  }
+const useHeaderAnimation = () => {
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const translateY = scrollY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, -TITLE_HEIGHT],
+    extrapolate: 'clamp',
+  });
+  const elevation = scrollY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, 4],
+    extrapolate: 'clamp',
+  });
+  const shadowOpacity = scrollY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [0, 0.18],
+    extrapolate: 'clamp',
+  });
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.error && prevProps.error !== this.props.error) {
-      DropDownAlert.showError();
-    }
-    if (
-      this.props.selectedCategory?.id !== prevProps.selectedCategory?.id &&
-      !this.props.isFetching
-    ) {
-      this.onRefreshTriggered();
-      const selectedIndex = this.props.categories.findIndex(
-        (category) => category.id === this.props.selectedCategory?.id
-      );
-      if (selectedIndex !== -1) {
-        this.categoriesListRef.current?.scrollToIndex({
-          animated: true,
-          index: selectedIndex,
-        });
-      } else {
-        this.categoriesListRef.current?.scrollToOffset({
-          animated: true,
-          offset: 0,
-        });
+  const handleScroll = (listener) =>
+    Animated.event(
+      [
+        {
+          nativeEvent: {
+            contentOffset: { y: scrollY },
+          },
+        },
+      ],
+      {
+        useNativeDriver: true,
+        listener,
       }
-    }
-    if (
-      prevState.isRefreshing &&
-      prevProps.isFetching &&
-      !this.props.isFetching
-    ) {
-      this.setState({ isRefreshing: false });
-    }
-  }
+    );
 
-  componentWillUnmount() {
-    AppState.removeEventListener('change', this.handleAppStateChange);
-    this.urlEvent?.remove();
-    this.shareEvent?.remove();
-    if (Platform.OS === 'ios') {
-      Linking.removeEventListener('url', this.urlHandler);
-    }
-  }
-
-  handleAppStateChange = (nextState) => {
-    if (nextState === 'active' && Platform.OS === 'ios') {
-      this.checkShareUrl();
-    }
+  return {
+    scrollY,
+    animatedHeaderStyles: {
+      transform: [{ translateY }],
+      elevation,
+      shadowOpacity,
+    },
+    handleScroll,
   };
+};
 
-  checkShareUrl() {
-    SharedModule.getShareUrl((error, url) => {
-      SharedModule.clearShareUrl();
-      this.showReportModal(url);
-    });
-  }
+const VerifiedScreen = ({
+  isFetchingInitial,
+  isFetchingNextPage,
+  articles,
+  categories,
+  selectedCategory,
+  shouldLoadNextPage,
+  nextPage,
+  dispatch,
+  allCategoriesLength,
+}) => {
+  const navigation = useNavigation();
 
-  checkOpenUrl() {
-    SharedModule.getOpenUrl((error, url) => {
+  const goToVerifiedDetails = (id) =>
+    navigation.navigate(routes.verifiedDetails, { id });
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const categoriesListRef = useRef(null);
+  const verifiedListRef = useRef(null);
+  const { animatedHeaderStyles, handleScroll } = useHeaderAnimation();
+
+  useShareEvent({
+    onShare: (url) => navigation.navigate(routes.reportModal, { url }),
+  });
+
+  useLinkEvent({
+    onUrlOpen: (url) => {
       const { id } = matchUrl(url, APP_URL + '/:id');
-      SharedModule.clearOpenUrl();
-      if (id && isUUID(id)) this.goToVerifiedDetails(id);
-    });
-  }
+      if (id && isUUID(id)) {
+        goToVerifiedDetails(id);
+      }
+    },
+  });
 
-  observeAndroidUrlToShare() {
-    this.shareEvent = DeviceEventEmitter.addListener(
-      'shareUrl',
-      this.onExternalUrlShareAndroid
+  useEffect(() => {
+    dispatch(feedActions.list());
+    dispatch(feedActions.categories());
+  }, []);
+
+  useEffect(() => {
+    dispatch(feedActions.list(1, selectedCategory?.name));
+    const selectedIndex = categories.findIndex(
+      (category) => category.id === selectedCategory?.id
     );
-  }
-
-  observeAndroidUrlToOpen() {
-    this.urlEvent = DeviceEventEmitter.addListener('openUrl', ({ url }) =>
-      this.onExternalUrlOpen(url)
-    );
-  }
-
-  onExternalUrlShareAndroid = ({ url }) => {
-    UrlShareModule.clearActionUrl();
-    this.showReportModal(url);
-  };
-
-  onExternalUrlOpen = (url) => {
-    const { id } = matchUrl(url, APP_URL + '/:id');
-    if (Platform.OS === 'ios') {
-      SharedModule.clearOpenUrl();
+    if (selectedIndex >= 0) {
+      categoriesListRef.current?.scrollToIndex({
+        animated: true,
+        viewPosition: 0.3,
+        index: selectedIndex,
+      });
     } else {
-      UrlShareModule.clearOpenUrl();
+      categoriesListRef.current?.scrollToOffset({
+        animated: true,
+        offset: 0,
+      });
     }
-    if (id && isUUID(id)) this.goToVerifiedDetails(id);
-  };
+  }, [selectedCategory?.id]);
 
-  urlHandler = ({ url }) => this.onExternalUrlOpen(url);
-
-  showReportModal = (url) =>
-    this.props.navigation.navigate(routes.reportModal, { url });
-
-  goToVerifiedDetails = (id) =>
-    this.props.navigation.navigate(routes.verifiedDetails, { id });
-
-  drawCell = ({ item }) => {
-    return (
-      <VerifiedCell
-        item={item}
-        onCellTapped={() => this.goToVerifiedDetails(item.id)}
-      />
+  const handleRefreshTriggered = () => {
+    setIsRefreshing(true);
+    dispatch(
+      feedActions.list(1, selectedCategory?.name, () => setIsRefreshing(false))
     );
   };
 
-  drawCategoryCell = ({ item }) => {
-    const { selectedCategory } = this.props;
-    const isSelected = selectedCategory && selectedCategory.id === item.id;
-    return (
-      <CategoryCell
-        item={item}
-        isSelected={isSelected}
-        onCellTapped={() => {
-          this.verifiedListRef.current?.scrollToOffset({
-            animated: true,
-            offset: 0,
-          });
-          setTimeout(() => {
-            this.props.setSelectedCategory(item);
-          }, 500);
-        }}
-      />
-    );
-  };
-
-  keyExtractor = (_item, index) => index.toString();
-
-  loadNextPage = () => {
-    const {
-      shouldLoadNextPage,
-      nextPage,
-      isFetchingNextPage,
-      fetchVerifiedRequest,
-      selectedCategory,
-    } = this.props;
-
-    if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
-      fetchVerifiedRequest(nextPage, selectedCategory?.name);
-    }
-  };
-
-  onRefreshTriggered = () => {
-    const { fetchVerifiedRequest, selectedCategory } = this.props;
-    this.setState({ isRefreshing: true });
-    fetchVerifiedRequest(1, selectedCategory?.name);
-  };
-
-  renderListFooterComponent = () => (
-    <View style={styles.loader}>
-      <ActivityIndicator size="large" color={CINNABAR} />
-    </View>
-  );
-
-  renderEmptyComponent = () => {
-    return (
-      <View style={styles.emptyComponent}>
-        <TouchableOpacityDebounce
-          onPress={this.onRefreshTriggered}
-          style={styles.refreshButton}
-        >
-          <Text style={styles.refreshButtonText}>{strings.refresh}</Text>
-        </TouchableOpacityDebounce>
-      </View>
-    );
-  };
-
-  renderCategoriesFooterIfNeeded = () => {
-    const { allCategoriesLength, categories } = this.props;
-    if (allCategoriesLength <= categories.length) return null;
-    return (
-      <CategoryCell
-        item={{ name: strings.verifiedDetails.categoriesMore }}
-        onCellTapped={() => this.props.navigation.navigate(routes.categories)}
-        textColor={CINNABAR}
-      />
-    );
-  };
-
-  renderCategoriesIfNeeded = () => {
-    const { categories, selectedCategory } = this.props;
-    if (categories.length > 0) {
-      return (
+  return (
+    <View style={styles.container}>
+      <Animated.View style={[styles.headerWrapper, animatedHeaderStyles]}>
+        <Container>
+          <Title title={strings.verifiedDetails.verifiedTitle} />
+        </Container>
         <FlatList
+          horizontal
+          ref={categoriesListRef}
           style={styles.categoriesList}
           contentContainerStyle={styles.categoriesContent}
-          ref={this.categoriesListRef}
           data={categories}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          renderItem={this.drawCategoryCell}
+          renderItem={({ item }) => (
+            <CategoryCell
+              item={item}
+              isSelected={selectedCategory && selectedCategory.id === item.id}
+              onCellTapped={() => {
+                verifiedListRef.current?.scrollToOffset({
+                  animated: true,
+                  offset: 0,
+                });
+                setTimeout(() => {
+                  dispatch(feedActions.setSelectedCategory(item));
+                }, 500);
+              }}
+            />
+          )}
           showsHorizontalScrollIndicator={false}
           ListHeaderComponent={() => {
             return (
@@ -279,128 +192,93 @@ class VerifiedScreen extends Component {
                 item={{ name: strings.verifiedDetails.categoriesAll }}
                 isSelected={!selectedCategory}
                 onCellTapped={() => {
-                  this.verifiedListRef.current?.scrollToOffset({
+                  verifiedListRef.current?.scrollToOffset({
                     animated: true,
                     offset: 0,
                   });
-                  this.props.setSelectedCategory(null);
+                  dispatch(feedActions.setSelectedCategory(null));
                 }}
               />
             );
           }}
-          ListFooterComponent={this.renderCategoriesFooterIfNeeded}
-        />
-      );
-    }
-  };
-
-  render() {
-    const { isFetchingInitial, isFetchingNextPage, articles } = this.props;
-    const { isRefreshing } = this.state;
-
-    const translateY = this.scrollY.interpolate({
-      inputRange: [0, 150],
-      outputRange: [0, -TITLE_HEIGHT],
-      extrapolate: 'clamp',
-    });
-    const elevation = this.scrollY.interpolate({
-      inputRange: [0, 150],
-      outputRange: [0, 4],
-      extrapolate: 'clamp',
-    });
-    const shadowOpacity = this.scrollY.interpolate({
-      inputRange: [0, 150],
-      outputRange: [0, 0.18],
-      extrapolate: 'clamp',
-    });
-
-    return (
-      <View style={styles.container}>
-        <Animated.View
-          style={{
-            position: 'absolute',
-            backgroundColor: 'white',
-            top: 0,
-            zIndex: 9,
-            transform: [{ translateY }],
-
-            elevation,
-            shadowColor: BLACK,
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity,
-            shadowRadius: 2,
-          }}
-        >
-          <Container>
-            <Title
-              title={strings.verifiedDetails.verifiedTitle}
-              scrollY={this.scrollY}
-            />
-          </Container>
-          {this.renderCategoriesIfNeeded()}
-        </Animated.View>
-        <FlatList
-          ref={this.verifiedListRef}
-          renderScrollComponent={(props) => (
-            <Animated.ScrollView
-              {...props}
-              // scrollEventThrottle={16}
-              // contentInset={{ top: 500 }}
-              onScroll={Animated.event(
-                [
-                  {
-                    nativeEvent: {
-                      contentOffset: { y: this.scrollY },
-                    },
-                  },
-                ],
-                {
-                  useNativeDriver: true,
-                  listener: (event) => props.onScroll(event),
-                }
-              )}
-            />
-          )}
-          data={articles}
-          contentContainerStyle={{
-            flexGrow: 1,
-            paddingVertical: 16,
-            paddingTop: CATEGORIES_HEIGHT + TITLE_HEIGHT + 8,
-          }}
-          style={{
-            flex: 1,
-          }}
-          renderItem={this.drawCell}
-          keyExtractor={this.keyExtractor}
-          onEndReached={this.loadNextPage}
-          onEndReachedThreshold={0.2}
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={this.onRefreshTriggered}
-              tintColor={CINNABAR}
-            />
-          }
           ListFooterComponent={
-            isFetchingNextPage && !isRefreshing
-              ? this.renderListFooterComponent
-              : null
+            allCategoriesLength > categories.length && (
+              <CategoryCell
+                item={{ name: strings.verifiedDetails.categoriesMore }}
+                onCellTapped={() => navigation.navigate(routes.categories)}
+                textColor={CINNABAR}
+              />
+            )
           }
-          ListEmptyComponent={this.renderEmptyComponent}
         />
-        <LoadingOverlay visible={isFetchingInitial && !isRefreshing} />
-      </View>
-    );
-  }
-}
+      </Animated.View>
+      <FlatList
+        data={articles}
+        ref={verifiedListRef}
+        style={styles.verifiedList}
+        contentContainerStyle={styles.verifiedListContent}
+        renderScrollComponent={(props) => (
+          <Animated.ScrollView
+            {...props}
+            // eslint-disable-next-line react/prop-types
+            onScroll={handleScroll((event) => props.onScroll(event))}
+          />
+        )}
+        renderItem={({ item }) => (
+          <VerifiedCell
+            item={item}
+            onCellTapped={() => goToVerifiedDetails(item.id)}
+          />
+        )}
+        onEndReached={() => {
+          if (shouldLoadNextPage && !isFetchingNextPage && nextPage) {
+            dispatch(feedActions.list(nextPage, selectedCategory?.name));
+          }
+        }}
+        onEndReachedThreshold={0.2}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefreshTriggered}
+            tintColor={CINNABAR}
+            progressViewOffset={TITLE_HEIGHT}
+          />
+        }
+        ListFooterComponent={
+          isFetchingNextPage &&
+          !isRefreshing && (
+            <View style={styles.loader}>
+              <ActivityIndicator size="large" color={CINNABAR} />
+            </View>
+          )
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyComponent}>
+            <TouchableOpacityDebounce
+              onPress={handleRefreshTriggered}
+              style={styles.refreshButton}
+            >
+              <Text style={styles.refreshButtonText}>{strings.refresh}</Text>
+            </TouchableOpacityDebounce>
+          </View>
+        }
+      />
+      <LoadingOverlay visible={isFetchingInitial && !isRefreshing} />
+    </View>
+  );
+};
 
 // TODO: replace any with correct types
 VerifiedScreen.propTypes = {
+  allCategoriesLength: PropTypes.any,
   articles: PropTypes.array,
+  categories: PropTypes.shape({
+    findIndex: PropTypes.func,
+    length: PropTypes.any,
+  }),
+  dispatch: PropTypes.func,
   error: PropTypes.any,
+  fetchCategories: PropTypes.func,
   fetchVerifiedRequest: PropTypes.func,
   isFetching: PropTypes.bool,
   isFetchingInitial: PropTypes.bool,
@@ -409,15 +287,12 @@ VerifiedScreen.propTypes = {
     navigate: PropTypes.func,
   }),
   nextPage: PropTypes.any,
-  shouldLoadNextPage: PropTypes.bool,
-  categories: PropTypes.any,
-  fetchCategories: PropTypes.func,
-  setSelectedCategory: PropTypes.func,
   selectedCategory: PropTypes.shape({
     id: PropTypes.string,
     name: PropTypes.string,
   }),
-  allCategoriesLength: PropTypes.any,
+  setSelectedCategory: PropTypes.func,
+  shouldLoadNextPage: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -441,12 +316,11 @@ const styles = StyleSheet.create({
     backgroundColor: CINNABAR,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 10,
+    borderRadius: 2,
   },
   refreshButtonText: {
     color: 'white',
-    fontSize: 20,
-    fontWeight: 'bold',
+    fontSize: 14,
   },
   categoriesList: {
     flexGrow: 0,
@@ -457,6 +331,28 @@ const styles = StyleSheet.create({
   },
   categoriesContent: {
     paddingRight: 32,
+    minWidth: '100%',
+  },
+  headerWrapper: {
+    position: 'absolute',
+    backgroundColor: 'white',
+    top: 0,
+    zIndex: 9,
+    shadowColor: BLACK,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowRadius: 2,
+  },
+  verifiedListContent: {
+    flexGrow: 1,
+    paddingVertical: 16,
+    paddingTop: TITLE_HEIGHT + 8,
+  },
+  verifiedList: {
+    flex: 1,
+    marginTop: CATEGORIES_HEIGHT,
   },
 });
 
@@ -476,16 +372,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchVerifiedRequest: (...args) => dispatch(feedActions.list(...args)),
-    fetchCategories: () => dispatch(feedActions.categories()),
-    setSelectedCategory: (...args) =>
-      dispatch(feedActions.setSelectedCategory(...args)),
-  };
-};
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withHeaderHeight
-)(VerifiedScreen);
+export default connect(mapStateToProps)(VerifiedScreen);
