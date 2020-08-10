@@ -12,7 +12,7 @@ import {
   SafeAreaView,
   Animated,
 } from 'react-native';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Moment from 'moment';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Hyperlink from 'react-native-hyperlink';
@@ -22,6 +22,7 @@ import {
   DropDownAlert,
   TouchableOpacityDebounce,
   Container,
+  ShareButton,
 } from '../components';
 import { strings } from '../constants/strings';
 import { DARK_GRAY, CINNABAR, WHITE, BLACK } from '../constants/colors';
@@ -30,54 +31,63 @@ import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
-import AndroidShareImg from '../resources/img/share-android.svg';
-import IOSShareImg from '../resources/img/share-ios.svg';
 import Close from '../resources/img/close.svg';
 import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
 import { useNavigation } from '@react-navigation/native';
 
 const URL_FONT_SIZE = 14;
-const isAndroid = Platform.OS === 'android';
+const VERIFICATION_STATUS = {
+  true: {
+    color: 'green',
+    image: <VerifiedOk width={40} height={40} style={{ color: 'green' }} />,
+    text: strings.report.authentic,
+  },
+  false: {
+    color: CINNABAR,
+    image: <VerifiedBad width={40} height={40} style={{ color: CINNABAR }} />,
+    text: strings.report.fakeNews,
+  },
+  unidentified: {
+    color: 'gray',
+    image: <VerifiedNot width={40} height={40} style={{ color: 'gray' }} />,
+    text: strings.report.unverifiable,
+  },
+};
+
 const LaunchImage = (
   <Launch width={URL_FONT_SIZE} height={URL_FONT_SIZE} fill={CINNABAR} />
 );
 
-const ShareIcon = ({ onShare }) => (
-  <TouchableOpacityDebounce style={styles.shareButton} onPress={onShare}>
-    {isAndroid && <AndroidShareImg fill={BLACK} />}
-    {!isAndroid && <IOSShareImg fill={CINNABAR} />}
-  </TouchableOpacityDebounce>
-);
-
-ShareIcon.propTypes = {
-  onShare: PropTypes.func,
-};
-
-const dateFormatted = (date, format) => Moment(date).format(format);
+const formatDate = (date, format) =>
+  Moment(date).format(format ?? 'DD.MM.YYYY HH:mm');
+const getSourcesArray = (sourcesString) =>
+  (sourcesString ?? []).split('\n').filter((source) => !!source);
 const fhLink = (id) => `${APP_URL}/${id}`;
 
-const VerifiedDetailsScreen = ({
-  route,
-  error,
-  isFetching,
-  fetchVerifiedDetailsRequest,
-  details,
-}) => {
+const VerifiedDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [imageViewerVisible, setImageViewerVisible] = useState(false);
   const [imageAspectRatio, setImageAspectRatio] = useState(0);
   const imageOpacity = useRef(new Animated.Value(0)).current;
 
+  const { details, isFetching, error } = useSelector(
+    ({ articles: { details } }) => ({
+      details: details.data,
+      isFetching: details.isFetching,
+      error: details.error,
+    })
+  );
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <ShareIcon onShare={onShare} />,
+      headerRight: () => <ShareButton onShare={handleShare} />,
     });
   }, []);
 
   useEffect(() => {
-    const { id } = route.params;
-    fetchVerifiedDetailsRequest(id);
+    dispatch(feedActions.details(route.params?.id));
   }, []);
 
   useEffect(() => {
@@ -103,9 +113,9 @@ const VerifiedDetailsScreen = ({
     setImageViewerVisible(!imageViewerVisible);
   };
 
-  const onShare = async () => {
+  const handleShare = async () => {
     try {
-      const url = fhLink(details.url);
+      const url = fhLink(details?.id);
       await Share.share({
         ...Platform.select({
           android: {
@@ -119,83 +129,37 @@ const VerifiedDetailsScreen = ({
     }
   };
 
-  const verificationStatusImage = () => {
-    if (!details) return null;
-    switch (details.verdict) {
-      case 'true':
-        return <VerifiedOk width={40} height={40} style={{ color: 'green' }} />;
-      case 'false':
-        return (
-          <VerifiedBad width={40} height={40} style={{ color: CINNABAR }} />
-        );
-      default:
-        return <VerifiedNot width={40} height={40} style={{ color: 'gray' }} />;
-    }
-  };
-
-  const verificationStatusText = () => {
-    if (!details) return null;
-    switch (details.verdict) {
-      case 'true':
-        return strings.report.authentic;
-      case 'false':
-        return strings.report.fakeNews;
-      default:
-        return strings.report.unverifiable;
-    }
-  };
-
-  const verificationStatusColor = () => {
-    if (!details) return null;
-    switch (details.verdict) {
-      case 'true':
-        return 'green';
-      case 'false':
-        return CINNABAR;
-      default:
-        return 'gray';
-    }
-  };
-
-  const renderImageModalHeader = () => {
-    return (
-      <SafeAreaView style={{ position: 'absolute', zIndex: 1 }}>
-        <TouchableOpacityDebounce
-          style={styles.closeButton}
-          onPress={() => setImageViewerVisible(false)}
-        >
-          <Close width={40} height={40} fill={WHITE} />
-        </TouchableOpacityDebounce>
-      </SafeAreaView>
-    );
-  };
-
-  const renderSource = (value) => {
-    return (
-      <Hyperlink
-        key={value}
-        linkDefault={true}
-        linkStyle={styles.url}
-        linkText={(url) => (
-          <Text>
-            {LaunchImage} {url}
-          </Text>
-        )}
-        style={{ flexDirection: 'row', marginTop: 8 }}
+  const renderImageModalHeader = () => (
+    <SafeAreaView style={{ position: 'absolute', zIndex: 1 }}>
+      <TouchableOpacityDebounce
+        style={styles.closeButton}
+        onPress={() => setImageViewerVisible(false)}
       >
-        <Text style={styles.detailsText}>{value}</Text>
-      </Hyperlink>
-    );
-  };
+        <Close width={40} height={40} fill={WHITE} />
+      </TouchableOpacityDebounce>
+    </SafeAreaView>
+  );
+
+  const renderSource = (value) => (
+    <Hyperlink
+      key={value}
+      linkDefault={true}
+      linkStyle={styles.url}
+      linkText={(url) => (
+        <Text>
+          {LaunchImage} {url}
+        </Text>
+      )}
+      style={{ flexDirection: 'row', marginTop: 8 }}
+    >
+      <Text style={styles.detailsText}>{value}</Text>
+    </Hyperlink>
+  );
 
   const renderExpertSources = () => {
-    const sources =
+    const sources = getSourcesArray(
       details.expert_opinion?.confirmation_sources
-        .split('\n')
-        .filter((source) => !!source) ?? [];
-    if (sources.length === 0) {
-      return null;
-    }
+    );
     return (
       <>
         <Text style={{ ...styles.detailsSubtitle, marginTop: 12 }}>
@@ -215,9 +179,9 @@ const VerifiedDetailsScreen = ({
         </Text>
 
         {details.fact_checker_opinions.map((report, index) => {
-          const sources = report.confirmation_sources
-            .split('\n')
-            .filter((source) => !!source);
+          const sources = getSourcesArray(
+            details.expert_opinion?.confirmation_sources
+          );
           return (
             <View style={{ marginBottom: 16 }} key={report.title}>
               <Text style={styles.detailsSubtitle}>
@@ -225,7 +189,7 @@ const VerifiedDetailsScreen = ({
               </Text>
               <Text style={styles.dateLabel}>
                 {strings.verifiedDetails.verifiedDateLabel}{' '}
-                {dateFormatted(details?.expert?.date, 'DD.MM.YYYY HH:mm')}
+                {formatDate(details?.expert?.date)}
               </Text>
               <Text style={styles.detailsText}>{report.comment}</Text>
               {sources.map(renderSource)}
@@ -240,6 +204,8 @@ const VerifiedDetailsScreen = ({
     return <LoadingOverlay loading />;
   }
 
+  const verificationStatus = VERIFICATION_STATUS[details.verdict];
+  const reportUrl = fhLink(details.id);
   return (
     <ScrollView style={{ backgroundColor: WHITE }}>
       <View style={styles.container}>
@@ -247,7 +213,7 @@ const VerifiedDetailsScreen = ({
           <Text style={styles.title}>{details?.title}</Text>
           <Text style={styles.dateLabel}>{`${
             strings.verifiedDetails.reportDateLabel
-          } ${dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
+          } ${formatDate(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
         </Container>
 
         <Container style={styles.verdictContainer}>
@@ -256,14 +222,14 @@ const VerifiedDetailsScreen = ({
           >
             {strings.report.verdict}
           </Text>
-          {verificationStatusImage()}
+          {verificationStatus.image}
           <Text
             style={{
               ...styles.verdictText,
-              color: verificationStatusColor(),
+              color: verificationStatus.color,
             }}
           >
-            {verificationStatusText()}
+            {verificationStatus.text}
           </Text>
         </Container>
 
@@ -289,17 +255,16 @@ const VerifiedDetailsScreen = ({
           <Text style={styles.detailsTitle}>
             {strings.verifiedDetails.fhLinkLabel}
           </Text>
-          <Text style={styles.url} onPress={() => openUrl(fhLink(details.id))}>
-            {LaunchImage} {fhLink(details.id)}
+          <Text style={styles.url} onPress={() => openUrl(reportUrl)}>
+            {LaunchImage} {reportUrl}
           </Text>
 
           <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
             {strings.verifiedDetails.expertReportLabel}
           </Text>
           <Text style={styles.dateLabel}>
-            {`${strings.verifiedDetails.verifiedDateLabel} ${dateFormatted(
-              details?.expert?.date,
-              'DD.MM.YYYY HH:mm'
+            {`${strings.verifiedDetails.verifiedDateLabel} ${formatDate(
+              details?.expert?.date
             )}`}
           </Text>
           <Text style={styles.detailsText}>
@@ -330,39 +295,11 @@ const VerifiedDetailsScreen = ({
   );
 };
 
-// TODO: replace any with correct types
 VerifiedDetailsScreen.propTypes = {
-  details: PropTypes.shape({
-    expert: PropTypes.shape({
-      date: PropTypes.any,
-    }),
-    expert_opinion: PropTypes.shape({
-      comment: PropTypes.any,
-      confirmation_sources: PropTypes.string,
-    }),
-    id: PropTypes.any,
-    reported_at: PropTypes.any,
-    screenshot_url: PropTypes.string,
-    title: PropTypes.any,
-    url: PropTypes.any,
-    verdict: PropTypes.any,
-    fact_checker_opinions: PropTypes.arrayOf(
-      PropTypes.shape({
-        comment: PropTypes.string,
-        confirmation_sources: PropTypes.string,
-        date: PropTypes.string,
-        title: PropTypes.string,
-      })
-    ),
-  }),
-  error: PropTypes.any,
-  fetchVerifiedDetailsRequest: PropTypes.func,
-  isFetching: PropTypes.any,
-  navigation: PropTypes.shape({
-    setOptions: PropTypes.func,
-  }),
   route: PropTypes.shape({
-    params: PropTypes.any,
+    params: PropTypes.objectOf({
+      id: PropTypes.string,
+    }),
   }),
 };
 
@@ -434,11 +371,6 @@ const styles = StyleSheet.create({
     color: CINNABAR,
     fontSize: URL_FONT_SIZE,
   },
-  shareButton: {
-    width: 24,
-    height: 24,
-    marginRight: isAndroid ? 16 : 8,
-  },
   closeButton: {
     marginLeft: 16,
     marginTop: 20,
@@ -447,22 +379,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    details: state.articles.details.data,
-    isFetching: state.articles.details.isFetching,
-    error: state.articles.details.error,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchVerifiedDetailsRequest: (...args) =>
-      dispatch(feedActions.details(...args)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(VerifiedDetailsScreen);
+export default VerifiedDetailsScreen;
