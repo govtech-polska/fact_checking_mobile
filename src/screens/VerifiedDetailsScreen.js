@@ -297,7 +297,7 @@ const VerifiedDetailsScreen = ({ route }) => {
 
 VerifiedDetailsScreen.propTypes = {
   route: PropTypes.shape({
-    params: PropTypes.objectOf({
+    params: PropTypes.shape({
       id: PropTypes.string,
     }),
   }),
@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: WHITE,
+    paddingBottom: 16,
   },
   titleContainer: {
     marginTop: 16,
