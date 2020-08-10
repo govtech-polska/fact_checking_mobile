@@ -8,3 +8,4 @@ export { default as Field } from './Field';
 export { default as DraftsListItem } from './DraftsListItem';
 export { default as Button } from './Button';
 export { default as CategoryCell } from './CategoryCell';
+export { default as LogoTitle } from './LogoTitle';
