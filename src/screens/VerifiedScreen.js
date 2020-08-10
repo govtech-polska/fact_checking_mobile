@@ -16,7 +16,6 @@ import isUUID from 'validator/lib/isUUID';
 import {
   VerifiedCell,
   LoadingOverlay,
-  TouchableOpacityDebounce,
   Title,
   Container,
   CategoryCell,
@@ -147,7 +146,7 @@ const VerifiedScreen = () => {
     <View style={styles.container}>
       <Animated.View style={[styles.headerWrapper, animatedHeaderStyles]}>
         <Container>
-          <Title title={strings.verifiedDetails.verifiedTitle} />
+          <Title title={strings.verifiedList.verifiedTitle} />
         </Container>
         {categories && (
           <FlatList
@@ -167,7 +166,7 @@ const VerifiedScreen = () => {
             ListHeaderComponent={() => {
               return (
                 <CategoryCell
-                  item={{ name: strings.verifiedDetails.categoriesAll }}
+                  item={{ name: strings.verifiedList.categoriesAll }}
                   isSelected={!selectedCategory}
                   onCellTapped={handleCategoryCellTap(null)}
                 />
@@ -176,7 +175,7 @@ const VerifiedScreen = () => {
             ListFooterComponent={
               allCategoriesLength > categories.length && (
                 <CategoryCell
-                  item={{ name: strings.verifiedDetails.categoriesMore }}
+                  item={{ name: strings.verifiedList.categoriesMore }}
                   onCellTapped={() => navigation.navigate(routes.categories)}
                   textColor={CINNABAR}
                 />
@@ -229,14 +228,9 @@ const VerifiedScreen = () => {
           )
         }
         ListEmptyComponent={
-          <View style={styles.emptyComponent}>
-            <TouchableOpacityDebounce
-              onPress={handleRefreshTriggered}
-              style={styles.refreshButton}
-            >
-              <Text style={styles.refreshButtonText}>{strings.refresh}</Text>
-            </TouchableOpacityDebounce>
-          </View>
+          <Text style={styles.emptyListText}>
+            {strings.verifiedList.emptyList}
+          </Text>
         }
       />
       <LoadingOverlay visible={isFetchingInitial && !isRefreshing} />
@@ -254,22 +248,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
   },
-  emptyComponent: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  refreshButton: {
-    width: 200,
-    height: 50,
-    backgroundColor: CINNABAR,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 2,
-  },
-  refreshButtonText: {
-    color: WHITE,
-    fontSize: 14,
+  emptyListText: {
+    textAlign: 'center',
+    marginTop: 16,
   },
   categoriesList: {
     flexGrow: 0,
