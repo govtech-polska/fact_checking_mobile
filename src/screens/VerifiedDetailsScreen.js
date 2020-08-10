@@ -29,15 +29,28 @@ import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
-import ShareImg from '../resources/img/share.svg';
+import AndroidShareImg from '../resources/img/share-android.svg';
+import IOSShareImg from '../resources/img/share-ios.svg';
 import Close from '../resources/img/close.svg';
 import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
 
 const URL_FONT_SIZE = 14;
+const isAndroid = Platform.OS === 'android';
 const LaunchImage = (
   <Launch width={URL_FONT_SIZE} height={URL_FONT_SIZE} fill={CINNABAR} />
 );
+
+const ShareIcon = ({ onShare }) => (
+  <TouchableOpacityDebounce style={styles.shareButton} onPress={onShare}>
+    {isAndroid && <AndroidShareImg fill={BLACK} />}
+    {!isAndroid && <IOSShareImg fill={CINNABAR} />}
+  </TouchableOpacityDebounce>
+);
+
+ShareIcon.propTypes = {
+  onShare: PropTypes.func,
+};
 
 class VerifiedDetailsScreen extends Component {
   constructor(props) {
@@ -47,14 +60,7 @@ class VerifiedDetailsScreen extends Component {
     };
 
     props.navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacityDebounce
-          style={styles.shareButton}
-          onPress={this.onShare}
-        >
-          <ShareImg fill={Platform.OS === 'ios' ? CINNABAR : BLACK} />
-        </TouchableOpacityDebounce>
-      ),
+      headerRight: () => <ShareIcon onShare={this.onShare} />,
     });
   }
 
@@ -424,9 +430,9 @@ const styles = StyleSheet.create({
     fontSize: URL_FONT_SIZE,
   },
   shareButton: {
-    width: 30,
-    height: 30,
-    marginRight: 8,
+    width: 24,
+    height: 24,
+    marginRight: isAndroid ? 16 : 8,
   },
   closeButton: {
     marginLeft: 16,
