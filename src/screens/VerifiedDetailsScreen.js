@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
@@ -10,6 +10,7 @@ import {
   Share,
   Platform,
   SafeAreaView,
+  Animated,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Moment from 'moment';
@@ -34,6 +35,7 @@ import IOSShareImg from '../resources/img/share-ios.svg';
 import Close from '../resources/img/close.svg';
 import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
+import { useNavigation } from '@react-navigation/native';
 
 const URL_FONT_SIZE = 14;
 const isAndroid = Platform.OS === 'android';
@@ -52,63 +54,72 @@ ShareIcon.propTypes = {
   onShare: PropTypes.func,
 };
 
-class VerifiedDetailsScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      imageViewerVisible: false,
-    };
+const dateFormatted = (date, format) => Moment(date).format(format);
+const fhLink = (id) => `${APP_URL}/${id}`;
 
-    props.navigation.setOptions({
-      headerRight: () => <ShareIcon onShare={this.onShare} />,
+const VerifiedDetailsScreen = ({
+  route,
+  error,
+  isFetching,
+  fetchVerifiedDetailsRequest,
+  details,
+}) => {
+  const navigation = useNavigation();
+  const [imageViewerVisible, setImageViewerVisible] = useState(false);
+  const [imageAspectRatio, setImageAspectRatio] = useState(0);
+  const imageOpacity = useRef(new Animated.Value(0)).current;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <ShareIcon onShare={onShare} />,
     });
-  }
+  }, []);
 
-  componentDidMount() {
-    const { id } = this.props.route.params;
-    this.props.fetchVerifiedDetailsRequest(id);
-  }
+  useEffect(() => {
+    const { id } = route.params;
+    fetchVerifiedDetailsRequest(id);
+  }, []);
 
-  componentDidUpdate(prevProps) {
-    if (this.props.error && prevProps.error !== this.props.error) {
+  useEffect(() => {
+    if (details?.screenshot_url) {
+      Image.getSize(details.screenshot_url, (width, height) => {
+        setImageAspectRatio(width / height);
+        Animated.timing(imageOpacity, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      });
+    }
+  }, [details?.screenshot_url]);
+
+  useEffect(() => {
+    if (error) {
       DropDownAlert.showError();
     }
-  }
+  }, [error]);
 
-  dateFormatted(date, format) {
-    return Moment(date).format(format);
-  }
-
-  fhLink(id) {
-    return `${APP_URL}/${id}`;
-  }
-
-  toggleImageViewerVisibility = () => {
-    this.setState((prevState) => ({
-      imageViewerVisible: !prevState.imageViewerVisible,
-    }));
+  const toggleImageViewerVisibility = () => {
+    setImageViewerVisible(!imageViewerVisible);
   };
 
-  onShare = async () => {
+  const onShare = async () => {
     try {
-      const {
-        details: { id },
-      } = this.props;
+      const url = fhLink(details.url);
       await Share.share({
         ...Platform.select({
           android: {
-            message: `${APP_URL}/${id}`,
+            message: url,
           },
         }),
-        url: `${APP_URL}/${id}`,
+        url,
       });
     } catch (error) {
       DropDownAlert.showError();
     }
   };
 
-  verificationStatusImage = () => {
-    const { details } = this.props;
+  const verificationStatusImage = () => {
     if (!details) return null;
     switch (details.verdict) {
       case 'true':
@@ -122,8 +133,7 @@ class VerifiedDetailsScreen extends Component {
     }
   };
 
-  verificationStatusText = () => {
-    const { details } = this.props;
+  const verificationStatusText = () => {
     if (!details) return null;
     switch (details.verdict) {
       case 'true':
@@ -135,8 +145,7 @@ class VerifiedDetailsScreen extends Component {
     }
   };
 
-  verificationStatusColor = () => {
-    const { details } = this.props;
+  const verificationStatusColor = () => {
     if (!details) return null;
     switch (details.verdict) {
       case 'true':
@@ -148,34 +157,12 @@ class VerifiedDetailsScreen extends Component {
     }
   };
 
-  renderImageModalIfNeeded = () => {
-    const { imageViewerVisible } = this.state;
-    const { details } = this.props;
-    return (
-      <Modal
-        visible={imageViewerVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={() => this.setState({ imageViewerVisible: false })}
-      >
-        <ImageViewer
-          enableSwipeDown
-          renderIndicator={() => {}}
-          imageUrls={[{ url: details?.screenshot_url || '' }]}
-          onRequestClose={this.toggleImageViewerVisibility}
-          onCancel={this.toggleImageViewerVisibility}
-          renderHeader={this.renderImageModalHeader}
-        />
-      </Modal>
-    );
-  };
-
-  renderImageModalHeader = () => {
+  const renderImageModalHeader = () => {
     return (
       <SafeAreaView style={{ position: 'absolute', zIndex: 1 }}>
         <TouchableOpacityDebounce
           style={styles.closeButton}
-          onPress={() => this.setState({ imageViewerVisible: false })}
+          onPress={() => setImageViewerVisible(false)}
         >
           <Close width={40} height={40} fill={WHITE} />
         </TouchableOpacityDebounce>
@@ -183,7 +170,7 @@ class VerifiedDetailsScreen extends Component {
     );
   };
 
-  renderSource = (value) => {
+  const renderSource = (value) => {
     return (
       <Hyperlink
         key={value}
@@ -201,11 +188,11 @@ class VerifiedDetailsScreen extends Component {
     );
   };
 
-  renderExpertSources = () => {
-    const { details } = this.props;
-    const sources = details.expert_opinion.confirmation_sources
-      .split('\n')
-      .filter((source) => !!source);
+  const renderExpertSources = () => {
+    const sources =
+      details.expert_opinion?.confirmation_sources
+        .split('\n')
+        .filter((source) => !!source) ?? [];
     if (sources.length === 0) {
       return null;
     }
@@ -214,13 +201,12 @@ class VerifiedDetailsScreen extends Component {
         <Text style={{ ...styles.detailsSubtitle, marginTop: 12 }}>
           {strings.verifiedDetails.sources}
         </Text>
-        {sources.map(this.renderSource)}
+        {sources.map(renderSource)}
       </>
     );
   };
 
-  renderFactCheckerOpinions = () => {
-    const { details } = this.props;
+  const renderFactCheckerOpinions = () => {
     if (details.fact_checker_opinions.length === 0) return null;
     return (
       <>
@@ -239,10 +225,10 @@ class VerifiedDetailsScreen extends Component {
               </Text>
               <Text style={styles.dateLabel}>
                 {strings.verifiedDetails.verifiedDateLabel}{' '}
-                {this.dateFormatted(details?.expert?.date, 'DD.MM.YYYY HH:mm')}
+                {dateFormatted(details?.expert?.date, 'DD.MM.YYYY HH:mm')}
               </Text>
               <Text style={styles.detailsText}>{report.comment}</Text>
-              {sources.map(this.renderSource)}
+              {sources.map(renderSource)}
             </View>
           );
         })}
@@ -250,88 +236,99 @@ class VerifiedDetailsScreen extends Component {
     );
   };
 
-  render() {
-    const { details, isFetching } = this.props;
-
-    return isFetching || !details ? (
-      <LoadingOverlay loading />
-    ) : (
-      <ScrollView style={{ backgroundColor: WHITE }}>
-        {this.renderImageModalIfNeeded()}
-        <View style={styles.container}>
-          <Container style={styles.titleContainer}>
-            <Text style={styles.title}>{details?.title}</Text>
-            <Text style={styles.dateLabel}>{`${
-              strings.verifiedDetails.reportDateLabel
-            } ${this.dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
-          </Container>
-
-          <Container style={styles.verdictContainer}>
-            <Text
-              style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}
-            >
-              {strings.report.verdict}
-            </Text>
-            {this.verificationStatusImage()}
-            <Text
-              style={{
-                ...styles.verdictText,
-                color: this.verificationStatusColor(),
-              }}
-            >
-              {this.verificationStatusText()}
-            </Text>
-          </Container>
-
-          <TouchableOpacityDebounce onPress={this.toggleImageViewerVisibility}>
-            <Image
-              resizeMode="contain"
-              style={styles.image}
-              source={{ uri: details.screenshot_url || '' }}
-            />
-          </TouchableOpacityDebounce>
-
-          <Container style={styles.detailsContainer}>
-            <Text style={styles.detailsTitle}>
-              {strings.verifiedDetails.informationSourceLabel}
-            </Text>
-            <Text style={styles.url} onPress={() => openUrl(details.url)}>
-              {LaunchImage} {details.url}
-            </Text>
-
-            <Text style={styles.detailsTitle}>
-              {strings.verifiedDetails.fhLinkLabel}
-            </Text>
-            <Text
-              style={styles.url}
-              onPress={() => openUrl(this.fhLink(details.id))}
-            >
-              {LaunchImage} {this.fhLink(details.id)}
-            </Text>
-
-            <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
-              {strings.verifiedDetails.expertReportLabel}
-            </Text>
-            <Text style={styles.dateLabel}>
-              {`${
-                strings.verifiedDetails.verifiedDateLabel
-              } ${this.dateFormatted(
-                details?.expert?.date,
-                'DD.MM.YYYY HH:mm'
-              )}`}
-            </Text>
-            <Text style={styles.detailsText}>
-              {details?.expert_opinion?.comment}
-            </Text>
-            {this.renderExpertSources()}
-
-            {this.renderFactCheckerOpinions()}
-          </Container>
-        </View>
-      </ScrollView>
-    );
+  if (isFetching || !details) {
+    return <LoadingOverlay loading />;
   }
-}
+
+  return (
+    <ScrollView style={{ backgroundColor: WHITE }}>
+      <View style={styles.container}>
+        <Container style={styles.titleContainer}>
+          <Text style={styles.title}>{details?.title}</Text>
+          <Text style={styles.dateLabel}>{`${
+            strings.verifiedDetails.reportDateLabel
+          } ${dateFormatted(details?.reported_at, 'DD.MM.YYYY')}`}</Text>
+        </Container>
+
+        <Container style={styles.verdictContainer}>
+          <Text
+            style={{ ...styles.detailsTitle, marginTop: 0, marginRight: 8 }}
+          >
+            {strings.report.verdict}
+          </Text>
+          {verificationStatusImage()}
+          <Text
+            style={{
+              ...styles.verdictText,
+              color: verificationStatusColor(),
+            }}
+          >
+            {verificationStatusText()}
+          </Text>
+        </Container>
+
+        <TouchableOpacityDebounce
+          onPress={toggleImageViewerVisibility}
+          style={[styles.imageWrapper, { opacity: imageOpacity }]}
+        >
+          <Image
+            resizeMode="contain"
+            style={[styles.image, { aspectRatio: imageAspectRatio }]}
+            source={{ uri: details.screenshot_url || '' }}
+          />
+        </TouchableOpacityDebounce>
+
+        <Container style={styles.detailsContainer}>
+          <Text style={styles.detailsTitle}>
+            {strings.verifiedDetails.informationSourceLabel}
+          </Text>
+          <Text style={styles.url} onPress={() => openUrl(details.url)}>
+            {LaunchImage} {details.url}
+          </Text>
+
+          <Text style={styles.detailsTitle}>
+            {strings.verifiedDetails.fhLinkLabel}
+          </Text>
+          <Text style={styles.url} onPress={() => openUrl(fhLink(details.id))}>
+            {LaunchImage} {fhLink(details.id)}
+          </Text>
+
+          <Text style={{ ...styles.detailsTitle, marginBottom: 4 }}>
+            {strings.verifiedDetails.expertReportLabel}
+          </Text>
+          <Text style={styles.dateLabel}>
+            {`${strings.verifiedDetails.verifiedDateLabel} ${dateFormatted(
+              details?.expert?.date,
+              'DD.MM.YYYY HH:mm'
+            )}`}
+          </Text>
+          <Text style={styles.detailsText}>
+            {details?.expert_opinion?.comment}
+          </Text>
+          {renderExpertSources()}
+
+          {renderFactCheckerOpinions()}
+        </Container>
+      </View>
+
+      <Modal
+        visible={imageViewerVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setImageViewerVisible(false)}
+      >
+        <ImageViewer
+          enableSwipeDown
+          renderIndicator={() => {}}
+          imageUrls={[{ url: details?.screenshot_url || '' }]}
+          onRequestClose={toggleImageViewerVisibility}
+          onCancel={toggleImageViewerVisibility}
+          renderHeader={renderImageModalHeader}
+        />
+      </Modal>
+    </ScrollView>
+  );
+};
 
 // TODO: replace any with correct types
 VerifiedDetailsScreen.propTypes = {
@@ -398,12 +395,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  imageWrapper: {
+    margin: 8,
+    shadowColor: BLACK,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 3,
+    elevation: 1,
+    backgroundColor: WHITE,
+  },
   image: {
     width: '100%',
-    aspectRatio: 1.5,
-    backgroundColor: BLACK,
-    padding: 8,
-    marginTop: 8,
   },
   detailsContainer: {
     flex: 1,
