@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 const { SharedModule, UrlShareModule } = NativeModules;
 
+const isIOS = Platform.OS === 'ios';
 export const useLinkEvent = ({ onUrlOpen }) => {
   const urlEvent = useRef(null);
 
@@ -18,7 +19,7 @@ export const useLinkEvent = ({ onUrlOpen }) => {
   };
 
   const handleExternalUrlOpen = ({ url }) => {
-    if (Platform.OS === 'ios') {
+    if (isIOS) {
       SharedModule.clearOpenUrl();
     } else {
       UrlShareModule.clearOpenUrl();
@@ -27,7 +28,7 @@ export const useLinkEvent = ({ onUrlOpen }) => {
   };
 
   useEffect(() => {
-    if (Platform.OS === 'ios') {
+    if (isIOS) {
       Linking.addEventListener('url', handleExternalUrlOpen);
       checkOpenUrl();
     } else {
@@ -40,7 +41,9 @@ export const useLinkEvent = ({ onUrlOpen }) => {
 
     return () => {
       urlEvent.current?.remove();
-      Linking.removeEventListener('url', handleExternalUrlOpen);
+      if (isIOS) {
+        Linking.removeEventListener('url', handleExternalUrlOpen);
+      }
     };
   }, []);
 };

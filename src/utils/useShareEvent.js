@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 const { SharedModule, UrlShareModule } = NativeModules;
 
+const isIOS = Platform.OS === 'ios';
 export const useShareEvent = ({ onShare }) => {
   const shareEvent = useRef(null);
   const checkShareUrl = () => {
@@ -23,13 +24,13 @@ export const useShareEvent = ({ onShare }) => {
   };
 
   const handleAppStateChange = (nextState) => {
-    if (nextState === 'active' && Platform.OS === 'ios') {
+    if (nextState === 'active' && isIOS) {
       checkShareUrl();
     }
   };
 
   useEffect(() => {
-    if (Platform.OS === 'ios') {
+    if (isIOS) {
       checkShareUrl();
     } else {
       shareEvent.current = DeviceEventEmitter.addListener(

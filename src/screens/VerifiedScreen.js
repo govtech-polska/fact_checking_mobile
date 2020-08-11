@@ -192,6 +192,7 @@ const VerifiedScreen = () => {
         contentContainerStyle={styles.verifiedListContent}
         contentInset={{ top: TITLE_HEIGHT }}
         contentOffset={{ x: 0, y: -TITLE_HEIGHT }}
+        scrollEventThrottle={16}
         renderScrollComponent={(props) => (
           <Animated.ScrollView
             {...props}
