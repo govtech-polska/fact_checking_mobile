@@ -11,10 +11,14 @@ export const strings = {
     title: 'Wybierz kategorię',
   },
 
-  verifiedDetails: {
+  verifiedList: {
+    verifiedTitle: 'Zweryfikowane informacje',
     categoriesAll: 'Wszystkie',
     categoriesMore: 'Pokaż więcej',
-    verifiedTitle: 'Zweryfikowane informacje',
+    emptyList: 'Brak raportów dla wybranej kategorii.',
+  },
+
+  verifiedDetails: {
     reportDateLabel: 'Data zgłoszenia: ',
     informationSourceLabel: 'Źródło informacji:',
     argumentLabel: 'Teza:',
@@ -33,8 +37,8 @@ export const strings = {
     imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU',
     emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
     sendButton: 'Wyślij',
-    saveDraftButton: 'Zapisz kopię roboczą',
-    updateDraftButton: 'Aktualizuj kopię roboczą',
+    saveDraftButton: 'Zapisz szkic',
+    updateDraftButton: 'Aktualizuj szkic',
     verdict: 'Werdykt:',
     fakeNews: 'Fake news',
     unverifiable: 'Nieweryfikowalny',

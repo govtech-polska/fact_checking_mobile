@@ -9,3 +9,4 @@ export { default as DraftsListItem } from './DraftsListItem';
 export { default as Button } from './Button';
 export { default as CategoryCell } from './CategoryCell';
 export { default as LogoTitle } from './LogoTitle';
+export { default as ShareButton } from './ShareButton';
