@@ -94,7 +94,11 @@ const ReportScreen = ({ navigation, route: { params } }) => {
     if (draft.id) {
       setRawImagePath(draft.rawImage);
       setImagePath(draft.image);
-      reset(draft);
+      reset({
+        url: draft.url,
+        comment: draft.comment,
+        email: draft.email,
+      });
     }
   }, [draft.id]);
 
