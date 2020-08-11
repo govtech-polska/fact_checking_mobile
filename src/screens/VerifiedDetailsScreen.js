@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Moment from 'moment';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Hyperlink from 'react-native-hyperlink';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   LoadingOverlay,
@@ -42,7 +43,6 @@ import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 import Close from '../resources/img/close.svg';
 import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
-import { useNavigation } from '@react-navigation/native';
 
 const URL_FONT_SIZE = 14;
 const VERIFICATION_STATUS = {
