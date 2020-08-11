@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Moment from 'moment';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Hyperlink from 'react-native-hyperlink';
+import { useNavigation } from '@react-navigation/native';
 
 import {
   LoadingOverlay,
@@ -25,7 +26,15 @@ import {
   ShareButton,
 } from '../components';
 import { strings } from '../constants/strings';
-import { DARK_GRAY, CINNABAR, WHITE, BLACK } from '../constants/colors';
+import {
+  DARK_GRAY,
+  CINNABAR,
+  WHITE,
+  BLACK,
+  VERDICT_TRUE,
+  VERDICT_FALSE,
+  VERDICT_UNIDENTIFIED,
+} from '../constants/colors';
 import { feedActions } from '../storages/verified/actions';
 import { APP_URL } from '../constants/urls';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
@@ -34,23 +43,32 @@ import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 import Close from '../resources/img/close.svg';
 import Launch from '../resources/img/launch.svg';
 import { openUrl } from '../utils/url';
-import { useNavigation } from '@react-navigation/native';
 
 const URL_FONT_SIZE = 14;
 const VERIFICATION_STATUS = {
   true: {
-    color: 'green',
-    image: <VerifiedOk width={40} height={40} style={{ color: 'green' }} />,
+    color: VERDICT_TRUE,
+    image: (
+      <VerifiedOk width={40} height={40} style={{ color: VERDICT_TRUE }} />
+    ),
     text: strings.report.authentic,
   },
   false: {
-    color: CINNABAR,
-    image: <VerifiedBad width={40} height={40} style={{ color: CINNABAR }} />,
+    color: VERDICT_FALSE,
+    image: (
+      <VerifiedBad width={40} height={40} style={{ color: VERDICT_FALSE }} />
+    ),
     text: strings.report.fakeNews,
   },
   unidentified: {
-    color: 'gray',
-    image: <VerifiedNot width={40} height={40} style={{ color: 'gray' }} />,
+    color: VERDICT_UNIDENTIFIED,
+    image: (
+      <VerifiedNot
+        width={40}
+        height={40}
+        style={{ color: VERDICT_UNIDENTIFIED }}
+      />
+    ),
     text: strings.report.unverifiable,
   },
 };

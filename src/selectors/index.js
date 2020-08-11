@@ -1,1 +1,1 @@
-export * from './VerifiedSelectors';
+export * from './verifiedSelectors';

@@ -19,5 +19,6 @@ export const apiAction = (type, endpoint, options = {}) => {
     requestOptions: options.requestOptions,
     afterSagaSuccess: options.afterSagaSuccess,
     clearOnRequest: options.clearOnRequest,
+    waitForSuccess: options.waitForSuccess,
   };
 };

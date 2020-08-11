@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, delay } from 'redux-saga/effects';
 
 import { request } from '../../api';
 import { REQUEST, SUCCESS, FAILURE } from '../../redux/const';
@@ -24,6 +24,9 @@ export const apiSaga = (type) => {
         data = {
           success: true,
         };
+      }
+      if (action.waitForSuccess) {
+        yield delay(action.waitForSuccess);
       }
       yield put({
         type: type + SUCCESS,

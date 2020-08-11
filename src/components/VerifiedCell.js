@@ -1,53 +1,53 @@
-import React, { memo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import Moment from 'moment';
 
 import TouchableOpacityDebounce from './TouchableOpacityDebounce';
-import { WHITE_SMOKE, DARK_GRAY, CINNABAR } from '../constants/colors';
+import {
+  WHITE_SMOKE,
+  DARK_GRAY,
+  VERDICT_TRUE,
+  VERDICT_FALSE,
+  VERDICT_UNIDENTIFIED,
+  BLACK,
+} from '../constants/colors';
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 
+const VERIFICATION_STATUS_IMAGE = {
+  true: (
+    <VerifiedOk
+      width={25}
+      height={25}
+      style={{ marginLeft: 8, color: VERDICT_TRUE }}
+    />
+  ),
+  false: (
+    <VerifiedBad
+      width={25}
+      height={25}
+      style={{ marginLeft: 8, color: VERDICT_FALSE }}
+    />
+  ),
+  unidentified: (
+    <VerifiedNot
+      width={25}
+      height={25}
+      style={{ marginLeft: 8, color: VERDICT_UNIDENTIFIED }}
+    />
+  ),
+};
+
 const VerifiedCell = ({ item, onCellTapped }) => {
-  const verificationStatusImage = () => {
-    switch (item.verdict) {
-      case 'true':
-        return (
-          <VerifiedOk
-            width={25}
-            height={25}
-            style={{ marginLeft: 8, color: 'green' }}
-          />
-        );
-      case 'false':
-        return (
-          <VerifiedBad
-            width={25}
-            height={25}
-            style={{ marginLeft: 8, color: CINNABAR }}
-          />
-        );
-      default:
-        return (
-          <VerifiedNot
-            width={25}
-            height={25}
-            style={{ marginLeft: 8, color: 'gray' }}
-          />
-        );
-    }
-  };
   const date = Moment(item.reported_at).format('DD.MM.YYYY');
 
   return (
     <>
-      <TouchableOpacityDebounce
-        style={styles.container}
-        onPress={() => onCellTapped()}
-      >
+      <TouchableOpacityDebounce style={styles.container} onPress={onCellTapped}>
         <Image
-          resizeMode="contain"
+          resizeMode={item.screenshot_url ? 'cover' : 'contain'}
           style={styles.image}
           defaultSource={require('../resources/img/verifiedCell/logoPlaceholder.png')}
           source={{ uri: item.screenshot_url || '' }}
@@ -56,7 +56,7 @@ const VerifiedCell = ({ item, onCellTapped }) => {
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.date}>{date}</Text>
         </View>
-        {verificationStatusImage()}
+        {VERIFICATION_STATUS_IMAGE[item.verdict]}
       </TouchableOpacityDebounce>
       <View style={styles.separator} />
     </>
@@ -84,7 +84,9 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: '25%',
-    aspectRatio: 2,
+    minHeight: 60,
+    maxHeight: 160,
+    height: '100%',
     backgroundColor: WHITE_SMOKE,
     marginRight: 12,
   },
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   title: {
-    color: 'black',
+    color: BLACK,
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -109,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(VerifiedCell);
+export default VerifiedCell;
