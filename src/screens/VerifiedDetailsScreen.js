@@ -250,20 +250,18 @@ const VerifiedDetailsScreen = ({ route }) => {
             {verificationStatus.text}
           </Text>
         </Container>
-
-        <TouchableOpacityDebounce
-          onPress={toggleImageViewerVisibility}
-          style={[styles.imageWrapper, { opacity: imageOpacity }]}
-        >
-          {!!details.screenshot_url && (
+        {!!details.screenshot_url && (
+          <TouchableOpacityDebounce
+            onPress={toggleImageViewerVisibility}
+            style={[styles.imageWrapper, { opacity: imageOpacity }]}
+          >
             <Image
               resizeMode="contain"
               style={[styles.image, { aspectRatio: imageAspectRatio }]}
               source={{ uri: details.screenshot_url || '' }}
             />
-          )}
-        </TouchableOpacityDebounce>
-
+          </TouchableOpacityDebounce>
+        )}
         <Container style={styles.detailsContainer}>
           <Text style={styles.detailsTitle}>
             {strings.verifiedDetails.informationSourceLabel}
