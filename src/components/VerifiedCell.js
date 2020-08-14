@@ -42,7 +42,9 @@ const VERIFICATION_STATUS_IMAGE = {
 
 const VerifiedCell = ({ item, onCellTapped }) => {
   const date = Moment(item.reported_at).format('DD.MM.YYYY');
-
+  const imageSource = item.screenshot_url
+    ? { uri: item.screenshot_url }
+    : require('../resources/img/verifiedCell/logoPlaceholder.png');
   return (
     <>
       <TouchableOpacityDebounce style={styles.container} onPress={onCellTapped}>
@@ -50,7 +52,7 @@ const VerifiedCell = ({ item, onCellTapped }) => {
           resizeMode={item.screenshot_url ? 'cover' : 'contain'}
           style={styles.image}
           defaultSource={require('../resources/img/verifiedCell/logoPlaceholder.png')}
-          source={{ uri: item.screenshot_url || '' }}
+          source={imageSource}
         />
         <View style={{ flex: 2 }}>
           <Text style={styles.title}>{item.title}</Text>
