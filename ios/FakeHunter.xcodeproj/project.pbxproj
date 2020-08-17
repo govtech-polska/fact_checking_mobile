@@ -381,7 +381,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = K36E9SFT27;
+						DevelopmentTeam = A58A936UKL;
 						LastSwiftMigration = 1150;
 						ProvisioningStyle = Manual;
 					};
@@ -396,7 +396,7 @@
 					};
 					8AF66DFB24C5A86300CC5785 = {
 						CreatedOnToolsVersion = 11.5;
-						DevelopmentTeam = K36E9SFT27;
+						DevelopmentTeam = A58A936UKL;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -792,9 +792,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = FakeHunter/FakeHunterDebug.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K36E9SFT27;
+				DEVELOPMENT_TEAM = A58A936UKL;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -807,7 +808,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.pap.fakehunter;
 				PRODUCT_NAME = FakeHunter;
 				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "FakeHunter-Bridging-Header.h";
@@ -828,7 +829,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K36E9SFT27;
+				DEVELOPMENT_TEAM = A58A936UKL;
 				INFOPLIST_FILE = FakeHunter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -836,7 +837,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.pap.fakehunter;
 				PRODUCT_NAME = FakeHunter;
 				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Prod";
 				SWIFT_OBJC_BRIDGING_HEADER = "FakeHunter-Bridging-Header.h";
@@ -1240,16 +1241,17 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareEx.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = K36E9SFT27;
+				DEVELOPMENT_TEAM = A58A936UKL;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareEx/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev.ShareEx;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.pap.fakehunter.shareEx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter Share Dev";
 				SKIP_INSTALL = YES;
@@ -1274,15 +1276,15 @@
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = K36E9SFT27;
+				DEVELOPMENT_TEAM = A58A936UKL;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareEx/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev.ShareEx;
+				PRODUCT_BUNDLE_IDENTIFIER = pl.pap.fakehunter.shareEx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Share Prod";
+				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter Share Prod";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
