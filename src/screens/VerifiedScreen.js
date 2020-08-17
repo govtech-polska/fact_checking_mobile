@@ -93,7 +93,10 @@ const VerifiedScreen = () => {
 
   useEffect(() => {
     dispatch(
-      feedActions.list(1, selectedCategory?.name, { waitForSuccess: 100 })
+      feedActions.list(1, selectedCategory?.name, {
+        waitForSuccess: 100,
+        afterSuccess: () => setIsRefreshing(false),
+      })
     );
     const selectedIndex = categories.findIndex(
       (category) => category.id === selectedCategory?.id
@@ -130,6 +133,7 @@ const VerifiedScreen = () => {
       animated: true,
       offset: -TITLE_HEIGHT,
     });
+    setIsRefreshing(true);
     dispatch(feedActions.setSelectedCategory(item));
   };
 
