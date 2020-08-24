@@ -9,6 +9,9 @@ import { WHITE, WHITE_SMOKE, EMPRESS } from '../constants/colors';
 import { strings } from '../constants/strings';
 
 const DraftsListItem = ({ item, onPress }) => {
+  const imageSource = item.image
+  ? { uri: item.image }
+  : require('../resources/img/verifiedCell/logoPlaceholder.png');
   return (
     <View style={styles.row}>
       <TouchableOpacityDebounce onPress={onPress}>
@@ -16,7 +19,7 @@ const DraftsListItem = ({ item, onPress }) => {
           <Image
             style={styles.image}
             defaultSource={require('../resources/img/verifiedCell/logoPlaceholder.png')}
-            source={{ uri: item.image }}
+            source={imageSource}
           />
           <View style={styles.contentWrapper}>
             <Text style={styles.date}>

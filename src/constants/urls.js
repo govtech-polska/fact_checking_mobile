@@ -1,6 +1,6 @@
-export const APP_URL = 'https://qa.app.fakehunter.pap.pl';
-export const BASE_URL = 'https://panel-api.qa.app.fakehunter.pap.pl';
-export const COLLECTOR_URL = 'https://collector.qa.app.fakehunter.pap.pl';
+export const APP_URL = 'https://app.fakehunter.pap.pl';
+export const BASE_URL = 'https://panel-api.app.fakehunter.pap.pl';
+export const COLLECTOR_URL = 'https://collector.app.fakehunter.pap.pl';
 
 export const apiUrls = {
   NEWS: '/news/published/news',
