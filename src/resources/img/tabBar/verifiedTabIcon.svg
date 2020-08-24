@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
+  <defs/>
+  <g data-name="Group 2">
+    <path fill="none" d="M0 0h28v28H0z" data-name="Rectangle 2"/>
+    <g transform="translate(1.093 5.678)">
+      <path d="M2.769 8.919a11.346 11.346 0 0120.384 0l-.74 1.295a6.666 6.666 0 012.2.844 13.168 13.168 0 001.063-2.138 13.657 13.657 0 00-25.422 0 13.67 13.67 0 0012.711 8.67h1.156v-.532a6.741 6.741 0 01.243-1.815l-1.4.081a11.347 11.347 0 01-10.192-6.4z" data-name="Path 5"/>
+      <path d="M24.517 12.964l-4.045 4.05-2.311-2.312-1.733 1.73 4.044 4.046 5.778-5.78z" data-name="Path 6"/>
+      <ellipse cx="3.467" cy="3.468" data-name="Ellipse 1" rx="3.467" ry="3.468" transform="translate(9.494 5.451)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">
+  <defs/>
+  <defs>
+    <style>
+      .cls-1,.cls-2{fill:none}.cls-2{stroke:currentColor;stroke-linecap:square;stroke-width:2.05px}
+    </style>
+  </defs>
+  <g id="Group_4" data-name="Group 4" transform="translate(-238 -578)">
+    <g id="vectorpaint" transform="translate(242 582)">
+      <path id="backgroundrect" d="M0 0h21v21H0z" class="cls-1"/>
+      <g id="Group_1" data-name="Group 1" transform="translate(.95 .945)">
+        <g id="Icon_feather-edit" data-name="Icon feather-edit">
+          <path id="Path_1" d="M10.046 4.674H3.4a1.9 1.9 0 00-1.9 1.9v13.294a1.9 1.9 0 001.9 1.9h13.294a1.9 1.9 0 001.9-1.9V13.22" class="cls-2" data-name="Path 1" transform="translate(-1.5 -2.66)"/>
+          <path id="Path_2" d="M20.471 2.082a2.014 2.014 0 112.849 2.849l-9.02 9.021-3.8.95.95-3.8z" class="cls-2" data-name="Path 2" transform="translate(-4.802 -1.492)"/>
+        </g>
+      </g>
+    </g>
+    <path id="Rectangle_4" d="M0 0h28v28H0z" class="cls-1" data-name="Rectangle 4" transform="translate(238 578)"/>
+  </g>
+</svg>

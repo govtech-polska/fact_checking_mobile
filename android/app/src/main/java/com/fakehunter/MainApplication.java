@@ -11,7 +11,15 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 public class MainApplication extends Application implements ReactApplication {
+
+  @Nullable
+  private String shareUrl = null;
+
+  @Nullable
+  private String openUrl = null;
 
   private final ReactNativeHost mReactNativeHost =
       new ReactNativeHost(this) {
@@ -25,7 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+          packages.add(new UrlSharePackage());
           return packages;
         }
 
@@ -46,6 +54,24 @@ public class MainApplication extends Application implements ReactApplication {
     SoLoader.init(this, /* native exopackage */ false);
     initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
   }
+
+    public void setShareUrl(@Nullable String shareUrl) {
+      this.shareUrl = shareUrl;
+    }
+
+    @Nullable
+    public String getShareUrl() {
+      return this.shareUrl;
+    }
+
+    @Nullable
+    public String getOpenUrl() {
+      return openUrl;
+    }
+
+    public void setOpenUrl(@Nullable String openUrl) {
+      this.openUrl = openUrl;
+    }
 
   /**
    * Loads Flipper in React Native templates. Call this in the onCreate method with something like
