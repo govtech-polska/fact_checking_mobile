@@ -84,12 +84,13 @@
 		2FAE5F5A5AE5E85F5ABA19F9 /* libPods-FakeHunter-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-FakeHunter-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB873C961739B65A80C4C5 /* Pods-FakeHunter-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOSTests/Pods-FakeHunter-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		7D66B7B556A2296B63303145 /* Pods-FakeHunter-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		8ACEE72624F3B01D001DF587 /* ShareExAdHoc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExAdHoc.entitlements; sourceTree = "<group>"; };
+		8ACEE72724F3B081001DF587 /* ShareExDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExDebug.entitlements; sourceTree = "<group>"; };
 		8AE1928E24EA7EF000A82DE7 /* ShareExRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExRelease.entitlements; sourceTree = "<group>"; };
 		8AF66DFC24C5A86300CC5785 /* ShareEx.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ShareEx.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AF66DFE24C5A86300CC5785 /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
 		8AF66E0324C5A86300CC5785 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8AF66E0C24C5AD8700CC5785 /* FakeHunterAdHoc.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterAdHoc.entitlements; path = FakeHunter/FakeHunterAdHoc.entitlements; sourceTree = "<group>"; };
-		8AF66E0D24C5ADCD00CC5785 /* ShareEx.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareEx.entitlements; sourceTree = "<group>"; };
 		8AF66E0E24C5C52400CC5785 /* FakeHunterDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterDebug.entitlements; path = FakeHunter/FakeHunterDebug.entitlements; sourceTree = "<group>"; };
 		8AF66E0F24C5C52F00CC5785 /* FakeHunterRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterRelease.entitlements; path = FakeHunter/FakeHunterRelease.entitlements; sourceTree = "<group>"; };
 		8AF66E1424C5CF4400CC5785 /* FakeHunter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FakeHunter-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -260,7 +261,8 @@
 			isa = PBXGroup;
 			children = (
 				8AE1928E24EA7EF000A82DE7 /* ShareExRelease.entitlements */,
-				8AF66E0D24C5ADCD00CC5785 /* ShareEx.entitlements */,
+				8ACEE72724F3B081001DF587 /* ShareExDebug.entitlements */,
+				8ACEE72624F3B01D001DF587 /* ShareExAdHoc.entitlements */,
 				8AF66DFE24C5A86300CC5785 /* ShareViewController.swift */,
 				8AF66E0324C5A86300CC5785 /* Info.plist */,
 			);
@@ -1242,7 +1244,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareEx.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareExDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -1303,7 +1305,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareEx.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareExAdHoc.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
