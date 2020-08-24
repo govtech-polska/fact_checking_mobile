@@ -42,7 +42,6 @@ const InfoScreen = () => {
         title: label,
         url: resolveUrl(urls.INFO_ATTACHMENTS, { fileName }),
       });
-      // openUrl(resolveUrl(urls.INFO_ATTACHMENTS, { fileName }));
     }
   };
 
