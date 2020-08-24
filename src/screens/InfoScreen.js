@@ -34,11 +34,14 @@ const INFO_LINKS = [
 const InfoScreen = () => {
   const navigation = useNavigation();
 
-  const handlePress = ({ route, fileName }) => () => {
+  const handlePress = ({ route, fileName, label }) => () => {
     if (route) {
       navigation.push(route);
     } else if (fileName) {
-      openUrl(resolveUrl(urls.INFO_ATTACHMENTS, { fileName }));
+      navigation.navigate(routes.webView, {
+        title: label,
+        url: resolveUrl(urls.INFO_ATTACHMENTS, { fileName }),
+      });
     }
   };
 
@@ -49,7 +52,7 @@ const InfoScreen = () => {
         <TouchableOpacityDebounce
           key={label}
           underlayColor={WHITE_SMOKE}
-          onPress={handlePress({ route, fileName })}
+          onPress={handlePress({ route, fileName, label })}
         >
           <Text style={styles.item}>{label}</Text>
         </TouchableOpacityDebounce>
