@@ -41,28 +41,32 @@
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
-                android:host="qa.app.fakehunter.pap.pl" />
+                android:host="qa.app.fakehunter.pap.pl"
+                android:pathPrefix="/raport" />
         </intent-filter>
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
-                android:host="app.fakehunter.pap.pl" />
+                android:host="app.fakehunter.pap.pl"
+                android:pathPrefix="/raport" />
         </intent-filter>
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
-                android:host="fakehunter.pap.pl" />
+                android:host="fakehunter.pap.pl"
+                android:pathPrefix="/raport" />
         </intent-filter>
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
             <data android:scheme="https"
-                android:host="qa.fakehunter.pap.pl" />
+                android:host="qa.fakehunter.pap.pl" 
+                android:pathPrefix="/raport" />
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
