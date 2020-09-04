@@ -12,4 +12,6 @@ export const routes = {
   infoAbout: 'InfoAboutScreen',
   infoTeam: 'InfoTeamScreen',
   reportModal: 'ReportModal',
+
+  pdfView: 'PDFView',
 };

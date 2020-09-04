@@ -14,6 +14,7 @@ import {
   InfoTeamScreen,
   CategoriesScreen,
   DraftsScreen,
+  PDFScreen,
 } from '../screens';
 import { LogoTitle } from '../components';
 import { CINNABAR } from '../constants/colors';
@@ -135,6 +136,14 @@ export const InfoStackScreen = () => {
         name={routes.infoTeam}
         component={InfoTeamScreen}
         options={{ title: '' }}
+      />
+      <InfoStack.Screen
+        name={routes.pdfView}
+        component={PDFScreen}
+        options={({ route }) => ({
+          title: route.params.title,
+          headerTintColor: CINNABAR,
+        })}
       />
     </InfoStack.Navigator>
   );

@@ -81,7 +81,7 @@ const formatDate = (date, format) =>
   Moment(date).format(format ?? 'DD.MM.YYYY HH:mm');
 const getSourcesArray = (sourcesString) =>
   (sourcesString ?? []).split('\n').filter((source) => !!source);
-const fhLink = (id) => `${APP_URL}/${id}`;
+const fhLink = (id) => `${APP_URL}/raport/${id}`;
 
 const VerifiedDetailsScreen = ({ route }) => {
   const navigation = useNavigation();
