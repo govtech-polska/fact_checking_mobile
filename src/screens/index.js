@@ -7,4 +7,4 @@ export { default as InfoAboutScreen } from './InfoAboutScreen';
 export { default as InfoTeamScreen } from './InfoTeamScreen';
 export { default as CategoriesScreen } from './CategoriesScreen';
 export { default as DraftsScreen } from './DraftsScreen';
-export { default as WebViewScreen } from './WebViewScreen';
+export { default as PDFScreen } from './PDFScreen';

@@ -38,7 +38,7 @@ const InfoScreen = () => {
     if (route) {
       navigation.push(route);
     } else if (fileName) {
-      navigation.navigate(routes.webView, {
+      navigation.navigate(routes.pdfView, {
         title: label,
         url: resolveUrl(urls.INFO_ATTACHMENTS, { fileName }),
       });

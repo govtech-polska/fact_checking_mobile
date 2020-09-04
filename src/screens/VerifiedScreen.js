@@ -79,7 +79,7 @@ const VerifiedScreen = () => {
 
   useLinkEvent({
     onUrlOpen: (url) => {
-      const { id } = matchUrl(url, APP_URL + '/:id');
+      const { id } = matchUrl(url, APP_URL + '/raport/:id');
       if (id && isUUID(id)) {
         goToVerifiedDetails(id);
       }
