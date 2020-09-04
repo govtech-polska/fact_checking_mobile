@@ -13,5 +13,5 @@ export const routes = {
   infoTeam: 'InfoTeamScreen',
   reportModal: 'ReportModal',
 
-  webView: 'WebView',
+  pdfView: 'PDFView',
 };

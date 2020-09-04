@@ -138,7 +138,7 @@ export const InfoStackScreen = () => {
         options={{ title: '' }}
       />
       <InfoStack.Screen
-        name={routes.webView}
+        name={routes.pdfView}
         component={PDFScreen}
         options={({ route }) => ({
           title: route.params.title,
