@@ -132,7 +132,7 @@ android {
         applicationId "pl.pap.fakehunter"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
+        versionCode 3
         versionName "1.1"
         multiDexEnabled true
     }
