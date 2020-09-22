@@ -97,6 +97,7 @@
 		8AF66E1524C5CF4400CC5785 /* SharedModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModule.swift; sourceTree = "<group>"; };
 		8AF66E1724C5D1F200CC5785 /* SharedModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SharedModule.m; sourceTree = "<group>"; };
 		8AFBE4BB251A33D700E7B3AD /* FakeHunterReleaseDOOK.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterReleaseDOOK.entitlements; path = FakeHunter/FakeHunterReleaseDOOK.entitlements; sourceTree = "<group>"; };
+		8AFBE4BC251A464700E7B3AD /* ShareExReleaseDOOK.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExReleaseDOOK.entitlements; sourceTree = "<group>"; };
 		9F5C8E130FA98E8BB2021F03 /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-FakeHunterTests/Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A86C8E0E2232D2B1BD6E6D34 /* Pods-FakeHunter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter/Pods-FakeHunter.release.xcconfig"; sourceTree = "<group>"; };
 		A99BE67B3DB1BA8DE3076C41 /* Pods-FakeHunter-tvOS.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -262,6 +263,7 @@
 		8AF66DFD24C5A86300CC5785 /* ShareEx */ = {
 			isa = PBXGroup;
 			children = (
+				8AFBE4BC251A464700E7B3AD /* ShareExReleaseDOOK.entitlements */,
 				8AE1928E24EA7EF000A82DE7 /* ShareExRelease.entitlements */,
 				8ACEE72724F3B081001DF587 /* ShareExDebug.entitlements */,
 				8ACEE72624F3B01D001DF587 /* ShareExAdHoc.entitlements */,
@@ -1409,7 +1411,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
 				PRODUCT_NAME = FakeHunter;
-				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Prod";
+				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Prod DOOK";
 				SWIFT_OBJC_BRIDGING_HEADER = "FakeHunter-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1501,21 +1503,21 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareExRelease.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareExReleaseDOOK.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = A58A936UKL;
+				DEVELOPMENT_TEAM = K36E9SFT27;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ShareEx/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
 				MARKETING_VERSION = 1.1;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = pl.pap.fakehunter.shareEx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev.ShareEx;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "FakeHunter Share Prod";
+				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Share Prod DOOK";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 5.0;
