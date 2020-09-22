@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, Platform } from 'react-native';
 import moment from 'moment';
 
 import { TouchableOpacityDebounce } from '../components';
@@ -8,10 +8,13 @@ import { TouchableOpacityDebounce } from '../components';
 import { WHITE, WHITE_SMOKE, EMPRESS } from '../constants/colors';
 import { strings } from '../constants/strings';
 
+const LOGO_PLACEHOLDER = require('../resources/img/verifiedCell/logoPlaceholder.png');
+const LOGO_PLACEHOLDER_IOS = require('../resources/img/verifiedCell/logoPlaceholderIOS.png');
+
 const DraftsListItem = ({ item, onPress }) => {
-  const imageSource = item.image
-  ? { uri: item.image }
-  : require('../resources/img/verifiedCell/logoPlaceholder.png');
+  const placeholderImage =
+    Platform.OS === 'ios' ? LOGO_PLACEHOLDER_IOS : LOGO_PLACEHOLDER;
+  const imageSource = item.image ? { uri: item.image } : placeholderImage;
   return (
     <View style={styles.row}>
       <TouchableOpacityDebounce onPress={onPress}>
