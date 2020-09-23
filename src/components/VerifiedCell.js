@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Platform } from 'react-native';
 import Moment from 'moment';
 
 import TouchableOpacityDebounce from './TouchableOpacityDebounce';
@@ -15,6 +15,8 @@ import {
 import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
+const LOGO_PLACEHOLDER = require('../resources/img/verifiedCell/logoPlaceholder.png');
+const LOGO_PLACEHOLDER_IOS = require('../resources/img/verifiedCell/logoPlaceholderIOS.png');
 
 const VERIFICATION_STATUS_IMAGE = {
   true: (
@@ -41,17 +43,19 @@ const VERIFICATION_STATUS_IMAGE = {
 };
 
 const VerifiedCell = ({ item, onCellTapped }) => {
+  const placeholderImage =
+    Platform.OS === 'ios' ? LOGO_PLACEHOLDER_IOS : LOGO_PLACEHOLDER;
   const date = Moment(item.reported_at).format('DD.MM.YYYY');
   const imageSource = item.screenshot_url
     ? { uri: item.screenshot_url }
-    : require('../resources/img/verifiedCell/logoPlaceholder.png');
+    : placeholderImage;
   return (
     <>
       <TouchableOpacityDebounce style={styles.container} onPress={onCellTapped}>
         <Image
           resizeMode={item.screenshot_url ? 'cover' : 'contain'}
           style={styles.image}
-          defaultSource={require('../resources/img/verifiedCell/logoPlaceholder.png')}
+          defaultSource={placeholderImage}
           source={imageSource}
         />
         <View style={{ flex: 2 }}>
