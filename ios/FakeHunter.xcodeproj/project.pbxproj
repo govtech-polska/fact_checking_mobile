@@ -96,6 +96,8 @@
 		8AF66E1424C5CF4400CC5785 /* FakeHunter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FakeHunter-Bridging-Header.h"; sourceTree = "<group>"; };
 		8AF66E1524C5CF4400CC5785 /* SharedModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedModule.swift; sourceTree = "<group>"; };
 		8AF66E1724C5D1F200CC5785 /* SharedModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SharedModule.m; sourceTree = "<group>"; };
+		8AFBE4BB251A33D700E7B3AD /* FakeHunterReleaseDOOK.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = FakeHunterReleaseDOOK.entitlements; path = FakeHunter/FakeHunterReleaseDOOK.entitlements; sourceTree = "<group>"; };
+		8AFBE4BC251A464700E7B3AD /* ShareExReleaseDOOK.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExReleaseDOOK.entitlements; sourceTree = "<group>"; };
 		9F5C8E130FA98E8BB2021F03 /* Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-FakeHunterTests/Pods-FakeHunter-FakeHunterTests.adhoc.xcconfig"; sourceTree = "<group>"; };
 		A86C8E0E2232D2B1BD6E6D34 /* Pods-FakeHunter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter.release.xcconfig"; path = "Target Support Files/Pods-FakeHunter/Pods-FakeHunter.release.xcconfig"; sourceTree = "<group>"; };
 		A99BE67B3DB1BA8DE3076C41 /* Pods-FakeHunter-tvOS.adhoc.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FakeHunter-tvOS.adhoc.xcconfig"; path = "Target Support Files/Pods-FakeHunter-tvOS/Pods-FakeHunter-tvOS.adhoc.xcconfig"; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 		13B07FAE1A68108700A75B9A /* FakeHunter */ = {
 			isa = PBXGroup;
 			children = (
+				8AFBE4BB251A33D700E7B3AD /* FakeHunterReleaseDOOK.entitlements */,
 				8AF66E0F24C5C52F00CC5785 /* FakeHunterRelease.entitlements */,
 				8AF66E0E24C5C52400CC5785 /* FakeHunterDebug.entitlements */,
 				8AF66E0C24C5AD8700CC5785 /* FakeHunterAdHoc.entitlements */,
@@ -260,6 +263,7 @@
 		8AF66DFD24C5A86300CC5785 /* ShareEx */ = {
 			isa = PBXGroup;
 			children = (
+				8AFBE4BC251A464700E7B3AD /* ShareExReleaseDOOK.entitlements */,
 				8AE1928E24EA7EF000A82DE7 /* ShareExRelease.entitlements */,
 				8ACEE72724F3B081001DF587 /* ShareExDebug.entitlements */,
 				8ACEE72624F3B01D001DF587 /* ShareExAdHoc.entitlements */,
@@ -807,7 +811,7 @@
 				);
 				INFOPLIST_FILE = FakeHunter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -837,7 +841,7 @@
 				DEVELOPMENT_TEAM = A58A936UKL;
 				INFOPLIST_FILE = FakeHunter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1142,7 +1146,7 @@
 				DEVELOPMENT_TEAM = K36E9SFT27;
 				INFOPLIST_FILE = FakeHunter/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1332,6 +1336,195 @@
 			};
 			name = AdHoc;
 		};
+		8AFBE4B5251A331500E7B3AD /* ReleaseDOOK */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "/usr/lib/swift $(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift/$(PLATFORM_NAME)\"",
+					"\"$(TOOLCHAIN_DIR)/usr/lib/swift-5.0/$(PLATFORM_NAME)\"",
+					"\"$(inherited)\"",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = ReleaseDOOK;
+		};
+		8AFBE4B6251A331500E7B3AD /* ReleaseDOOK */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A86C8E0E2232D2B1BD6E6D34 /* Pods-FakeHunter.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = FakeHunter/FakeHunterReleaseDOOK.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K36E9SFT27;
+				INFOPLIST_FILE = FakeHunter/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.2;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev;
+				PRODUCT_NAME = FakeHunter;
+				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Prod DOOK";
+				SWIFT_OBJC_BRIDGING_HEADER = "FakeHunter-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				VERSIONING_SYSTEM = "apple-generic";
+			};
+			name = ReleaseDOOK;
+		};
+		8AFBE4B7251A331500E7B3AD /* ReleaseDOOK */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D48E222D4AE54F53B5DD52B0 /* Pods-FakeHunter-FakeHunterTests.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COPY_PHASE_STRIP = NO;
+				INFOPLIST_FILE = FakeHunterTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-lc++",
+					"$(inherited)",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FakeHunter.app/FakeHunter";
+			};
+			name = ReleaseDOOK;
+		};
+		8AFBE4B8251A331500E7B3AD /* ReleaseDOOK */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7D66B7B556A2296B63303145 /* Pods-FakeHunter-tvOS.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "FakeHunter-tvOS/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.FakeHunter-tvOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.2;
+			};
+			name = ReleaseDOOK;
+		};
+		8AFBE4B9251A331500E7B3AD /* ReleaseDOOK */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 66CB873C961739B65A80C4C5 /* Pods-FakeHunter-tvOSTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "FakeHunter-tvOSTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-lc++",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.FakeHunter-tvOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = appletvos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FakeHunter-tvOS.app/FakeHunter-tvOS";
+				TVOS_DEPLOYMENT_TARGET = 10.1;
+			};
+			name = ReleaseDOOK;
+		};
+		8AFBE4BA251A331500E7B3AD /* ReleaseDOOK */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = ShareEx/ShareExReleaseDOOK.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = K36E9SFT27;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ShareEx/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 1.1;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dook.fakehunter.dev.ShareEx;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "Fakehunter Share Prod DOOK";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = ReleaseDOOK;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1340,6 +1533,7 @@
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
 				00E356F71AD99517003FC87E /* Release */,
+				8AFBE4B7251A331500E7B3AD /* ReleaseDOOK */,
 				8AD650CC24A4C66200536082 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1350,6 +1544,7 @@
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
 				13B07F951A680F5B00A75B9A /* Release */,
+				8AFBE4B6251A331500E7B3AD /* ReleaseDOOK */,
 				8AD650CB24A4C66200536082 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1360,6 +1555,7 @@
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
 				2D02E4981E0B4A5E006451C7 /* Release */,
+				8AFBE4B8251A331500E7B3AD /* ReleaseDOOK */,
 				8AD650CD24A4C66200536082 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1370,6 +1566,7 @@
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
 				2D02E49A1E0B4A5E006451C7 /* Release */,
+				8AFBE4B9251A331500E7B3AD /* ReleaseDOOK */,
 				8AD650CE24A4C66200536082 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1380,6 +1577,7 @@
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
 				83CBBA211A601CBA00E9B192 /* Release */,
+				8AFBE4B5251A331500E7B3AD /* ReleaseDOOK */,
 				8AD650CA24A4C66200536082 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -1390,6 +1588,7 @@
 			buildConfigurations = (
 				8AF66E0824C5A86300CC5785 /* Debug */,
 				8AF66E0924C5A86300CC5785 /* Release */,
+				8AFBE4BA251A331500E7B3AD /* ReleaseDOOK */,
 				8AF66E0A24C5A86300CC5785 /* AdHoc */,
 			);
 			defaultConfigurationIsVisible = 0;
