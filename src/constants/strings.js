@@ -8,8 +8,8 @@ const translationGetters = {
 
 const findBestLanguage = (languageArray) => {
   const currentLocales = RNLocalize.getLocales();
-  const currentLanguage = currentLocales[0].languageCode || 'en';
-  return languageArray.indexOf(currentLanguage) !== -1 ? currentLanguage : 'en';
+  const currentLanguage = currentLocales[0].languageCode || 'pl';
+  return languageArray.indexOf(currentLanguage) !== -1 ? currentLanguage : 'pl';
 };
 
 const languageTag = findBestLanguage(Object.keys(translationGetters));
