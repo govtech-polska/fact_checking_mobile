@@ -1,19 +1,11 @@
-import * as RNLocalize from 'react-native-localize';
 import store from '../base/redux/configureStore';
 
-const translationGetters = {
-  en: () => require('./strings.en').strings,
-  pl: () => require('./strings.pl').strings,
-};
+import {
+  getCurrentLanguageTag,
+  translationGetters,
+} from '../utils/translations';
 
-const findBestLanguage = (languageArray) => {
-  const currentLocales = RNLocalize.getLocales();
-  const currentLanguage = currentLocales[0].languageCode || 'pl';
-  return languageArray.indexOf(currentLanguage) !== -1 ? currentLanguage : 'pl';
-};
-
-const languageTag = findBestLanguage(Object.keys(translationGetters));
-
+const languageTag = getCurrentLanguageTag();
 const strings = translationGetters[languageTag]();
 
 store.dispatch({
