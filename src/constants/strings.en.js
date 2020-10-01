@@ -1,185 +1,191 @@
 export const strings = {
-  error_general: 'Ups, coś poszło nie tak :(',
-  refresh: 'Odśwież',
+  error_general: 'Ups, something went wrong :(',
+  refresh: 'Refresh',
 
   //MARK: Tab names
   verifiedTab: 'Verified',
-  reportTab: 'Zgłoś',
-  draftsTab: 'Szkice',
+  reportTab: 'Report',
+  draftsTab: 'Drafts',
 
   categories: {
-    title: 'Wybierz kategorię',
+    title: 'Choose category',
   },
 
   verifiedList: {
-    verifiedTitle: 'Zweryfikowane informacje',
-    categoriesAll: 'Wszystkie',
-    categoriesMore: 'Pokaż więcej',
-    emptyList: 'Brak raportów dla wybranej kategorii.',
+    verifiedTitle: 'Verified text',
+    categoriesAll: 'All',
+    categoriesMore: 'Show more',
+    emptyList: 'No reports for choosen category',
   },
 
   verifiedDetails: {
-    reportDateLabel: 'Data zgłoszenia: ',
-    informationSourceLabel: 'Źródło informacji:',
-    argumentLabel: 'Teza:',
-    fhLinkLabel: 'Link do materiału:',
-    expertReportLabel: 'Raport eksperta:',
-    verifiedDateLabel: 'Data werdyktu:',
-    communityReportsLabel: 'Raporty społeczności:',
-    communityReportLabel: 'Raport',
-    sources: 'Źródła',
+    reportDateLabel: 'Date of the report:',
+    informationSourceLabel: 'Source of information:',
+    argumentLabel: 'Thesis:',
+    fhLinkLabel: 'Link to the press material:',
+    expertReportLabel: "Expert's Report:",
+    verifiedDateLabel: 'Date of the verdict:',
+    communityReportsLabel: 'Social reports:',
+    communityReportLabel: 'Report',
+    sources: 'Sources',
   },
 
   report: {
-    title: 'Zgłaszam fake newsa',
-    addLinkLabel: 'Dodaj link do materiału',
-    whatIsWrong: 'Co w tej informacji budzi Twoją wątpliwość:',
-    imageButtonLabel: 'Dołącz zrzut ekranu', //'DOŁĄCZ ZRZUT EKRANU',
-    emailLabel: 'Wpisz adres email, na który przesłać rezultat weryfikacji:',
-    sendButton: 'Wyślij',
-    saveDraftButton: 'Zapisz szkic',
-    updateDraftButton: 'Aktualizuj szkic',
-    verdict: 'Werdykt:',
+    title: 'Report fake news',
+    addLinkLabel: 'Add a link to the press material ',
+    whatIsWrong: 'Which part of the information raises your doubts',
+    imageButtonLabel: 'Attach a printscreen',
+    emailLabel: 'Type your email to which we should send you the results',
+    sendButton: 'Send',
+    saveDraftButton: 'Save the draft',
+    updateDraftButton: 'Update your draft',
+    verdict: 'Verdict',
     fakeNews: 'Fake news',
-    unverifiable: 'Nieweryfikowalny',
-    authentic: 'Prawda',
-    submissionSuccess: 'Dziękujemy za zgłoszenie!',
+    unverifiable: 'Unverifiable',
+    authentic: 'Truth',
+    submissionSuccess: 'Thank you for your report!',
     submissionSuccessDescription:
-      'Po jego weryfikacji otrzymasz powiadomienie e-mail z linkiem do raportu.',
-    draftSaveSuccess: 'Zapisano kopię roboczą!',
+      'After verification, you will receive an e-mail notification with a link to the report.',
+    draftSaveSuccess: 'Your draft has been saved',
   },
   reportImageEdit: {
-    saveButton: 'Zapisz',
+    saveButton: 'Save',
   },
 
   drafts: {
-    title: 'Dokończ swoje zgłoszenia',
-    commentEmptyState: 'Brak komentarza',
-    urlEmptyState: 'Brak linku źródłowego',
-    listEmptyState: 'Nie posiadasz żadnego zgłoszenia w wersji roboczej.',
+    title: 'Complete your report',
+    commentEmptyState: 'No comment',
+    urlEmptyState: 'No source link',
+    listEmptyState: 'You do not have any pending drafts.',
   },
 
   info: {
-    title: 'O aplikacji',
-    aboutProject: 'O projekcie',
-    team: 'Zespół',
-    verificationRules: 'Reguły weryfikacji faktów',
-    verificationPolicy: 'Polityka korekt',
-    privacyPolicy: 'Polityka prywatności',
+    title: 'About the app',
+    aboutProject: 'About the project',
+    team: 'Team',
+    verificationRules: 'Rules of verification',
+    verificationPolicy: 'The policy of correction',
+    privacyPolicy: 'Privacy policy',
     fileNames: {
-      verificationRules: 'reguly_weryfikacji_faktow.pdf',
-      verificationPolicy: 'polityka_korekt.pdf',
-      privacyPolicy: 'polityka_prywatnosci.pdf',
+      verificationRules: 'FH_Rules_of_Fact_Verification.pdf',
+      verificationPolicy: 'Fact-checking_policy.pdf',
+      privacyPolicy: 'Privacy_policy.pdf',
     },
   },
   infoAbout: {
-    title: 'O projekcie',
+    title: 'About the project',
     projectDescription1:
-      '#FakeHunter to społeczny projekt weryfikacji treści publikowanych w internecie, uruchomiony przez Polską Agencję Prasową wspólnie z GovTech Polska, którego celem jest demaskowanie nieprawdziwych wiadomości dotyczących wirusa SARS-CoV-2. Każdy internauta będzie mógł zgłosić wątpliwą treść do weryfikacji, a następnie otrzymać wiarygodną odpowiedź, zweryfikowaną przez społecznych liderów opinii oraz ekspertów PAP.',
+      '#FakeHunter is a social project to verify content published on the Internet, launched by the Polish Press Agency together with GovTech Polska, whose aim is to unmask false news about the SARS-CoV-2 virus. Each Internet user will be able to submit questionable content for verification, and then receive a credible verdict verified by social opinion leaders and PAP experts.',
     projectDescription2:
-      'W przestrzeni internetowej pojawia się coraz więcej fałszywych wiadomości, a ich zadaniem jest dezinformacja i sianie paniki w czasie zagrożenia epidemicznego. Projekt #FakeHunter zrodził się z potrzeby przeciwstawienia się takiej sytuacji, a także z dążenia do tego, by portale internetowe i wszyscy użytkownicy mediów społecznościowych w sposób odpowiedzialny dzielili się wyłącznie prawdziwymi przekazami.',
+      'More and more fake messages are appearing in the Internet space, and their task is to disinformate and spread panic at the time of an epidemic danger. The #FakeHunter project was born out of the need to counter this situation, as well as the desire to ensure that websites and all social media users responsibly share only real messages.',
   },
   infoTeam: {
-    title: 'Zespół',
+    title: 'Team',
     team: {
-      '1': {
+      1: {
+        name: 'Grzegorz Rutke',
+        description:
+          'Journalist associated with such titles as: „Gazeta Finansowa”, „Trybuna Śląska” and „Gazeta Prawna”, and then the editor-in-chief of the Egmont Polska and Edipresse Polska publishing houses. He graduated from the Faculty of Journalism and Political Science at the University of Warsaw.',
+      },
+      2: {
+        name: 'Jarosław Junko',
+        description:
+          'In journalism since 1996. First at the Polish Radio for Foreigners, and then, since 2005, as a correspondent of the Polish Press Agency in Ukraine. He reported, among others the events of the Orange Revolution of 2004, the war in Georgia in 2008 and the Revolution of Dignity at the turn of 2013-2014.',
+      },
+      3: {
         name: 'Monika Wysocka',
         description:
-          'Redaktor Serwisu Zdrowie wydawanego przez Polską Agencję Prasową. Jako dziennikarz medyczny przez wiele lat związana z branżowymi wydawnictwami dla lekarzy (m.in. Puls Medycyny, Puls Farmacji, Magazyn Medycyny Rodzinnej) oraz portalami o tematyce zdrowotnej (m.in. Portale Medyczne, Kobiety i Medycyna, Czas dla Seniora).',
+          "Editor of the 'Health Service' published by the Polish Press Agency. A medical journalist for many years associated with sector publications for doctors (including Puls Medycyny, Puls Farmacji, Magazyn Medycyny Rodzinnej) as well as portals on the subject of health (including Portale Medyczne, Kobiety i Medycyna, Czas dla Seniora).",
       },
-      '2': {
+      4: {
         name: 'Marcin Mastalerz',
         description:
-          'W dziennikarstwie od 1994 roku. W latach 2001-2012 sekretarz redakcji i zastępca redaktora naczelnego Newsweeka. Poza tym pracował w Metro International, Życiu i Super Expressie. Autor książek (m.in. „Zew oceanu”, „Ja, Fronczewski”, „Miasto’ 44”). W Polskiej Agencji Prasowej od 2019 roku.',
+          "In journalism since 1994. In the years 2001-2012 secretary of the editorial office and deputy editor-in-chief of Newsweek. In addition, he has worked at Metro International, Życie and Super Express. Author of books (including 'Zew oceanu', 'Ja, Fronczewski, Miasto’ 44'). At the Polish Press Agency since 2019.",
       },
-      '3': {
+      5: {
         name: 'Anna Banasik',
         description:
-          'Dla Polskiej Agencji Prasowej pracuje od 2006 r.; specjalizuje się w tematyce dotyczącej samorządu terytorialnego, w tym przede wszystkim systemu oświaty. Absolwentka Wydziału Historycznego Uniwersytetu Warszawskiego i Podyplomowego Studium Edytorstwa Współczesnego Uniwersytetu Kardynała Stefana Wyszyńskiego.',
+          'Has worked for the Polish Press Agency since 2006; specialises in issues concerning local government, including primarily education. A graduate of the History Faculty of the University of Warsaw and Post-diploma Studies in Contemporary Editing at the Cardinal Stefan Wyszyński University.',
       },
-      '4': {
+      6: {
         name: 'Sebastian Górski',
         description:
-          'Redaktor w Zespole Obsługi Medialnej Polskiej Agencji Prasowej. Kilkanaście lat redakcyjnej pracy w prasie komputerowej (PC World Komputer, Komputer Świat) i serwisach internetowych poświęconych technologii oraz biznesowi (PCworld.pl, Komputerswiat.pl, Next.Gazeta.pl, SztucznaInteligencja.org.pl, Telepolis.pl).',
+          "Editor in the Polish Press Agency's Media Services Team. Over ten years editing in the computer press (PC World Komputer, Komputer Świat) and internet services devoted to technology and business (PCWorld.pl, Komputerswiat.pl, Next.Gazeta.pl, SztucznaInteligencja.org.pl, Telepolis.pl).",
       },
-      '5': {
+      7: {
         name: 'Anna Piotrowska',
         description:
-          'Od blisko 20 lat zajmuje się popularyzacją odkryć naukowych. Z wykształcenia historyczka i socjolożka. Współautorka kilku książek z zakresu medycyny. Prywatnie wielbicielka starożytnej Grecji oraz kultur prehistorycznych.',
+          'Has been involved in popularising scientific discoveries for nearly 20 years. With a history and sociology education. Co-author of several books in the field of medicine. Private enthusiast of ancient Greece and prehistoric cultures.',
       },
-      '6': {
+      8: {
         name: 'Jacek Pochłopień',
         description:
-          'Redaktor naczelny Serwisu Samorządowego PAP. Wcześniej między innymi redaktor naczelny tygodnika Wprost, zastępca redaktora naczelnego miesięcznika Forbes oraz redaktor Pulsu Biznesu. Absolwent Szkoły Głównej Handlowej w Warszawie.',
+          'Editor-in-chief of the PAP Local Government Service. Earlier, among other roles, editor-in-chief of the weekly Wprost, deputy editor-in-chief of the Forbes monthly and editor of Puls Biznesu. Graduate of the Warsaw School of Economics.',
       },
-      '7': {
+      9: {
         name: 'Mateusz Kominiarczuk',
         description:
-          'Od 2017 r. redaktor serwisu PAP Technologie poświęconego m.in. zagadnieniom cyberbezpieczeństwa oraz dezinformacji w internecie. Magister filologii polskiej, badacz gier komputerowych i towarzyskich.',
+          "Since 2017 editor of PAP's Technology service, devoted among other things to cybersecurity issues and disinformation on the internet. Master of Polish Philology, computer and social game researcher.",
       },
-      '8': {
+      10: {
         name: 'Paulina Pomianowska',
         description:
-          'Redaktor i edytor w Zespole Obsługi Medialnej Polskiej Agencji Prasowej. Długoletnie doświadczenie redakcyjne w prasie codziennej (Nowa Europa, Super Express) oraz w prasie kolorowej (miesięczniki poradnicze w wydawnictwach G+J, Bauer). Absolwentka filologii polskiej oraz archeologii pradziejowej.',
+          "Editor in the Polish Press Agency's Media Services Team. Many years' editorial experience in the daily press (Nowa Europa, Super Express) and colour press (consulting monthlies at G+J publishing, Bauer). Graduate of Polish Philology and Prehistoric Archaeology.",
       },
-      '9': {
+      11: {
         name: 'Aleksandra Zarychta-Kuzalska',
         description:
-          'Ekspert w dziedzinie komunikacji, marketingu i PR. Absolwentka Wydziału Dziennikarstwa i Nauk Politycznych Uniwersytetu Warszawskiego.',
+          'PAP Media Intelligence department. Expert in the field of communication, marketing and PR. Graduate of the Journalism and Political Science Faculty of the University of Warsaw.',
       },
-      '10': {
+      12: {
         name: 'Marek Wójcik',
         description:
-          'Ekspert w dziedzinie nowych technologii. Ponad 20 lat doświadczenia pracy w mediach.',
+          "PAP Media Intelligence department. Expert in the field of new technologies. Over 20 years' work experience in the media.",
       },
-      '11': {
+      13: {
         name: 'Justyna Wojteczek',
         description:
-          'Kierownik redakcji Serwisu Zdrowie wydawanego przez Polską Agencję Prasową',
+          "Editorial manager in the 'Health Service' published by the Polish Press Agency.",
       },
-      '12': {
+      14: {
         name: 'Mateusz Kicka',
         description:
-          'Pracuje w PAP od 2011 r. Od 2015 r. jest koordynatorem międzynarodowego projektu partnerstwa medialnego Komitetu Regionu z trzema europejskimi agencjami: EFE, ANSA i PAP po stronie polskiej. W 2018 r. został redaktorem prowadzącym serwisu EuroPAP News. Od samego początku pracy w Agencji związany z redakcją Serwisu Samorządowego PAP.',
+          "Editor in PAP's Local Government Service. Has worked at PAP since 2011. Since 2015 has been coordinator of the Komitet Regionu international partnership project with three European agencies: EFE, ANSA and PAP, on the Polish side. From the very start of his work at the Agency, he has been associated with the PAP Local Government Service.",
       },
-      '13': {
+      15: {
         name: 'Joanna Balcer',
         description:
-          'Dziennikarka z 15-letnim doświadczeniem w PAP. Redaktor w serwisach: społecznym, politycznym, newsroomie, obecnie w Serwisie Samorządowym PAP. Absolwentka historii i dziennikarstwa.',
+          "A journalists with 15 years of experience at PAP. She worked as an editor in the social and political news service as well as the Newsroom. Now she works for PAP's Local Government Service. She is a history and journalism graduate.",
       },
-      '14': {
-        name: 'Patrycja Łuszczyk',
-        description: 'Redaktor serwisu PAP Technologie.',
-      },
-      '15': {
+      16: {
         name: 'Anna Małecka',
-        description: 'Zastępca redaktora prowadzącego serwisu PAP Technologie.',
+        description: 'Deputy editor-in-chief of the PAP Technology service.',
       },
-      '16': {
+      17: {
         name: 'Marcin Przybylski',
         description:
-          'Od 2006 dziennikarz Polskiej Agencji Prasowej, redaktor serwisów samorzad.pap.pl, europarlament.pap.pl i kurier.pap.pl. Specjalizuje się w zagadnieniach dotyczących gospodarki komunalnej, ochrony środowiska i funduszy europejskich. Współautor i koordynator wielu projektów edukacyjnych i promocyjnych realizowanych przez PAP m.in. we współpracy z NBP i ministerstwami zajmującymi się funduszami UE.',
+          'Editor of the PAP Local Government service. Since 2006 a journalist at the Polish Press Agency, editor of the samorzad.pap.pl, europarlament.pap.pl and kurier.pap.pl services. Specialises in issues concerned with the municipal economy, environmental protection and European funds. Co-author and coordinator of many educational and promotional projects carried out by PAP, including in cooperation with the NBP (National Bank of Poland) and ministries concerned with EU funds.',
       },
-      '17': {
+      18: {
         name: 'Wiktor Szczepaniak',
         description:
-          'Od ponad 15 lat pracuje w ogólnopolskich mediach, specjalizując się najpierw w dziennikarstwie ekonomicznym (PAP, Puls Biznesu), a obecnie naukowym i medycznym (Serwis Zdrowie PAP). Posiada też kilkuletnie doświadczenie w działalności public relations (Instytut Żywności i Żywienia, Narodowe Centrum Edukacji Żywieniowej). Absolwent Wydziału Dziennikarstwa i Nauk Politycznych Uniwersytetu Warszawskiego. Interesuje się różnymi aspektami i uwarunkowaniami zdrowia, w tym zwłaszcza profilaktyką zdrowotną, psychologią zdrowia i medycyną spersonalizowaną, a także wpływem mediów na zdrowie publiczne.',
+          'Has been working for over 15 years in the national media, specializing first in economic journalism (PAP, Puls Biznesu), and now in science and medicine (Serwis Zdrowie PAP). He also has several years of experience in public relations activities (Institute of Food and Nutrition, National Center for Nutritional Education). A graduate of the Faculty of Journalism and Political Science at the University of Warsaw. He is interested in various aspects and determinants of health, including in particular preventive medicine, health psychology and personalized medicine, as well as the influence of the media on public health.',
       },
-      '18': {
+      19: {
         name: 'Małgorzata Biegalska',
         description:
-          'Z PAP związana od 2001 roku. Początkowo jako reporter, następnie redaktor. Absolwentka Wydziału Humanistycznego Uniwersytetu Marii Curie-Skłodowskiej w Lublinie.',
+          'Since 2001 PAP-based, initially as a reporter later as an editor. Graduate of the Faculty of Humanities at the University of Marie Curie Skłodowska in Lublin.',
       },
-      '19': {
+      20: {
         name: 'Anna Gwozdowska',
         description:
-          'Od 20 lat w mediach. Na początku TVP, potem Polskie Radio, „Warsaw Business Journal”, „Głos Ameryki” „Puls Medycyny” „Polska the Times”, „Przekrój”, „Focus”, ”Wprost” i znów Polskie Radio. Specjalizuje się w tematyce międzynarodowej.',
+          'Since 20 years in media. In the beginning in Polish Public Broadcaster TVP, then Polish Public Radio, Warsaw Business Journal, Głos Ameryki, Polska the Times, Przekrój, Focus, Wprost, and then Polish Radio again. Mrs Gwozdowska specializes in international affairs.',
       },
     },
   },
   validation: {
-    presence: 'To pole jest wymagane',
-    email: 'Nieprawidłowy email',
-    url: 'Nieprawidłowy adres URL',
+    presence: 'This field is required',
+    email: 'Invalid email',
+    url: 'Invalid URL',
   },
 };
