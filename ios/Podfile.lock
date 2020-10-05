@@ -315,6 +315,8 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
+  - RNLocalize (1.4.1):
+    - React
   - RNPDF (0.11.0):
     - React
   - RNReanimated (1.9.0):
@@ -383,6 +385,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNLocalize (from `../node_modules/react-native-localize`)
   - RNPDF (from `../node_modules/react-native-view-pdf`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -470,6 +473,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNLocalize:
+    :path: "../node_modules/react-native-localize"
   RNPDF:
     :path: "../node_modules/react-native-view-pdf"
   RNReanimated:
@@ -525,6 +530,7 @@ SPEC CHECKSUMS:
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNImageCropPicker: f0557a908758c4a3f83978894ec7227651529b45
+  RNLocalize: c388679af021ddd6069c215f7fdd2acf4e77ede5
   RNPDF: f9dc9bac0b82da5f250df9bdd0d59b5993828fa2
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
