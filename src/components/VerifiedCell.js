@@ -16,7 +16,6 @@ import VerifiedNot from '../resources/img/verifiedCell/verifiedNot.svg';
 import VerifiedOk from '../resources/img/verifiedCell/verifiedOk.svg';
 import VerifiedBad from '../resources/img/verifiedCell/verifiedBad.svg';
 const LOGO_PLACEHOLDER = require('../resources/img/verifiedCell/logoPlaceholder.png');
-const LOGO_PLACEHOLDER_IOS = require('../resources/img/verifiedCell/logoPlaceholderIOS.png');
 
 const VERIFICATION_STATUS_IMAGE = {
   true: (
@@ -43,19 +42,17 @@ const VERIFICATION_STATUS_IMAGE = {
 };
 
 const VerifiedCell = ({ item, onCellTapped }) => {
-  const placeholderImage =
-    Platform.OS === 'ios' ? LOGO_PLACEHOLDER_IOS : LOGO_PLACEHOLDER;
   const date = Moment(item.reported_at).format('DD.MM.YYYY');
   const imageSource = item.screenshot_url
     ? { uri: item.screenshot_url }
-    : placeholderImage;
+    : LOGO_PLACEHOLDER;
   return (
     <>
       <TouchableOpacityDebounce style={styles.container} onPress={onCellTapped}>
         <Image
           resizeMode={item.screenshot_url ? 'cover' : 'contain'}
           style={styles.image}
-          defaultSource={placeholderImage}
+          defaultSource={LOGO_PLACEHOLDER}
           source={imageSource}
         />
         <View style={{ flex: 2 }}>
