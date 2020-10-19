@@ -21,6 +21,9 @@ import Record from '../resources/img/recording.svg';
 import CropSvg from '../resources/img/crop.svg';
 import Close from '../resources/img/close.svg';
 
+// banner for FakeHunter Challenge
+import Banner from '../resources/img/banner.gif';
+
 import { strings } from '../constants/strings';
 import {
   GAINSBORO,
@@ -334,6 +337,7 @@ const ReportScreen = ({ navigation, route: { params } }) => {
               ? strings.report.updateDraftButton
               : strings.report.saveDraftButton}
           </Button>
+          <Image source={Banner} />
         </Container>
       </KeyboardAwareScrollView>
     </SafeAreaView>
