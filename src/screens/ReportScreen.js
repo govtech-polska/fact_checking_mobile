@@ -38,6 +38,7 @@ import { useVoiceRecognition } from '../utils/useVoiceRecognition';
 import { useDrafts } from '../utils/useDrafts';
 import { validate } from '../utils/validation';
 import { saveTmpImagesToDevice, removeImagesFromDevice } from '../utils/files';
+import { max } from 'moment';
 
 const anyObjectValueExists = (obj) =>
   Object.values(obj).some((value) => !!value);
@@ -337,7 +338,10 @@ const ReportScreen = ({ navigation, route: { params } }) => {
               ? strings.report.updateDraftButton
               : strings.report.saveDraftButton}
           </Button>
-          <Image source={Banner} />
+          <Image 
+            source={Banner} 
+            style={{ marginTop: 10, marginBottom: 20, alignSelf: "center", width: "100%" }}
+          />
         </Container>
       </KeyboardAwareScrollView>
     </SafeAreaView>
